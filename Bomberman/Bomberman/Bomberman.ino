@@ -1,7 +1,18 @@
+#include <Arduino.h>
+#include <MI0283QT9.h>
+
+#include "BasicDisplay.h"
+
+
+
 int main(void){
-	//test test van mike
-	//test
-	//tewt
+	init();
+
+	DisplayOn();
+	DisplayGame();
+
+	while (1);
+
 	return 0;
 	// feature
 }
