@@ -8,17 +8,21 @@ void DisplayOn(){
 	scherm.fillScreen(RGB(255, 255, 255));
 }
 
-void DisplayGame(){
+
+void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
 	_displayBorder();
 	_displayInnerStatic();
-	_displayCrates();
+	_displayCrates(crates);
 	_displayInfo();
-	_displayPlayer((int_least16_t)0x00, RGB(255, 0, 0));
-	_displayPlayer((int_least16_t)0xCC, RGB(0, 0, 255));
+	_displayPlayer(player1Location, RGB(255, 0, 0));
+	_displayPlayer(player2Location, RGB(0, 0, 255));
 }
 
-void UpdateGame(){
-
+void UpdateGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
+	_displayCrates(crates);
+	_displayInfo();
+	_displayPlayer(player1Location, RGB(255, 0, 0));
+	_displayPlayer(player2Location, RGB(0, 0, 255));
 }
 
 void _displayBorder(){
@@ -41,9 +45,22 @@ void _displayInnerStatic(){
 	}
 }
 
-void _displayCrates(){
+void _displayCrates(uint8_t crates[]){
 	// todo set crates in random/preset locations
-	for (uint8_t i = 3; i < 12; i += 2){
+	for (uint8_t i = 0; i < 127; i++){
+		if (crates[i] != 0xFF){
+			uint8_t x1 = 97 + ((crates[i] & 0xF0) >> 4) * 16;
+			uint8_t x2 = 14 + x1;
+			uint8_t y = 17 + (crates[i] & 0x0F) * 16;
+
+			scherm.drawLine(x1, y, x2, y, RGB(0, 0, 0));
+			scherm.drawLine(x1, y + 3, x2, y + 3, RGB(0, 0, 0));
+			scherm.drawLine(x1, y + 6, x2, y + 6, RGB(0, 0, 0));
+			scherm.drawLine(x1, y + 9, x2, y + 9, RGB(0, 0, 0));
+			scherm.drawLine(x1, y + 12, x2, y + 12, RGB(0, 0, 0));
+		}
+	}
+	/*for (uint8_t i = 3; i < 12; i += 2){
 		for (uint8_t j = 1; j < 14; j++){
 			scherm.drawLine(81 + i * 16, 1 + j * 16, 95 + i * 16, 1 + j * 16, RGB(0, 0, 0));
 			scherm.drawLine(81 + i * 16, 4 + j * 16, 95 + i * 16, 4 + j * 16, RGB(0, 0, 0));
@@ -51,7 +68,7 @@ void _displayCrates(){
 			scherm.drawLine(81 + i * 16, 10 + j * 16, 95 + i * 16, 10 + j * 16, RGB(0, 0, 0));
 			scherm.drawLine(81 + i * 16, 13 + j * 16, 95 + i * 16, 13 + j * 16, RGB(0, 0, 0));
 		}
-	}
+	}*/
 }
 
 void _displayPlayer(int_least16_t position, uint16_t playerColor){
@@ -69,15 +86,13 @@ void _displayInfo(){
 	uint8_t pl2Score = 0;
 	int i = 2;
 	while (pl1Score > 0){
-		char c = (pl1Score % 10) + '0';
-		scherm.drawChar(27 + i*16, 5, c, RGB(255, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawInteger(27 + i * 16, 5, (long unsigned int)(pl1Score % 10), 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
 		i--;
 		pl1Score = pl1Score / 10;
-	}	
+	}
 	i = 2;
 	while (pl2Score > 0){
-		char c = (pl2Score % 10) + '0';
-		scherm.drawChar(27 + i * 16, 125, c, RGB(0, 0, 255), RGB(255, 255, 255), 2);
+		scherm.drawInteger(27 + i * 16, 125, (long unsigned int)(pl2Score % 10), 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
 		i--;
 		pl2Score = pl2Score / 10;
 	}

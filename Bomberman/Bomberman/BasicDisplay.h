@@ -6,12 +6,12 @@
 #define BasicDisplay
 
 void DisplayOn();
-void DisplayGame();
-void UpdateGame();
+void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location);
+void UpdateGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location);
 
 void _displayBorder();
 void _displayInnerStatic();
-void _displayCrates();
+void _displayCrates(uint8_t crates[]);
 void _displayPlayer(int_least16_t position, uint16_t playerColor);
 void _displayInfo();
 
