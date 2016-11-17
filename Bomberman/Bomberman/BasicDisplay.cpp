@@ -17,7 +17,6 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 	_displayPlayer(player1Location, RGB(255, 0, 0));
 	_displayPlayer(player2Location, RGB(0, 0, 255));
 }
-
 void UpdateGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
 	_displayCrates(crates);
 	_displayInfo();
