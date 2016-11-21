@@ -24,9 +24,15 @@
     <ClInclude Include="BasicDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Nunchuck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Nunchuck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
