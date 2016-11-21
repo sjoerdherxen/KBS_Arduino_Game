@@ -2,11 +2,11 @@
 #include <MI0283QT9.h>
 
 #include "BasicDisplay.h"
-
+#include "showLives.h"
 
 uint8_t crates[127];
 
-int main(void){
+int main2(void){
 	init();
 
 	for (int i = 0; i < 127; i++){
