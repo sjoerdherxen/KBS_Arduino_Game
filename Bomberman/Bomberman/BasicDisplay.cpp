@@ -8,8 +8,37 @@ void DisplayOn(){
 	scherm.fillScreen(RGB(255, 255, 255));
 }
 
+void DisplayScherpte(uint8_t x){
+	scherm.led(x);
+}
+
+void DisplayMainMenu(uint8_t selected){
+	if (selected == 0){ // scherm eerste keer openen
+		scherm.fillScreen(RGB(255, 255, 255));
+		_displayMenuHelpers(2);
+	}
+	if (selected == 1){ //start selected
+		scherm.drawRect(79, 44, 162, 18, RGB(0, 0, 0));
+		scherm.drawRect(79, 99, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(80, 45, "Start Game", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+		scherm.drawText(80, 100, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
+	else if (selected == 2){ // highscore selected
+		scherm.drawRect(79, 99, 162, 18, RGB(0, 0, 0));
+		scherm.drawRect(79, 44, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 100, "Highscores", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+	}
+	else {// no selected
+		scherm.drawRect(79, 44, 162, 18, RGB(255, 255, 255));
+		scherm.drawRect(79, 99, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 100, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
+}
 
 void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
+	scherm.fillScreen(RGB(255, 255, 255));
 	_displayBorder();
 	_displayInnerStatic();
 	_displayCrates(crates);
@@ -17,6 +46,7 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 	_displayPlayer(player1Location, RGB(255, 0, 0));
 	_displayPlayer(player2Location, RGB(0, 0, 255));
 }
+
 void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew){
 	_displayCrates(oldCrates, newCrates);
 	_displayInfo();
@@ -28,6 +58,17 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 		_displayPlayer(player2LocationNew, RGB(0, 0, 255));
 		_clearSquare(player2LocationOld);
 	}
+}
+
+void DisplayHighscore(char **names, uint8_t *scores){
+	scherm.drawText(80, 20, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+
+	for (uint8_t i = 0; i < 5; i++){
+		scherm.drawText(80, 41 + i * 21, names[i], RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawInteger(192, 41 + i * 21, (unsigned long)(scores[i]), 10, RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
+
+	_displayMenuHelpers(1);
 }
 
 void _displayBorder(){
@@ -65,15 +106,6 @@ void _displayCrates(uint8_t crates[]){
 			scherm.drawLine((uint16_t)(x1)+97, y + 12, (uint16_t)(x2)+97, y + 12, RGB(0, 0, 0));
 		}
 	}
-	/*for (uint8_t i = 3; i < 12; i += 2){
-		for (uint8_t j = 1; j < 14; j++){
-		scherm.drawLine(81 + i * 16, 1 + j * 16, 95 + i * 16, 1 + j * 16, RGB(0, 0, 0));
-		scherm.drawLine(81 + i * 16, 4 + j * 16, 95 + i * 16, 4 + j * 16, RGB(0, 0, 0));
-		scherm.drawLine(81 + i * 16, 7 + j * 16, 95 + i * 16, 7 + j * 16, RGB(0, 0, 0));
-		scherm.drawLine(81 + i * 16, 10 + j * 16, 95 + i * 16, 10 + j * 16, RGB(0, 0, 0));
-		scherm.drawLine(81 + i * 16, 13 + j * 16, 95 + i * 16, 13 + j * 16, RGB(0, 0, 0));
-		}
-		}*/
 }
 
 void _displayPlayer(int_least16_t position, uint16_t playerColor){
@@ -115,7 +147,7 @@ void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]){
 			scherm.drawLine((uint16_t)(x1)+97, y + 6, (uint16_t)(x2)+97, y + 6, RGB(0, 0, 0));
 			scherm.drawLine((uint16_t)(x1)+97, y + 9, (uint16_t)(x2)+97, y + 9, RGB(0, 0, 0));
 			scherm.drawLine((uint16_t)(x1)+97, y + 12, (uint16_t)(x2)+97, y + 12, RGB(0, 0, 0));
-			
+
 			_clearSquare(oldCrates[i]);
 		}
 	}
@@ -125,4 +157,13 @@ void _clearSquare(uint8_t square){
 	uint8_t x = ((square & 0xF0) >> 4) * 16;
 	uint8_t y = 17 + (square & 0x0F) * 16;
 	scherm.fillRect(96 + ((square & 0xF0) >> 4) * 16, 16 + (square & 0x0F) * 16, 16, 16, RGB(255, 255, 255));
+}
+
+void _displayMenuHelpers(uint8_t witch){
+	if (witch & (1 << 0)){
+		scherm.drawText(5, 219, "C back", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
+	if (witch & (1 << 1)){
+		scherm.drawText(187, 219, "Z select", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
 }
