@@ -82,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicDisplay.cpp" />
-    <ClCompile Include="showLives.c" />
+    <ClCompile Include="showLives.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

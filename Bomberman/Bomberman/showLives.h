@@ -8,6 +8,6 @@ void setupPorts();
 void blink(int lives);
 void loseLife(int *lifeCount);
 void endOfGame();
-void startLives();
+void startLives(int *lives);
 
 #endif // !showLives

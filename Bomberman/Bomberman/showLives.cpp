@@ -1,7 +1,5 @@
 #include "showLives.h"											//All functions are declared in the showLives.h headerfile
 
-
-int lives = 0;
 int check = 0;
 
 void setupPorts() {												//Sets all the ports that are needed to an output
@@ -9,11 +7,11 @@ void setupPorts() {												//Sets all the ports that are needed to an output
 	DDRB |= (1 << PORTB0) | (1 << PORTB1);
 }
 
-void startLives() {												//Turns all leds on which is equal to having 5 lives
+void startLives(int *lives) {									//Turns all leds on which is equal to having 5 lives
 	PORTD |= (1 << 5) | (1 << 6) | (1 << 7);
 	PORTB |= (1 << 0) | (1 << 1);
 
-	lives = 5;
+	*lives = 5;
 }
 
 void blink(int check2) {										//Makes the leds blink when a live is lost
@@ -22,32 +20,32 @@ void blink(int check2) {										//Makes the leds blink when a live is lost
 		case 4:
 			PORTD |= (1 << 5) | (1 << 6) | (1 << 7);
 			PORTB |= (1 << 0) | (1 << 1);
-			delay(200);
+			_delay_ms(200);
 			PORTD &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
 			PORTB &= ~(1 << 0) & ~(1 << 1);
-			delay(200);
+			_delay_ms(200);
 			break;
 		case 3:
 			PORTD |= (1 << 6) | (1 << 7);
 			PORTB |= (1 << 0) | (1 << 1);
-			delay(200);
+			_delay_ms(200);
 			PORTD &= ~(1 << 6) & ~(1 << 7);
 			PORTB &= ~(1 << 0) & ~(1 << 1);
-			delay(200);
+			_delay_ms(200);
 			break;
 		case 2:
 			PORTD |= (1 << 7);
 			PORTB |= (1 << 0) | (1 << 1);
-			delay(200);
+			_delay_ms(200);
 			PORTD &= ~(1 << 7);
 			PORTB &= ~(1 << 0) & ~(1 << 1);
-			delay(200);
+			_delay_ms(200);
 			break;
 		case 1:
 			PORTB |= (1 << 0) | (1 << 1);
-			delay(200);
+			_delay_ms(200);
 			PORTB &= ~(1 << 0) & ~(1 << 1);
-			delay(200);
+			_delay_ms(200);
 			break;
 		}
 	}
@@ -79,6 +77,8 @@ void loseLife(int *lifeCount) {									//Activates the blinking and after that 
 		break;
 	case 0:
 		blink(check);
+		PORTB &= ~(1 << 1);
+		endOfGame();
 		PORTD &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
 		PORTB &= ~(1 << 0) & ~(1 << 1);
 		break;
@@ -91,47 +91,21 @@ void endOfGame() {												//Makes the leds animate when there are no more li
 		PORTB &= ~(1 << 0) & ~~(1 << 1);
 
 		PORTD |= (1 << 7);
-		delay(100);
+		_delay_ms(100);
 		PORTD |= (1 << 6) | (1 << 7);
 		PORTB |= (1 << 0);
-		delay(100);
+		_delay_ms(100);
 		PORTD |= (1 << 5) | (1 << 6);
 		PORTD &= ~(1 << 7);
 		PORTB |= (1 << 0) | (1 << 1);
-		delay(100);
-		PORTD |= (1 << 5);
+		_delay_ms(100);
+		PORTD |= (1 << 5); 
 		PORTD &= ~(1 << 6);
-		PORTB &= ~(1 << 0);
+		PORTB &= ~(1 << 0); 
 		PORTB |= (1 << 1);
-		delay(100);
+		_delay_ms(100);
 		PORTD &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
 		PORTB &= ~(1 << 0) & ~(1 << 1);
+		_delay_ms(100);
 	}
-
-}
-
-int main() {													//This is an example main() function
-	init();
-	setupPorts();												//Set the ports that are needed to output
-
-	while (1) {
-		startLives();											//5 Leds are on
-
-		delay(3000);
-		loseLife(&lives);
-		delay(3000);
-		loseLife(&lives);
-		delay(3000);
-		loseLife(&lives);
-		delay(3000);
-		loseLife(&lives);
-		delay(3000);
-		loseLife(&lives);										//Loses last life
-
-		if (lives == 0) {										//Animation and all leds off
-			endOfGame();
-		}
-		delay(3000);
-	}
-	return 0;
 }
