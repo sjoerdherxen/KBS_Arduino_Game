@@ -1,9 +1,12 @@
 #include <Arduino.h>
 
 #ifndef showLives
+
 #define showLives
-void setLives();
-int loseLife(int lives);
+void setPorts();
+void blink(int lives);
+void loseLife(int *lifeCount);
+void endOfGame();
 int main();
 
 #endif // !showLives
