@@ -32,7 +32,7 @@
     <ClCompile Include="BasicDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="screenBrightness.c">
+    <ClCompile Include="screenBrightness.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
