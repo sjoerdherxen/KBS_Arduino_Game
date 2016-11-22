@@ -2,13 +2,14 @@
 #include <MI0283QT9.h>
 
 #include "BasicDisplay.h"
+#include "soundEffects.h"
 
 
 uint8_t crates[127];
 
 int main(void){
 	init();
-
+/*
 	for (int i = 0; i < 127; i++){
 		crates[i] = 0xFF;
 	}
@@ -21,8 +22,11 @@ int main(void){
 
 	while (1){
 		UpdateGame(crates, 0x01, 0xCC);
-	}
+	}*/
 
+	while (1) {
+		playStart();
+	}
 	return 0;
 	// feature
 }
