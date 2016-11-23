@@ -29,7 +29,7 @@ uint16_t analogReadPot(uint8_t pin) {
 	low = ADCL;
 	high = ADCH;
 
-	/* connect the results to make a 16 bit value to output */
+	/* connect the results to make a 16-bit value to output */
 	return (high << 8) | low;
 }
 
