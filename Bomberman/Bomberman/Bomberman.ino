@@ -81,11 +81,62 @@ uint8_t OpenBMPFile(char *file, int16_t x, int16_t y)
 	return result;
 }
 
+void drawTexture(int texture, int x, int y) {
+	int picker, bomb, crate1, static1, player1, player2, player3, player4, explosion1, explosion2, explosion3, ep_powerup, er_powerup, mb_powerup, wf_powerup;
+	picker = texture;
+	switch (picker) {
+	case 1:
+		bomb = OpenBMPFile("Bomb.bmp", x, y);
+		break;
+	case 2:
+		crate1 = OpenBMPFile("Crate1.bmp", x, y);
+		break;
+	case 3:
+		static1 = OpenBMPFile("static1.bmp", x, y);
+		break;
+
+	case 5:
+		player1 = OpenBMPFile("Player1.bmp", x, y);
+		break;
+	case 6:
+		player2 = OpenBMPFile("Player2.bmp", x, y);
+		break;
+	case 7:
+		player3 = OpenBMPFile("Player3.bmp", x, y);
+		break;
+	case 8:
+		player4 = OpenBMPFile("Player4.bmp", x, y);
+		break;
+
+	case 10:
+		explosion1 = OpenBMPFile("Ex1.bmp", x, y);
+		break;
+	case 11:
+		explosion2 = OpenBMPFile("Ex2.bmp", x, y);
+		break;
+	case 12:
+		explosion3 = OpenBMPFile("Ex3.bmp", x, y);
+		break;
+
+	case 14:
+		ep_powerup = OpenBMPFile("EPPU.bmp", x, y);
+		break;
+	case 15:
+		er_powerup = OpenBMPFile("ERPU.bmp", x, y);
+		break;
+	case 16:
+		mb_powerup = OpenBMPFile("MBPU.bmp", x, y);
+		break;
+	case 17:
+		wf_powerup = OpenBMPFile("WFPU.bmp", x, y);
+		break;
+	}
+}
 
 int main()
 {
 	init();
-	int x, i, y;
+	int x, i, y, j;
 	//init Display
 	lcd.begin();
 	lcd.fillScreen(RGB(255, 255, 255));
@@ -100,10 +151,26 @@ int main()
 
 	//open windows bmp file (24bit RGB)
 	x = lcd.drawText(5, 5, "Open File...", RGB(0, 0, 0), RGB(255, 255, 255), 1);
-	i = OpenBMPFile("Bomb.bmp", 16, 16);
 
+	while (1){
+		drawTexture(1, 0, 0);
+		drawTexture(2, 16, 0);
+		drawTexture(3, 32, 0);
 
-	while (1){}
+		drawTexture(5, 48, 0);
+		drawTexture(6, 64, 0);
+		drawTexture(7, 80, 0);
+		drawTexture(8, 96, 0);
+
+		drawTexture(10, 112, 0);
+		drawTexture(11, 128, 0);
+		drawTexture(12, 144, 0);
+
+		drawTexture(14, 160, 0);
+		drawTexture(15, 176, 0);
+		drawTexture(16, 192, 0);
+		drawTexture(17, 208, 0);
+	}
 
 
 	return 0;
