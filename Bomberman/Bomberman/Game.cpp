@@ -4,21 +4,41 @@ uint8_t *crates;
 volatile uint8_t gameTickReady;
 uint8_t player1Location = 0x00;
 uint8_t player2Location = 0xCC;
+uint16_t bombs[6];
+uint8_t nextPlayerMove;
 
 void GameTick(uint16_t count){
-	if (count % 3 == 1){
-		uint8_t nunchuck = Nunchuck_get_data();
-		uint8_t direction = (nunchuck << 2) >> 2;
-		uint8_t oldpl1Loc = player1Location;
-		PlayerMove(direction);
 
-		UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location);
+	uint8_t nunchuck = Nunchuck_get_data();
+
+	uint8_t oldpl1Loc = player1Location;
+	if (nextPlayerMove){
+		nextPlayerMove--;
 	}
+	else {
+		PlayerMove((nunchuck << 2) >> 2);
+		if (oldpl1Loc != player1Location){
+			nextPlayerMove = 3;
+		}
+	}
+	if (nunchuck & 0x40){
+		PlaceBomb();
+	}
+
+	UpdateBoms();
+
+	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs);
+
 }
 
 void Game(){
 	crates = GenerateCrates();
 	DisplayGame(crates, player1Location, player2Location);
+
+	nextPlayerMove = 0;
+	for (uint8_t i = 0; i < 6; i++){
+		bombs[i] = 0;
+	}
 
 	// set timer voor gametick
 	uint16_t i = 0;
@@ -92,3 +112,22 @@ void PlayerMove(uint8_t direction){
 	player1Location = newLocation;
 }
 
+void UpdateBoms(){
+	for (uint8_t i = 0; i < 6; i++){
+		if (bombs[i]){
+			if ((bombs[i] & 0x001F) < 0x19){
+				bombs[i]++;
+			}
+			else {
+				bombs[i] = 0;
+			}
+		}
+	}
+}
+
+void PlaceBomb(){
+	if (!bombs[0]){
+		bombs[0] = 0;
+		bombs[0] |= (player1Location << 8) | 1 | (1 << 6);
+	}
+}
