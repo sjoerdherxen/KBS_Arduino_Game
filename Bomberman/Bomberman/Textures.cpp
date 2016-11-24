@@ -17,8 +17,8 @@ BMP-File Demonstration
 //Declare only one display !
 // MI0283QT2 lcd;  //MI0283QT2 Adapter v1
 MI0283QT9 lcd;  //MI0283QT9 Adapter v1
-// DisplaySPI lcd; //SPI (GLCD-Shield or MI0283QT Adapter v2)
-//DisplayI2C lcd; //I2C (GLCD-Shield or MI0283QT Adapter v2)
+				// DisplaySPI lcd; //SPI (GLCD-Shield or MI0283QT Adapter v2)
+				//DisplayI2C lcd; //I2C (GLCD-Shield or MI0283QT Adapter v2)
 
 
 uint8_t OpenBMPFile(char *file, int16_t x, int16_t y)
@@ -152,32 +152,22 @@ void loadTextures() {
 	x = lcd.drawText(5, 5, "Open File...", RGB(0, 0, 0), RGB(255, 255, 255), 1);
 }
 
-int main()
-{
-	loadTextures();
+/*Some testing commands to test if all textures load in properly:
+drawTexture(1, 0, 0);
+drawTexture(2, 16, 0);
+drawTexture(3, 32, 0);
 
-	
+drawTexture(5, 48, 0);
+drawTexture(6, 64, 0);
+drawTexture(7, 80, 0);
+drawTexture(8, 96, 0);
 
-	while (1){
-		drawTexture(1, 0, 0);
-		drawTexture(2, 16, 0);
-		drawTexture(3, 32, 0);
+drawTexture(10, 112, 0);
+drawTexture(11, 128, 0);
+drawTexture(12, 144, 0);
 
-		drawTexture(5, 48, 0);
-		drawTexture(6, 64, 0);
-		drawTexture(7, 80, 0);
-		drawTexture(8, 96, 0);
-
-		drawTexture(10, 112, 0);
-		drawTexture(11, 128, 0);
-		drawTexture(12, 144, 0);
-
-		drawTexture(14, 160, 0);
-		drawTexture(15, 176, 0);
-		drawTexture(16, 192, 0);
-		drawTexture(17, 208, 0);
-	}
-
-
-	return 0;
-}
+drawTexture(14, 160, 0);
+drawTexture(15, 176, 0);
+drawTexture(16, 192, 0);
+drawTexture(17, 208, 0);
+*/
