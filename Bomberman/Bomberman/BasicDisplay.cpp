@@ -47,7 +47,7 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 	_displayPlayer(player2Location, RGB(0, 0, 255));
 }
 
-void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew){
+void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *boms){
 	_displayCrates(oldCrates, newCrates);
 	_displayInfo();
 	if (player1LocationNew != player1LocationOld){
@@ -58,6 +58,7 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 		_displayPlayer(player2LocationNew, RGB(0, 0, 255));
 		_clearSquare(player2LocationOld);
 	}
+	_displayBoms(boms, newCrates);
 }
 
 void DisplayHighscore(char **names, uint8_t *scores){
@@ -154,8 +155,6 @@ void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]){
 }
 
 void _clearSquare(uint8_t square){
-	uint8_t x = ((square & 0xF0) >> 4) * 16;
-	uint8_t y = 17 + (square & 0x0F) * 16;
 	scherm.fillRect(96 + ((square & 0xF0) >> 4) * 16, 16 + (square & 0x0F) * 16, 16, 16, RGB(255, 255, 255));
 }
 
@@ -165,5 +164,83 @@ void _displayMenuHelpers(uint8_t witch){
 	}
 	if (witch & (1 << 1)){
 		scherm.drawText(187, 219, "Z select", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
+}
+
+void _displayBoms(uint16_t *boms, uint8_t *crates){
+	for (uint16_t i = 0; i < 6; i++){
+		if (boms[i]){
+			if ((boms[i] & 0x1F) < 0x18){
+				_clearSquare(boms[i] >> 8);
+				scherm.drawCircle(((boms[i] & 0xF000) >> 12) * 16 + 104, ((boms[i] & 0x0F00) >> 8) * 16 + 24, 7, RGB(0, 0, 0));
+			}
+			else if ((boms[i] & 0x1F) < 0x19){
+				_clearSquare(boms[i] >> 8);
+				_displayExplode(boms[i] >> 8);
+
+				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 1, crates);
+				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -1, crates);
+				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 16, crates);
+				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -16, crates);
+			}
+			else {
+				_clearSquare(boms[i] >> 8);
+				_explodeLoopDone(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 1, crates);
+				_explodeLoopDone(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -1, crates);
+				_explodeLoopDone(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 16, crates);
+				_explodeLoopDone(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -16, crates);
+			}
+		}
+	}
+}
+
+void _displayExplode(uint8_t location){
+	scherm.fillTriangle(((location & 0xF0) >> 4) * 16 + 104, (location & 0x0F) * 16 + 17, ((location & 0xF0) >> 4) * 16 + 97, (location & 0x0F) * 16 + 31, ((location & 0xF0) >> 4) * 16 + 111, (location & 0x0F) * 16 + 31, RGB(0, 0, 0));
+}
+
+int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates){
+	for (int8_t j = 1; j < max; j++){
+		uint8_t newLocation = location + j*mul;
+
+		// is static
+		if ((newLocation & 0x0F) > 0x0C ||
+			(newLocation & 0xF0) > 0xC0 ||
+			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)){
+			return j;
+		}
+
+		// is crate
+		for (uint8_t u = 0; u < 127; u++){
+			if (crates[u] == newLocation){
+				_clearSquare(newLocation);
+				_displayExplode(newLocation);
+				crates[u] = 0xFF;
+				return j;
+			}
+		}
+
+		_clearSquare(location + j*mul);
+		_displayExplode(location + j*mul);
+	}
+}
+
+void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates){
+	for (int8_t j = 1; j < max; j++){
+		uint8_t newLocation = location + j*mul;
+
+		// is static
+		if ((newLocation & 0x0F) > 0x0C ||
+			(newLocation & 0xF0) > 0xC0 ||
+			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)){
+			return;
+		}
+
+		// is crate
+		for (uint8_t u = 0; u < 127; u++){
+			if (crates[u] == newLocation){
+				return;
+			}
+		}
+		_clearSquare(location + j*mul);
 	}
 }

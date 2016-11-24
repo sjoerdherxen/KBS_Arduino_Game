@@ -11,5 +11,7 @@ void GameTick(uint16_t count);
 void Game();
 void GameInit();
 void PlayerMove(uint8_t direction);
+void UpdateBoms();
+void PlaceBomb();
 
 #endif

@@ -1,7 +1,7 @@
 #include "Nunchuck.h"
 
 uint8_t nunchuck_buf[6];   // array to store nunchuck data,
-uint8_t nunchuckdata = 0x00;
+
 // Uses port C (analog in) pins as power & ground for Nunchuck
 void Nunchuck_setpowerpins()
 {
@@ -34,7 +34,7 @@ void Nunchuck_send_request()
 }
 
 // Receive data back from the nunchuck, 
-int Nunchuck_get_data()
+uint8_t Nunchuck_get_data()
 {
 #define MIN 80
 #define MAX 180
@@ -48,24 +48,21 @@ int Nunchuck_get_data()
 	Nunchuck_send_request();  // send request for next data payload
 	// If we recieved the 6 bytes, then go print them
 	if (cnt >= 5) {
-		uint8_t nunchuckdata = 0xC0;
-		int joy_x_axis = nunchuck_buf[0];
-		int joy_y_axis = nunchuck_buf[1];
-
+		uint8_t nunchuckdata = 0xC0; // default 0b1100 0000
 
 		// byte nunchuck_buf[5] contains bits for z and c buttons
 		// it also contains the least significant bits for the accelerometer data
 		// so we have to check each bit of byte outbuf[5]
-		if (joy_y_axis > MAX) {
+		if (nunchuck_buf[1] > MAX) {
 			nunchuckdata = 1;
 		}
-		else if (joy_y_axis < MIN) {
+		else if (nunchuck_buf[1] < MIN) {
 			nunchuckdata = 3;
 		}
-		else if (joy_x_axis > MAX) {
+		else if (nunchuck_buf[0] > MAX) {
 			nunchuckdata = 2;
 		}
-		else if (joy_x_axis < MIN) {
+		else if (nunchuck_buf[0] < MIN) {
 			nunchuckdata = 4;
 		}
 
