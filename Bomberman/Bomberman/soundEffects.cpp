@@ -4,7 +4,6 @@
 unsigned long time = 0;;
 
 void setupSpeaker() {
-
 	/* setting pin 4 as output for the speaker */
 	DDRD |= (1 << PORTD4);
 }
