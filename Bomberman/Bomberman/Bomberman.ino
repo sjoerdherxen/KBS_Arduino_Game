@@ -25,7 +25,8 @@ int main(void){
 	}*/
 
 	while (1) {
-		playStart();
+		playGameOver();
+		_delay_ms(500);
 	}
 	return 0;
 	// feature
