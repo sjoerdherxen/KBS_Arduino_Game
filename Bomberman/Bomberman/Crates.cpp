@@ -6,6 +6,10 @@ uint8_t* GenerateCrates(){
 	randomSeed(analogRead(0));
 	uint8_t x = 2;
 	for (uint8_t i = 0; i < 127; i++){
+		c[i] = 0xFF;
+	}
+
+	for (uint8_t i = 0; i < 127; i++){
 		if (random(2) == 1){
 			x++;
 		}

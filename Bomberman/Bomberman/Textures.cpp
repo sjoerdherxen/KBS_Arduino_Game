@@ -5,142 +5,95 @@ BMP-File Demonstration
 #include "Textures.h"
 
 
-//Declare only one display !
-// MI0283QT2 lcd;  //MI0283QT2 Adapter v1
-MI0283QT9 lcd;  //MI0283QT9 Adapter v1
-				// DisplaySPI lcd; //SPI (GLCD-Shield or MI0283QT Adapter v2)
-				//DisplayI2C lcd; //I2C (GLCD-Shield or MI0283QT Adapter v2)
-
-
-uint8_t OpenBMPFile(char *file, int16_t x, int16_t y)
+void OpenBMPFile(char *name, int16_t x, int16_t y, MI0283QT9 *lcd)
 {
 	File myFile;
 	uint8_t buf[40]; //read buf (min. size = sizeof(BMP_DIPHeader))
-	BMP_Header *bmp_hd;
-	BMP_DIPHeader *bmp_dip;
-	int16_t width, height, w, h;
-	uint8_t pad, result = 0;
+	int16_t w, h;
 
 	//open file
-	myFile = SD.open(file);
+	myFile = SD.open(name, O_READ);
 	if (myFile)
 	{
-		result = 1;
-		//BMP Header
 		myFile.read(&buf, sizeof(BMP_Header));
-		bmp_hd = (BMP_Header*)&buf[0];
-		if ((bmp_hd->magic[0] == 'B') && (bmp_hd->magic[1] == 'M') && (bmp_hd->offset == 54))
+		myFile.read(&buf, sizeof(BMP_DIPHeader));
+		for (h = (y + 15); h >= y; h--) //for every line
 		{
-			result = 2;
-			//BMP DIP-Header
-			myFile.read(&buf, sizeof(BMP_DIPHeader));
-			bmp_dip = (BMP_DIPHeader*)&buf[0];
-			if ((bmp_dip->size == sizeof(BMP_DIPHeader)) && (bmp_dip->bitspp == 24) && (bmp_dip->compress == 0))
+			for (w = x; w < (x + 16); w++) //for every pixel in line
 			{
-				result = 3;
-				//BMP Data (1. pixel = bottom left)
-				width = bmp_dip->width;
-				height = bmp_dip->height;
-				pad = width % 4; //padding (line is multiply of 4)
-				if ((x + width) <= lcd.getWidth() && (y + height) <= lcd.getHeight())
-				{
-					result = 4;
-					lcd.setArea(x, y, x + width - 1, y + height - 1);
-					for (h = (y + height - 1); h >= y; h--) //for every line
-					{
-						for (w = x; w < (x + width); w++) //for every pixel in line
-						{
-							myFile.read(&buf, 3);
-							lcd.drawPixel(w, h, RGB(buf[2], buf[1], buf[0]));
-						}
-						if (pad)
-						{
-							myFile.read(&buf, pad);
-						}
-					}
-				}
-				else
-				{
-					lcd.drawText(x, y, "Pic out of screen!", RGB(0, 0, 0), RGB(255, 255, 255), 1);
-				}
+				myFile.read(&buf, 3);
+				lcd->drawPixel(w, h, RGB(buf[2], buf[1], buf[0]));
 			}
 		}
 
 		myFile.close();
 	}
-
-	return result;
 }
 
-void drawTexture(int texture, int x, int y) {
-	int picker, bomb, crate1, static1, player1, player2, player3, player4, explosion1, explosion2, explosion3, ep_powerup, er_powerup, mb_powerup, wf_powerup;
-	picker = texture;
-	switch (picker) {
+void LoadBMPFile(char *name, int texture){
+	//files[texture] = SD.open(name);
+}
+
+void drawTexture(int texture, int16_t x, int16_t y, MI0283QT9 *lcd) {
+	switch (texture) {
 	case 1:
-		bomb = OpenBMPFile("Bomb.bmp", x, y);
+		OpenBMPFile("Bomb.bmp", x, y, lcd);
 		break;
 	case 2:
-		crate1 = OpenBMPFile("Crate1.bmp", x, y);
+		OpenBMPFile("Crate1.bmp", x, y, lcd);
 		break;
 	case 3:
-		static1 = OpenBMPFile("static1.bmp", x, y);
+		OpenBMPFile("static1.bmp", x, y, lcd);
 		break;
 
 	case 5:
-		player1 = OpenBMPFile("Player1.bmp", x, y);
+		OpenBMPFile("Player1.bmp", x, y, lcd);
 		break;
 	case 6:
-		player2 = OpenBMPFile("Player2.bmp", x, y);
+		OpenBMPFile("Player2.bmp", x, y, lcd);
 		break;
 	case 7:
-		player3 = OpenBMPFile("Player3.bmp", x, y);
+		OpenBMPFile("Player3.bmp", x, y, lcd);
 		break;
 	case 8:
-		player4 = OpenBMPFile("Player4.bmp", x, y);
+		OpenBMPFile("Player4.bmp", x, y, lcd);
 		break;
 
 	case 10:
-		explosion1 = OpenBMPFile("Ex1.bmp", x, y);
+		OpenBMPFile("Ex1.bmp", x, y, lcd);
 		break;
 	case 11:
-		explosion2 = OpenBMPFile("Ex2.bmp", x, y);
+		OpenBMPFile("Ex2.bmp", x, y, lcd);
 		break;
 	case 12:
-		explosion3 = OpenBMPFile("Ex3.bmp", x, y);
+		OpenBMPFile("Ex3.bmp", x, y, lcd);
 		break;
 
 	case 14:
-		ep_powerup = OpenBMPFile("EPPU.bmp", x, y);
+		OpenBMPFile("EPPU.bmp", x, y, lcd);
 		break;
 	case 15:
-		er_powerup = OpenBMPFile("ERPU.bmp", x, y);
+		OpenBMPFile("ERPU.bmp", x, y, lcd);
 		break;
 	case 16:
-		mb_powerup = OpenBMPFile("MBPU.bmp", x, y);
+		OpenBMPFile("MBPU.bmp", x, y, lcd);
 		break;
 	case 17:
-		wf_powerup = OpenBMPFile("WFPU.bmp", x, y);
+		OpenBMPFile("WFPU.bmp", x, y, lcd);
 		break;
 	}
 }
 
-void loadTextures() {
-	init();
-	int x, i, y, j;
-	//init Display
-	lcd.begin();
-	lcd.fillScreen(RGB(255, 255, 255));
-
-	//init SD-Card
-	x = lcd.drawText(5, 5, "Init SD-Card...", RGB(0, 0, 0), RGB(255, 255, 255), 1);
-	if (!SD.begin(4)) //cs-pin=4
+uint8_t loadTextures() {
+	if (!SD.begin(4))
 	{
-		lcd.drawText(x, 5, "failed", RGB(0, 0, 0), RGB(255, 255, 255), 1);
-		while (1);
-	}
-
-	//open windows bmp file (24bit RGB)
-	x = lcd.drawText(5, 5, "Open File...", RGB(0, 0, 0), RGB(255, 255, 255), 1);
+		//lcd->drawText(5, 5, "Kan SD kaart niet lezen", RGB(0, 0, 0), RGB(255, 255, 255), 1);
+		return 0;
+	}/*
+	for (uint8_t i = 0; i < 10; i++){
+		drawTexture(i);
+	}*/
+	return 1; 
 }
 
 /*Some testing commands to test if all textures load in properly:

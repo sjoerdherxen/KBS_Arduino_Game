@@ -3,6 +3,7 @@
 #include "Nunchuck.h"
 #include "Crates.h"
 #include "MainMenu.h"
+#include "Textures.h"
 
 #ifndef Game_h
 #define Game_h

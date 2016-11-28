@@ -1,3 +1,24 @@
+#include <Wire.h>
+#include <Arduino.h>
+#include <MI0283QT9.h>
+
+#include "Textures.h"
+#include "BasicDisplay.h"
+#include "MainMenu.h"
+#include "Crates.h"
+#include "Nunchuck.h"
+#include "Game.h"
+
+int main(void){
+	init();
+
+	GameInit();
+
+	return 1;
+}
+
+/*
+
 #include "Textures.h"
 
 int main()
@@ -28,3 +49,4 @@ int main()
 
 	return 0;
 }
+*/

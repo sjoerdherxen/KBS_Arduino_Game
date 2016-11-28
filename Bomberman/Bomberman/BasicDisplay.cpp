@@ -1,11 +1,14 @@
 #include "BasicDisplay.h"
 
 MI0283QT9 scherm;
+uint8_t SDcardLoaded = 0;
 
 void DisplayOn(){
+	SDcardLoaded = loadTextures();
 	scherm.begin();
 	scherm.led(40);
 	scherm.fillScreen(RGB(255, 255, 255));
+	
 }
 
 void DisplayScherpte(uint8_t x){
@@ -76,8 +79,13 @@ void _displayBorder(){
 	for (uint8_t i = 0; i < 15; i++){
 		for (uint8_t j = 0; j < 15; j++){
 			if (i == 0 || i == 14 || j == 0 || j == 14){
-				scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
-				scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
+				if (SDcardLoaded){
+					drawTexture(3, 80 + i * 16, j * 16, &scherm);
+				}
+				else{
+					scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
+					scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
+				}
 			}
 		}
 	}
@@ -86,31 +94,45 @@ void _displayBorder(){
 void _displayInnerStatic(){
 	for (uint8_t i = 2; i < 13; i += 2){
 		for (uint8_t j = 2; j < 13; j += 2){
-			scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
-			scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
+			if (SDcardLoaded){
+				drawTexture(3, 80 + i * 16, j * 16, &scherm);
+			}
+			else{
+				scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
+				scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
+			}
 		}
 	}
 }
 
 void _displayCrates(uint8_t crates[]){
-	// todo set crates in random/preset locations
 	for (uint8_t i = 0; i < 127; i++){
 		if (crates[i] != 0xFF){
-			uint8_t x1 = (((crates[i] & 0xF0) >> 4) * 16);
-			uint8_t x2 = x1 + 14;
-			uint8_t y = 17 + (crates[i] & 0x0F) * 16;
 
-			scherm.drawLine((uint16_t)(x1)+97, y, (uint16_t)(x2)+97, y, RGB(0, 0, 0));
-			scherm.drawLine((uint16_t)(x1)+97, y + 3, (uint16_t)(x2)+97, y + 3, RGB(0, 0, 0));
-			scherm.drawLine((uint16_t)(x1)+97, y + 6, (uint16_t)(x2)+97, y + 6, RGB(0, 0, 0));
-			scherm.drawLine((uint16_t)(x1)+97, y + 9, (uint16_t)(x2)+97, y + 9, RGB(0, 0, 0));
-			scherm.drawLine((uint16_t)(x1)+97, y + 12, (uint16_t)(x2)+97, y + 12, RGB(0, 0, 0));
+			if (SDcardLoaded){
+				drawTexture(2, (((crates[i] & 0xF0) >> 4) * 16) + 96, 16 + (crates[i] & 0x0F) * 16, &scherm);
+			}
+			else{
+				uint8_t x1 = (((crates[i] & 0xF0) >> 4) * 16);
+				uint8_t x2 = x1 + 14;
+				uint8_t y = 17 + (crates[i] & 0x0F) * 16;
+				scherm.drawLine((uint16_t)(x1)+97, y, (uint16_t)(x2)+97, y, RGB(0, 0, 0));
+				scherm.drawLine((uint16_t)(x1)+97, y + 3, (uint16_t)(x2)+97, y + 3, RGB(0, 0, 0));
+				scherm.drawLine((uint16_t)(x1)+97, y + 6, (uint16_t)(x2)+97, y + 6, RGB(0, 0, 0));
+				scherm.drawLine((uint16_t)(x1)+97, y + 9, (uint16_t)(x2)+97, y + 9, RGB(0, 0, 0));
+				scherm.drawLine((uint16_t)(x1)+97, y + 12, (uint16_t)(x2)+97, y + 12, RGB(0, 0, 0));
+			}
 		}
 	}
 }
 
 void _displayPlayer(int_least16_t position, uint16_t playerColor){
-	scherm.drawChar(97 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, 'X', playerColor, RGB(255, 255, 255), 2);
+	if (SDcardLoaded){
+		drawTexture(5, 96 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, &scherm);
+	}
+	else {
+		scherm.drawChar(97 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, 'X', playerColor, RGB(255, 255, 255), 2);
+	}
 }
 
 void _displayInfo(){
@@ -172,7 +194,12 @@ void _displayBoms(uint16_t *boms, uint8_t *crates){
 		if (boms[i]){
 			if ((boms[i] & 0x1F) < 0x18){
 				_clearSquare(boms[i] >> 8);
-				scherm.drawCircle(((boms[i] & 0xF000) >> 12) * 16 + 104, ((boms[i] & 0x0F00) >> 8) * 16 + 24, 7, RGB(0, 0, 0));
+				if (SDcardLoaded){
+					drawTexture(1, ((boms[i] & 0xF000) >> 12) * 16 + 96, ((boms[i] & 0x0F00) >> 8) * 16 + 16, &scherm);
+				}
+				else{
+					scherm.drawCircle(((boms[i] & 0xF000) >> 12) * 16 + 104, ((boms[i] & 0x0F00) >> 8) * 16 + 24, 7, RGB(0, 0, 0));
+				}
 			}
 			else if ((boms[i] & 0x1F) < 0x19){
 				_clearSquare(boms[i] >> 8);
@@ -195,7 +222,12 @@ void _displayBoms(uint16_t *boms, uint8_t *crates){
 }
 
 void _displayExplode(uint8_t location){
-	scherm.fillTriangle(((location & 0xF0) >> 4) * 16 + 104, (location & 0x0F) * 16 + 17, ((location & 0xF0) >> 4) * 16 + 97, (location & 0x0F) * 16 + 31, ((location & 0xF0) >> 4) * 16 + 111, (location & 0x0F) * 16 + 31, RGB(0, 0, 0));
+	if (SDcardLoaded){
+		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
+	}
+	else {
+		scherm.fillTriangle(((location & 0xF0) >> 4) * 16 + 104, (location & 0x0F) * 16 + 17, ((location & 0xF0) >> 4) * 16 + 97, (location & 0x0F) * 16 + 31, ((location & 0xF0) >> 4) * 16 + 111, (location & 0x0F) * 16 + 31, RGB(0, 0, 0));
+	}
 }
 
 int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates){

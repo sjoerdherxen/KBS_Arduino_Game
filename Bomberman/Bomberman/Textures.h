@@ -1,5 +1,7 @@
 #include <Wire.h>
+#include <Arduino.h>
 #include <SPI.h>
+#include <Arduino.h>
 #include <digitalWriteFast.h>
 #include <GraphicsLib.h>
 #include <MI0283QT2.h>
@@ -9,11 +11,12 @@
 #include <SD.h>
 #include <BMPheader.h>
 
-#ifndef Game_h
-#define Game_h
+#ifndef Textures_h
+#define Textures_h
 
-uint8_t OpenBMPFile(char *file, int16_t x, int16_t y);
-void drawTexture(int texture, int x, int y);
-void loadTextures();
+void OpenBMPFile(char *texture, int16_t x, int16_t y, MI0283QT9 *lcd);
+void drawTexture(int texture, int16_t x, int16_t y, MI0283QT9 *lcd);
+void OpenBMPFile(char *name);
+uint8_t loadTextures();
 
 #endif
