@@ -6,6 +6,7 @@ uint8_t player1Location = 0x00;
 uint8_t player2Location = 0xCC;
 uint16_t bombs[6];
 uint8_t nextPlayerMove;
+uint8_t screenBrightness = 0;
 
 void GameTick(uint16_t count){
 
@@ -18,7 +19,7 @@ void GameTick(uint16_t count){
 	else {
 		PlayerMove((nunchuck << 2) >> 2);
 		if (oldpl1Loc != player1Location){
-			nextPlayerMove = 3;
+			nextPlayerMove = 1;
 		}
 	}
 	if (nunchuck & 0x40){
@@ -29,9 +30,16 @@ void GameTick(uint16_t count){
 
 	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs);
 
+	if (screenBrightness != setBrightness()){
+		screenBrightness = setBrightness();
+		DisplayScherpte(screenBrightness);
+	}
+
 }
 
 void Game(){
+	
+
 	crates = GenerateCrates();
 	DisplayGame(crates, player1Location, player2Location);
 
@@ -43,15 +51,15 @@ void Game(){
 	// set timer voor gametick
 	uint16_t i = 0;
 	while (1){
-		if (1){
-			GameTick(i++);
-			_delay_ms(100);
-		}
+		GameTick(i++);
+		_delay_ms(100);
 	}
 }
 
 void GameInit(){
 	DisplayOn();
+	setupPot();
+	screenBrightness = setBrightness();
 
 	Nunchuck_setpowerpins();
 	Nunchuck_init();

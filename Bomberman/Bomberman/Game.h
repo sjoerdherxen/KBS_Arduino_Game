@@ -4,6 +4,7 @@
 #include "Crates.h"
 #include "MainMenu.h"
 #include "Textures.h"
+#include "ScreenBrightness.h"
 
 #ifndef Game_h
 #define Game_h
