@@ -24,12 +24,15 @@
     <ClInclude Include="BasicDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="showLives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="showLives.c">
+    <ClCompile Include="showLives.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
