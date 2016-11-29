@@ -30,7 +30,7 @@ void OpenBMPFile(char *name, int16_t x, int16_t y, MI0283QT9 *lcd)
 	}
 }
 
-void LoadBMPFile(char *name, int texture){
+void LoadBMPFile(char *name, int texture) {
 	//files[texture] = SD.open(name);
 }
 
@@ -93,7 +93,7 @@ uint8_t loadTextures() {
 	for (uint8_t i = 0; i < 10; i++){
 		drawTexture(i);
 	}*/
-	return 1; 
+	return 1;
 }
 
 /*Some testing commands to test if all textures load in properly:
