@@ -6,7 +6,6 @@
 #include <util/delay.h>
 
 uint8_t crates[127];
-int lives = 0;
 
 int main(void) {
 	setupPorts();												//Set the ports that are needed to output power to the leds
