@@ -3,7 +3,7 @@
 #ifndef IrSend_h
 #define IrSend_h
 
-void initSendPin();
+void initIrSend();
 void IrSendByte(uint8_t byte);
 
 #endif

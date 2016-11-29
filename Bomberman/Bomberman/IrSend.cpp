@@ -5,10 +5,10 @@ void initIrSend(){
 
 	DDRB |= 1 << PORTB3;
 
-	// set up Timer 2
-	TCCR2A = _BV(COM2A0) | _BV(WGM21);  // CTC, toggle OC2A on Compare Match
-	TCCR2B = _BV(CS20);   // No prescaler
-	OCR2A = 209;
+	 //set up Timer 2
+	TCCR0A = _BV(COM0A0) | _BV(WGM01);  // CTC, toggle OC2A on Compare Match
+	TCCR0B = _BV(CS00);   // No prescaler
+	OCR0A = 209;
 
 	sei();
 }

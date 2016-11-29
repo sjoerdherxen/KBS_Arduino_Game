@@ -4,17 +4,21 @@ MI0283QT9 scherm;
 uint8_t SDcardLoaded = 0;
 
 void DisplayOn(){
+	// probeer de sdkaart te openen.
 	SDcardLoaded = loadTextures();
+	// scherm aanzetten.
 	scherm.begin();
 	scherm.led(40);
 	scherm.fillScreen(RGB(255, 255, 255));
 	
 }
 
+// helderheid van scherm aanpassen, wordt door potentiometer bepaalt.
 void DisplayScherpte(uint8_t x){
 	scherm.led(x);
 }
 
+// hoofdmenu tekenen
 void DisplayMainMenu(uint8_t selected){
 	if (selected == 0){ // scherm eerste keer openen
 		scherm.fillScreen(RGB(255, 255, 255));
@@ -40,8 +44,9 @@ void DisplayMainMenu(uint8_t selected){
 	}
 }
 
+// spel voor eerste keer tonen.
 void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
-	scherm.fillScreen(RGB(255, 255, 255));
+	scherm.fillScreen(RGB(255, 255, 255)); // scherm resetten
 	_displayBorder();
 	_displayInnerStatic();
 	_displayCrates(crates);
@@ -50,6 +55,7 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 	_displayPlayer(player2Location, RGB(0, 0, 255));
 }
 
+// aanpassingen in game tonen op scherm
 void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *boms){
 	_displayCrates(oldCrates, newCrates);
 	_displayInfo();
@@ -64,6 +70,7 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 	_displayBoms(boms, newCrates);
 }
 
+// highscores tonen verwacht 5 3 letterige namen. 5 scores.
 void DisplayHighscore(char **names, uint8_t *scores){
 	scherm.drawText(80, 20, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
@@ -75,6 +82,8 @@ void DisplayHighscore(char **names, uint8_t *scores){
 	_displayMenuHelpers(1);
 }
 
+// de border van het spel tekenen
+// word aan het begin van het spel getekend.
 void _displayBorder(){
 	for (uint8_t i = 0; i < 15; i++){
 		for (uint8_t j = 0; j < 15; j++){
@@ -91,6 +100,8 @@ void _displayBorder(){
 	}
 }
 
+// de statische blokken in het speelveld tonen
+// wordt aan begin van het spel getekend.
 void _displayInnerStatic(){
 	for (uint8_t i = 2; i < 13; i += 2){
 		for (uint8_t j = 2; j < 13; j += 2){
@@ -105,6 +116,8 @@ void _displayInnerStatic(){
 	}
 }
 
+// alle kratten tekenen 
+// aan het begin van het spel wordt deze getekent.
 void _displayCrates(uint8_t crates[]){
 	for (uint8_t i = 0; i < 127; i++){
 		if (crates[i] != 0xFF){
@@ -126,6 +139,7 @@ void _displayCrates(uint8_t crates[]){
 	}
 }
 
+// dit tekent de speler aan het begin van het spel.	
 void _displayPlayer(int_least16_t position, uint16_t playerColor){
 	if (SDcardLoaded){
 		drawTexture(5, 96 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, &scherm);
@@ -135,6 +149,7 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 	}
 }
 
+// dit zal de score en upgrades van de spelers tonen. 
 void _displayInfo(){
 	// todo getplayercount
 
@@ -158,6 +173,7 @@ void _displayInfo(){
 	}
 }
 
+// dit tekend de kratten als deze aangepast wordt tijdens het spel. 
 void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]){
 	for (uint8_t i = 0; i < 127; i++){
 		if (oldCrates[i] != 0xFF && oldCrates[i] != newCrates[i]){
@@ -176,10 +192,12 @@ void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]){
 	}
 }
 
+// reset een vakje
 void _clearSquare(uint8_t square){
 	scherm.fillRect(96 + ((square & 0xF0) >> 4) * 16, 16 + (square & 0x0F) * 16, 16, 16, RGB(255, 255, 255));
 }
 
+// menu helpers voor info over knoppen tonen.
 void _displayMenuHelpers(uint8_t witch){
 	if (witch & (1 << 0)){
 		scherm.drawText(5, 219, "C back", RGB(0, 0, 0), RGB(255, 255, 255), 2);
@@ -189,10 +207,11 @@ void _displayMenuHelpers(uint8_t witch){
 	}
 }
 
+// de bommen tekenen die geplaatst zijn
 void _displayBoms(uint16_t *boms, uint8_t *crates){
 	for (uint16_t i = 0; i < 6; i++){
 		if (boms[i]){
-			if ((boms[i] & 0x1F) < 0x18){
+			if ((boms[i] & 0x1F) < 0x18){ // bom is zichtbaar.
 				_clearSquare(boms[i] >> 8);
 				if (SDcardLoaded){
 					drawTexture(1, ((boms[i] & 0xF000) >> 12) * 16 + 96, ((boms[i] & 0x0F00) >> 8) * 16 + 16, &scherm);
@@ -201,7 +220,7 @@ void _displayBoms(uint16_t *boms, uint8_t *crates){
 					scherm.drawCircle(((boms[i] & 0xF000) >> 12) * 16 + 104, ((boms[i] & 0x0F00) >> 8) * 16 + 24, 7, RGB(0, 0, 0));
 				}
 			}
-			else if ((boms[i] & 0x1F) < 0x19){
+			else if ((boms[i] & 0x1F) < 0x19){ // bom explodeerd
 				_clearSquare(boms[i] >> 8);
 				_displayExplode(boms[i] >> 8);
 
@@ -210,7 +229,7 @@ void _displayBoms(uint16_t *boms, uint8_t *crates){
 				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 16, crates);
 				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -16, crates);
 			}
-			else {
+			else { // bom explosie weghalen.
 				_clearSquare(boms[i] >> 8);
 				_explodeLoopDone(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 1, crates);
 				_explodeLoopDone(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -1, crates);
@@ -221,7 +240,7 @@ void _displayBoms(uint16_t *boms, uint8_t *crates){
 	}
 }
 
-void _displayExplode(uint8_t location){
+void _displayExplode(uint8_t location){ // teken bom explosie 
 	if (SDcardLoaded){
 		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
 	}
@@ -230,32 +249,36 @@ void _displayExplode(uint8_t location){
 	}
 }
 
+// explosie tekenen voor links rechts omhoog en omlaag.
 int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates){
 	for (int8_t j = 1; j < max; j++){
 		uint8_t newLocation = location + j*mul;
 
-		// is static
+		// check of statisch blok is
 		if ((newLocation & 0x0F) > 0x0C ||
 			(newLocation & 0xF0) > 0xC0 ||
 			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)){
+			// stop de explosie
 			return j;
 		}
 
-		// is crate
+		// check of krat is
 		for (uint8_t u = 0; u < 127; u++){
 			if (crates[u] == newLocation){
 				_clearSquare(newLocation);
 				_displayExplode(newLocation);
+				// haal krat weg en stop explosie hierna
 				crates[u] = 0xFF;
 				return j;
 			}
 		}
-
+		// explosie verder tekenen.
 		_clearSquare(location + j*mul);
 		_displayExplode(location + j*mul);
 	}
 }
 
+// explosie loop is klaar vergelijkbare code als functie hierboven
 void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates){
 	for (int8_t j = 1; j < max; j++){
 		uint8_t newLocation = location + j*mul;
@@ -264,15 +287,18 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 		if ((newLocation & 0x0F) > 0x0C ||
 			(newLocation & 0xF0) > 0xC0 ||
 			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)){
+			// stop reset
 			return;
 		}
 
 		// is crate
 		for (uint8_t u = 0; u < 127; u++){
 			if (crates[u] == newLocation){
+				// stop reset
 				return;
 			}
 		}
+		// maak vak wit.
 		_clearSquare(location + j*mul);
 	}
 }
