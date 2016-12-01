@@ -6,7 +6,6 @@
 #include "Textures.h"
 #include "ScreenBrightness.h"
 #include "IrSend.h"
-#include ""
 
 #ifndef Game_h
 #define Game_h
