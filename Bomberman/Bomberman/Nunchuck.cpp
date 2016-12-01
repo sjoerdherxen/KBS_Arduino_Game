@@ -1,43 +1,77 @@
 #include "Nunchuck.h"
 
-uint8_t nunchuck_buf[6];   // array to store nunchuck data,
+/* array used to sdtore data from the nunchuck */
+uint8_t nunchuck_buf[6];
 
-// Uses port C (analog in) pins as power & ground for Nunchuck
-void Nunchuck_setpowerpins()
-{
+/* function used to setup the nunchuck */
+void Nunchuck_setpowerpins() {
+/* PORTC3 (Analog 3) is used as the power-pin (pwrpin) */
 #define pwrpin PORTC3
+
+/* PORTC2 (Analog 2) is used as the ground-pin (gndpin) */
 #define gndpin PORTC2
+
+	/* DDR-register of the power-pin and ground-pin are set to INPUT */
 	DDRC |= _BV(pwrpin) | _BV(gndpin);
+
+	/* the ground-pin is set to LOW */
 	PORTC &= ~_BV(gndpin);
+
+	/* the power-pin is set to HIGH */
 	PORTC |= _BV(pwrpin);
-	delay(100);  // wait for things to stabilize        
+
+	/* this delay waits for the program to stabilize */
+	delay(100);
 }
 
-// initialize the I2C system, join the I2C bus,
-// and tell the nunchuck we're talking to it
-void Nunchuck_init()
-{
-	Wire.begin();	                // join i2c bus as master
-	Wire.beginTransmission(0x52);	// transmit to device 0x52
-	Wire.write(0x40);		// sends memory address
-	Wire.write(0x00);		// sends sent a zero.  
-	Wire.endTransmission();	// stop transmitting
+/* function used to initialize the I2C protocol, join the I2C bus and
+tell the nunchuck that we are talking to it */
+void Nunchuck_init() {
+	/* this sets begins the transmision by I2C, using the Wire library,
+	the I2C bus is joined as a master */
+	Wire.begin();
+
+	/* the address of the nunchuck is 52 (this is the same for every white
+	nunchuck), this address is send to all the divices connected by I2C, 
+	the nunchuck now knows that we are talking to it */
+	Wire.beginTransmission(0x52);
+
+	/* send the memory address to the nunchuck */
+	Wire.write(0x40);
+
+	/* send a zero to the nunchuck */
+	Wire.write(0x00);
+
+	/* stop the transmission */
+	Wire.endTransmission();
 }
 
-// Send a request for data to the nunchuck
-// was "send_zero()"
+/* function to send a request to the nunchuck */
 void Nunchuck_send_request()
 {
-	Wire.beginTransmission(0x52);	// transmit to device 0x52
-	Wire.write(0x00);		// sends one byte
-	Wire.endTransmission();	// stop transmitting
+	/* the address of the nunchuck is 52 (this is the same for every white
+	nunchuck), this address is send to all the divices connected by I2C, 
+	the nunchuck now knows that we are talking to it */
+	Wire.beginTransmission(0x52);
+
+	/* send a zero to the nunchuck */
+	Wire.write(0x00);
+
+	/* stop the transmission */
+	Wire.endTransmission();
 }
 
-// Receive data back from the nunchuck, 
+/* function to receive data from the nunchuck */
 uint8_t Nunchuck_get_data()
 {
+
+/* the minimal value is defined as 80 */
 #define MIN 80
+
+/* the maximum value is defined as 180 */
 #define MAX 180
+
+	/*  */
 	int cnt = 0;
 	Wire.requestFrom(0x52, 6);	// request data from nunchuck
 	while (Wire.available()) {
