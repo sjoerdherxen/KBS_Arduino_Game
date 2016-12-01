@@ -1,11 +1,17 @@
-#include "IrSend.h"
+#include "IrComm.h"
+
+ uint8_t datasend = 0;
 
 void initIrSend(){
 	cli();
 
+	DDRD |= (1 << PIND2);
+	EICRA = 2;	// pinchange on falling edge pd2 / pin2
+	EIMSK = 1;  // Set interupt enable on pin 2
+
 	DDRB |= 1 << PORTB3;
 
-	 //set up Timer 2
+	//set up Timer 2
 	TCCR0A = _BV(COM0A0) | _BV(WGM01);  // CTC, toggle OC2A on Compare Match
 	TCCR0B = _BV(CS00);   // No prescaler
 	OCR0A = 209;
@@ -36,4 +42,8 @@ void IrSendByte(uint8_t byte){
 	}
 	DDRB |= 1 << PORTB3;
 	_delay_us(100);
+}
+
+ISR(INT0_vect) {
+
 }

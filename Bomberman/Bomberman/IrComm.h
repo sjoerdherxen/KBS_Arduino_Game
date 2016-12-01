@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
-#ifndef IrSend_h
-#define IrSend_h
+#ifndef IrComm_h
+#define IrComm_h
 
 void initIrSend();
 void IrSendByte(uint8_t byte);
