@@ -13,8 +13,8 @@
 int main(void){
 	// init van arduino en init van het spel aanroepen.
 	init();
-	initIrSend();
-	//GameInit();
+	//initIrSend();
+	GameInit();
 
 	while (1);
 

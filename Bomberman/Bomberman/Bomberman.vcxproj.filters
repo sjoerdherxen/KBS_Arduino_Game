@@ -42,6 +42,12 @@
     <ClInclude Include="Textures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ScreenBrightness.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IRsend.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicDisplay.cpp">
@@ -63,6 +69,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Textures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="screenBrightness.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IrSend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

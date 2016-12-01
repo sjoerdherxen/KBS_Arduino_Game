@@ -72,7 +72,7 @@ void GameInit(){
 	Nunchuck_init();
 
 	// testcode
-	initIrSend();
+	//initIrSend();
 
 	// hoofdmenu openen
 	uint8_t selected = Mainmenu();
