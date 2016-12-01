@@ -5,16 +5,12 @@
 #include "IrComm.h"
 #include "Textures.h"
 #include "BasicDisplay.h"
-#include "MainMenu.h"
-#include "Crates.h"
-#include "Nunchuck.h"
-#include "Game.h"
+
+
+uint8_t crates[127];
 
 int main(void){
-	// init van arduino en init van het spel aanroepen.
 	init();
-	initIrSend();
-	//GameInit();
 
 	while (1);
 
