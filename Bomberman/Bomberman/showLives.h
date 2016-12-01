@@ -1,13 +1,20 @@
 #include <util/delay.h>
 #include <Arduino.h>
+#include <avr/io.h>
+#include <avr/delay.h>
+#include <stdint.h>
+#include <wire.h>
+#include <MI0283QT9.h>
+#include "BasicDisplay.h"
+
 
 #ifndef showLives
 
 #define showLives
-void setupPorts();
-void blink(int lives);
-void loseLife(int *lifeCount);
+void setupExpander();
+void blink(int check2);
+void loseLife();
 void endOfGame();
-void startLives(int *lives);
+void startLives();
 
 #endif // !showLives

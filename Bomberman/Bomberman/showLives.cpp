@@ -1,110 +1,133 @@
-#include "showLives.h"											//All functions are declared in the showLives.h headerfile
+#include "showLives.h"									//All functions are declared in the showLives.h headerfile
 
-int lives = 0;													//Initializes and declares lives to 0
+int lives = 0;											//Initializes and declares lives to 0
 
+const uint8_t patterns[] PROGMEM = {
+	0b11100000,
+	0b11110000,
+	0b11111000,
+	0b11111100,
+	0b11111110,
+	0b11111111,
 
-void setupPorts() {												//Sets all the ports that are needed to an output
-	DDRD |= (1 << PORTD5) | (1 << PORTD6) | (1 << PORTD7);		//Digital ports 5, 6 & 7
-	DDRB |= (1 << PORTB0) | (1 << PORTB1);						//And digital ports 8 & 9 set to output
+	0b11111011,
+	0b11110001,
+	0b11100100,
+	0b11101110,
+};
+
+void setupExpander() {
+	Wire.begin();
 }
 
-void startLives(int *lives) {									//Turns all leds on which is equal to having 5 lives
-	PORTD |= (1 << 5) | (1 << 6) | (1 << 7);					//Digital ports 5, 6 & 7
-	PORTB |= (1 << 0) | (1 << 1);								//And digital ports 8 & 9 output power
-
-	*lives = 5;													//Needs to be a pointer because otherwise it won't be able to change the value of lives
+void startLives() {										//Turns all leds on which is equal to having 5 lives
+	Wire.beginTransmission(56);
+	Wire.write(pgm_read_byte(&patterns[0]));			
+	Wire.endTransmission();
+	lives = 5;											//Sets lives to 5		
 }
 
-void blink(int check2) {										//Makes the leds blink when a live is lost
+void blink(int check2) {								//Makes the leds blink when a live is lost
 	for (int i = 0; i < 3; i++) {
-		switch (check2) {										//Checks how many lives the player has and which leds have to be animated
-		case 4:													//What the leds should look like: (o = on and x = off)
-			PORTD |= (1 << 5) | (1 << 6) | (1 << 7);			
-			PORTB |= (1 << 0) | (1 << 1);						//ooooo
+		switch (check2) {								//Checks how many lives the player has and which leds have to be animated
+		case 4:											//What the leds should look like: (o = on and x = off)
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[0]));
+			Wire.endTransmission();						//ooooo
 			_delay_ms(200);
-			PORTD &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
-			PORTB &= ~(1 << 0) & ~(1 << 1);						//xxxxx
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[5]));
+			Wire.endTransmission();						//xxxxx
 			_delay_ms(200);
 			break;
 		case 3:
-			PORTD |= (1 << 6) | (1 << 7);	
-			PORTB |= (1 << 0) | (1 << 1);						//oooox					
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[1]));
+			Wire.endTransmission();						//oooox					
 			_delay_ms(200);
-			PORTD &= ~(1 << 6) & ~(1 << 7);
-			PORTB &= ~(1 << 0) & ~(1 << 1);						//xxxxx
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[5]));
+			Wire.endTransmission();						//xxxxx
 			_delay_ms(200);
 			break;
 		case 2:
-			PORTD |= (1 << 7);
-			PORTB |= (1 << 0) | (1 << 1);						//oooxx
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[2]));
+			Wire.endTransmission();						//oooxx
 			_delay_ms(200);
-			PORTD &= ~(1 << 7);
-			PORTB &= ~(1 << 0) & ~(1 << 1);						//xxxxx
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[5]));
+			Wire.endTransmission();						//xxxxx
 			_delay_ms(200);
 			break;
 		case 1:
-			PORTB |= (1 << 0) | (1 << 1);						//ooxxx
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[3]));
+			Wire.endTransmission();						//ooxxx
 			_delay_ms(200);
-			PORTB &= ~(1 << 0) & ~(1 << 1);						//xxxxx
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[5]));
+			Wire.endTransmission();						//xxxxx
 			_delay_ms(200);
 			break;
 		}
 	}
 }
 
-void loseLife(int *lives) {										//Activates the blinking and after that the amount of leds equal to the amount of lives is set.
-	int check = *lives;											//Initializes and declares check, will be given the value of lives
-	check--;													//-1 Live
-	*lives = check;												//Sets lives to one less, for instance: from 4 to 3
-
-	switch (check) {											//Checks how many lives the player has and which leds have to be displayed
-	case 4:														//What the leds should look like: (o = on and x = off)
-		blink(check);
-		PORTD |= (1 << 6) | (1 << 7);
-		PORTB |= (1 << 0) | (1 << 1);							//oooox
+void loseLife() {										//Activates the blinking and after that the amount of leds equal to the amount of lives is set.
+	lives--;											//Sets lives to one less, for instance: from 4 to 3
+	switch (lives) {									//Checks how many lives the player has and which leds have to be displayed
+	case 4:												//What the leds should look like: (o = on and x = off)
+		blink(lives);
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[1]));
+		Wire.endTransmission();							//oooox
 		break;
 	case 3:
-		blink(check);
-		PORTD |= (1 << 7);
-		PORTB |= (1 << 0) | (1 << 1);							//oooxx
+		blink(lives);
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[2]));
+		Wire.endTransmission();							//oooxx
 		break;
 	case 2:
-		blink(check);
-		PORTB |= (1 << 0) | (1 << 1);							//ooxxx
+		blink(lives);
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[3]));
+		Wire.endTransmission();							//ooxxx
 		break;
 	case 1:
-		blink(check);	
-		PORTB |= (1 << 1);										//oxxxx
+		blink(lives);
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[4]));
+		Wire.endTransmission();							//oxxxx
 		break;
 	case 0:
-		blink(check);
-		PORTB &= ~(1 << 1);
-		endOfGame();
-		PORTD &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
-		PORTB &= ~(1 << 0) & ~(1 << 1);							//xxxxxx
+		blink(lives);
+		endOfGame();									//xxxxxx
 		break;
 	}
 }
 
-void endOfGame() {												//Makes the leds animate when there are no more lives and keeps the leds off
-	for (int i = 0; i < 2; i++) {								//What the leds should look like: (o = on and x = off)
-		PORTD &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);				
-		PORTB &= ~(1 << 0) & ~(1 << 1);							//xxxxx
-
-		PORTD |= (1 << 7);										//xxoxx
-		_delay_ms(100);
-		PORTD |= (1 << 6);
-		PORTB |= (1 << 0);										//xooox
-		_delay_ms(100);
-		PORTD |= (1 << 5);
-		PORTD &= ~(1 << 7);
-		PORTB |= (1 << 1);										//ooxoo
-		_delay_ms(100);
-		PORTD &= ~(1 << 6);
-		PORTB &= ~(1 << 0); 									//oxxxo
-		_delay_ms(100);
-		PORTD &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
-		PORTB &= ~(1 << 0) & ~(1 << 1);							//xxxxx
-		_delay_ms(100);
+void endOfGame() {										//Makes the leds animate when there are no more lives and keeps the leds off
+	for (int i = 0; i < 2; i++) {						//What the leds should look like: (o = on and x = off)
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[6]));
+		Wire.endTransmission();							//xxoxx
+		_delay_ms(200);
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[7]));
+		Wire.endTransmission();							//xooox
+		_delay_ms(200);
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[8]));
+		Wire.endTransmission();							//ooxoo
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[9]));
+		Wire.endTransmission();							//oxxxo
+		_delay_ms(200);
+		Wire.beginTransmission(56);
+		Wire.write(pgm_read_byte(&patterns[5]));
+		Wire.endTransmission();							//xxxxx
+		_delay_ms(200);
 	}
 }
