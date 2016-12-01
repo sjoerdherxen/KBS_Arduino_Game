@@ -1,4 +1,5 @@
 #include "BasicDisplay.h"
+#include "Game.h"
 
 MI0283QT9 scherm;
 uint8_t SDcardLoaded = 0;
@@ -272,6 +273,12 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 				return j;
 			}
 		}
+
+		// check of de speler in de explosie staat
+		if (newLocation == returnPlayerLocation()) {
+			
+		}
+
 		// explosie verder tekenen.
 		_clearSquare(location + j*mul);
 		_displayExplode(location + j*mul);

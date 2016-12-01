@@ -134,6 +134,10 @@ void PlayerMove(uint8_t direction){
 	player1Location = newLocation;
 }
 
+uint8_t returnPlayerLocation() {
+	return player1Location;
+}
+
 // bom statussen updaten
 void UpdateBoms(){
 	for (uint8_t i = 0; i < 6; i++){

@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "ScreenBrightness.h"
 #include "IrSend.h"
+#include ""
 
 #ifndef Game_h
 #define Game_h
@@ -14,6 +15,7 @@ void GameTick(uint16_t count);
 void Game();
 void GameInit();
 void PlayerMove(uint8_t direction);
+uint8_t returnPlayerLocation();
 void UpdateBoms();
 void PlaceBomb();
 
