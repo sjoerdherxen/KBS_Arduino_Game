@@ -5,7 +5,7 @@
 #include "MainMenu.h"
 #include "Textures.h"
 #include "ScreenBrightness.h"
-#include "IrSend.h"
+#include "IrComm.h"
 #include "showLives.h"
 
 #ifndef Game_h

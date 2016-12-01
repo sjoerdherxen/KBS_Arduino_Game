@@ -5,12 +5,14 @@
 #include "IrComm.h"
 #include "Textures.h"
 #include "BasicDisplay.h"
+#include "Game.h"
 
 
-uint8_t crates[127];
+//uint8_t crates[127];
 
 int main(void){
 	init();
+	GameInit();
 
 	while (1);
 

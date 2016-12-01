@@ -54,11 +54,18 @@ void Game(){
 
 	// set timer voor gametick
 	uint16_t i = 0;
+
+	// led levens opstarten
+	startLives();
+
 	while (1){
 		// verander timing naar timer/counter/interrupt
 		GameTick(i++);
 		_delay_ms(100);
 	}
+
+	
+	
 }
 
 // dit wordt uitgevoerd bij het opstarten van de arduino
@@ -71,9 +78,8 @@ void GameInit(){
 	Nunchuck_setpowerpins();
 	Nunchuck_init();
 
-	// ports leds instellen
+	// ports leds levens instellen
 	setupPorts();
-	startLives();
 
 	// testcode
 	initIrSend();

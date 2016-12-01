@@ -6,8 +6,8 @@
 #define showLives
 void setupPorts();
 void blink(int lives);
-void loseLife(int *lifeCount);
+void loseLife();
 void endOfGame();
-void startLives(int *lives);
+void startLives();
 
 #endif // !showLives
