@@ -5,6 +5,11 @@
 *.suo
 *.user
 *.sln.docstates
+*.vcxproj
+*.filters
+*.user
+*.vmps.xml
+
 
 # Build results
 

@@ -42,15 +42,6 @@
     <ClInclude Include="Textures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScreenBrightness.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IrComm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="showLives.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicDisplay.cpp">
@@ -72,15 +63,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="screenBrightness.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IrComm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="showLives.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,5 +5,6 @@
 
 void initIrSend();
 void IrSendByte(uint8_t byte);
+void dataRecieve();
 
 #endif
