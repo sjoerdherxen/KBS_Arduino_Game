@@ -46,7 +46,7 @@ void Nunchuck_init() {
 	Wire.endTransmission();
 }
 
-/* function to send a request to the nunchuck */
+/* function used to send a request to the nunchuck */
 void Nunchuck_send_request()
 {
 	/* the address of the nunchuck is 52 (this is the same for every white
@@ -61,32 +61,41 @@ void Nunchuck_send_request()
 	Wire.endTransmission();
 }
 
-/* function to receive data from the nunchuck */
+/* function used to receive data from the nunchuck */
 uint8_t Nunchuck_get_data()
 {
 
-/* the minimal value is defined as 80 */
+/* the minimal value is defined as 80, used for the nunchuck buffer */
 #define MIN 80
 
-/* the maximum value is defined as 180 */
+/* the maximum value is defined as 180, used for the nunchuck buffer */
 #define MAX 180
 
-	/*  */
+	/* an integer is made as a count variable */
 	int cnt = 0;
-	Wire.requestFrom(0x52, 6);	// request data from nunchuck
+
+	/* a data request is send to the nunchuck on address 52 */
+	Wire.requestFrom(0x52, 6);
+
+	/* while the nunchuck is sending data this loop keeps going */
 	while (Wire.available()) {
-		// receive byte as an integer
+		/* the data send by the nunchuck is decoded */
 		nunchuck_buf[cnt] = Nunchuk_decode_byte(Wire.read());
 		cnt++;
 	}
-	Nunchuck_send_request();  // send request for next data payload
-	// If we recieved the 6 bytes, then go print them
-	if (cnt >= 5) {
-		uint8_t nunchuckdata = 0xC0; // default 0b1100 0000
 
-		// byte nunchuck_buf[5] contains bits for z and c buttons
-		// it also contains the least significant bits for the accelerometer data
-		// so we have to check each bit of byte outbuf[5]
+	/* a new data request is send to the nunchuck for a new data payload */
+	Nunchuck_send_request();
+
+	/* when the counter hits 5, we recieved 6 bytes,
+	then we can print the full data payload */
+	if (cnt >= 5) {
+		/* default data is set to binary 1100 0000 (0xC0) */
+		uint8_t nunchuckdata = 0xC0;
+
+		/* byte 6 of the nunchuck contains the bits for the Z- and C-buttons
+		it also contains the least significant bits for the accelerometer,
+		the next lines check if the received data contains this infromation */
 		if (nunchuck_buf[1] > MAX) {
 			nunchuckdata = 1;
 		}
@@ -100,29 +109,33 @@ uint8_t Nunchuck_get_data()
 			nunchuckdata = 4;
 		}
 
-
 		if ((nunchuck_buf[5] >> 0) & 1)
 			nunchuckdata &= ~(1 << 6);
 		if ((nunchuck_buf[5] >> 1) & 1)
 			nunchuckdata &= ~(1 << 7);
+
+		/* the function will return the nunchuck data */
 		return nunchuckdata;
 	}
-	return 0; //failure
+
+	/* if the data request fails, the function returns a 0 */
+	return 0;
 }
 
-// Print the input data we have recieved
-// accel data is 10 bits long
-// so we read 8 bits, then we have to add
-// on the last 2 bits.  That is why I
-// multiply them by 2 * 2
+/* this function prints the data recieved by the nunchuck,
+it needs an 8-bit data integer to function */
 void Nunchuck_print_data(uint8_t data)
 {
+	/* print data in binary */
 	Serial.print(data, BIN);
-	Serial.print("\r\n");  // newline
+
+	/* sets a newline */
+	Serial.print("\r\n");
 }
 
-// Encode data to format that most wiimote drivers except
-// only needed if you use one of the regular wiimote drivers
+/* the nunchuck uses a specific data format, this has to
+be decoded to use in our functions, this function does that
+(only needed if the regular wiimote driver is used) */
 char Nunchuk_decode_byte(char x)
 {
 	x = (x ^ 0x17) + 0x17;
