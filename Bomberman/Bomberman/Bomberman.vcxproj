@@ -47,8 +47,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire;C:\Users\SnippiestGem\Documents\Arduino\libraries\MI0283QT9;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Users\SnippiestGem\Documents\Arduino\libraries\digitalWriteFast;C:\Users\SnippiestGem\Documents\Arduino\libraries\GraphicsLib;C:\Users\SnippiestGem\Documents\Arduino\libraries\MI0283QT2;C:\Users\SnippiestGem\Documents\Arduino\libraries\DisplaySPI;C:\Users\SnippiestGem\Documents\Arduino\libraries\DisplayI2C;C:\Program Files (x86)\Arduino\libraries\SD\src;C:\Users\SnippiestGem\Documents\Arduino\libraries\MI0283QT9\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Users\SnippiestGem\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Users\SnippiestGem\Source\Repos\KBS_Arduino_Game\Bomberman\Bomberman;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\Users\SnippiestGem\Source\Repos\KBS_Arduino_Game\Bomberman\Bomberman\__vm\.Bomberman.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>C:\Users\Joris\Documents\Arduino\libraries\MI0283QT9;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Users\Joris\Documents\Arduino\libraries\digitalWriteFast;C:\Users\Joris\Documents\Arduino\libraries\GraphicsLib;C:\Users\Joris\Documents\Arduino\libraries\digitalWriteFast\utility;C:\Users\Joris\Documents\Arduino\libraries\GraphicsLib\utility;C:\Users\Joris\Documents\Arduino\libraries\MI0283QT9\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Users\Joris\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Users\Joris\Source\Repos\KBS_Arduino_Game\Bomberman\Bomberman;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Users\Joris\Documents\Arduino\libraries\MI0283QT9;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Users\Joris\Documents\Arduino\libraries\digitalWriteFast;C:\Users\Joris\Documents\Arduino\libraries\GraphicsLib;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\gatz3lkq.zzi\Micro Platforms\default\debuggers;C:\Users\Joris\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>D:\Dev\arduino\KBS_Game\Bomberman\Bomberman\__vm\.Bomberman.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
       <PreprocessorDefinitions>__AVR_ATmega328p__;__AVR_ATmega328P__;F_CPU=16000000L;ARDUINO=10607;ARDUINO_AVR_UNO;ARDUINO_ARCH_AVR;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -77,22 +77,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicDisplay.h" />
-    <ClInclude Include="Crates.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Highscore.h" />
-    <ClInclude Include="MainMenu.h" />
-    <ClInclude Include="Nunchuck.h" />
-    <ClInclude Include="Textures.h" />
+    <ClInclude Include="soundEffects.h" />
     <ClInclude Include="__vm\.Bomberman.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicDisplay.cpp" />
-    <ClCompile Include="Crates.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Highscore.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
-    <ClCompile Include="Nunchuck.cpp" />
-    <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="soundEffects.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

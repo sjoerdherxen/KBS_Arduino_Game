@@ -24,22 +24,7 @@
     <ClInclude Include="BasicDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Crates.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Nunchuck.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Highscore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Textures.h">
+    <ClInclude Include="soundEffects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,22 +32,7 @@
     <ClCompile Include="BasicDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Crates.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Nunchuck.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Highscore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
+    <ClCompile Include="soundEffects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
