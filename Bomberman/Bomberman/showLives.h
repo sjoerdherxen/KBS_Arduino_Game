@@ -13,8 +13,8 @@
 #define showLives
 void setupExpander();
 void blink(int check2);
-void loseLife();
-void endOfGame();
+void loseLife(uint16_t count);
+void endOfGame(uint16_t count);
 void startLives();
 
 #endif // !showLives

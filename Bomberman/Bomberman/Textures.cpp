@@ -8,7 +8,7 @@ void OpenBMPFile(char *name, int16_t x, int16_t y, MI0283QT9 *lcd)
 	File myFile;
 
 	/* read buffer with a minimum size of (min. size = sizeof(BMP_DIPHeader) */
-	uint8_t buf[40]
+	uint8_t buf[40];
 	int16_t w, h;
 
 	/* the file is opened and read */

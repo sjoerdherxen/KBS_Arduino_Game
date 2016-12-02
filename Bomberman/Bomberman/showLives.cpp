@@ -1,6 +1,8 @@
 #include "showLives.h"									//All functions are declared in the showLives.h headerfile
 
 int lives = 0;											//Initializes and declares lives to 0
+uint8_t ifEndGame = 0;									//1 = true dus einde, 0 is false dus geen einde
+uint16_t endOfGameTick = 0;
 
 const uint8_t patterns[] PROGMEM = {
 	0b11100000,
@@ -17,17 +19,16 @@ const uint8_t patterns[] PROGMEM = {
 };
 
 void setupExpander() {
-	init();
 	Wire.begin();
 }
 
 void startLives() {										//Turns all leds on which is equal to having 5 lives
 	Wire.beginTransmission(56);
-	Wire.write(pgm_read_byte(&patterns[0]));			
+	Wire.write(pgm_read_byte(&patterns[0]));
 	Wire.endTransmission();
 	lives = 5;											//Sets lives to 5		
 }
-
+/*
 void blink(int check2) {								//Makes the leds blink when a live is lost
 	for (int i = 0; i < 3; i++) {
 		switch (check2) {								//Checks how many lives the player has and which leds have to be animated
@@ -44,7 +45,7 @@ void blink(int check2) {								//Makes the leds blink when a live is lost
 		case 3:
 			Wire.beginTransmission(56);
 			Wire.write(pgm_read_byte(&patterns[1]));
-			Wire.endTransmission();						//oooox					
+			Wire.endTransmission();						//oooox
 			_delay_ms(200);
 			Wire.beginTransmission(56);
 			Wire.write(pgm_read_byte(&patterns[5]));
@@ -72,64 +73,76 @@ void blink(int check2) {								//Makes the leds blink when a live is lost
 			_delay_ms(200);
 			break;
 		}
-	}*/
+	}
 }
+*/
 
-void loseLife() {										//Activates the blinking and after that the amount of leds equal to the amount of lives is set.
+void loseLife(uint16_t count) {										//Activates the blinking and after that the amount of leds equal to the amount of lives is set.
 	lives--;											//Sets lives to one less, for instance: from 4 to 3
 	switch (lives) {									//Checks how many lives the player has and which leds have to be displayed
 	case 4:												//What the leds should look like: (o = on and x = off)
-		blink(lives);
+		//blink(lives);
 		Wire.beginTransmission(56);
 		Wire.write(pgm_read_byte(&patterns[1]));
 		Wire.endTransmission();							//oooox
 		break;
 	case 3:
-		blink(lives);
+		//blink(lives);
 		Wire.beginTransmission(56);
 		Wire.write(pgm_read_byte(&patterns[2]));
 		Wire.endTransmission();							//oooxx
 		break;
 	case 2:
-		blink(lives);
+		//blink(lives);
 		Wire.beginTransmission(56);
 		Wire.write(pgm_read_byte(&patterns[3]));
 		Wire.endTransmission();							//ooxxx
 		break;
 	case 1:
-		blink(lives);
+		//blink(lives);
 		Wire.beginTransmission(56);
 		Wire.write(pgm_read_byte(&patterns[4]));
 		Wire.endTransmission();							//oxxxx
 		break;
 	case 0:
-		blink(lives);
-		endOfGame();									//xxxxxx
+		//blink(lives);
+		endOfGameTick = count;
+		ifEndGame = 3;									//xxxxx
 		break;
 	}
-	*/
 }
 
-void endOfGame() {										//Makes the leds animate when there are no more lives and keeps the leds off
-	for (int i = 0; i < 2; i++) {						//What the leds should look like: (o = on and x = off)
-		Wire.beginTransmission(56);
-		Wire.write(pgm_read_byte(&patterns[6]));
-		Wire.endTransmission();							//xxoxx
-		_delay_ms(200);
-		Wire.beginTransmission(56);
-		Wire.write(pgm_read_byte(&patterns[7]));
-		Wire.endTransmission();							//xooox
-		_delay_ms(200);
-		Wire.beginTransmission(56);
-		Wire.write(pgm_read_byte(&patterns[8]));
-		Wire.endTransmission();							//ooxoo
-		Wire.beginTransmission(56);
-		Wire.write(pgm_read_byte(&patterns[9]));
-		Wire.endTransmission();							//oxxxo
-		_delay_ms(200);
-		Wire.beginTransmission(56);
-		Wire.write(pgm_read_byte(&patterns[5]));
-		Wire.endTransmission();							//xxxxx
-		_delay_ms(200);
+void endOfGame(uint16_t count) {
+	if (ifEndGame) {								
+		if (count == endOfGameTick) {
+			//for (int i = 0; i < 2; i++) {						
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[6]));		//xxoxx
+			Wire.endTransmission();
+		}
+		else if (count == endOfGameTick + 2) {
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[7]));		//xooox
+			Wire.endTransmission();
+		}
+		else if (count == endOfGameTick + 4) {				
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[8]));		//ooxoo
+			Wire.endTransmission();
+		}
+		else if (count == endOfGameTick + 6) {				
+			Wire.beginTransmission(56);	
+			Wire.write(pgm_read_byte(&patterns[9]));		//oxxxo
+			Wire.endTransmission();
+		}
+		else if (count == endOfGameTick + 8) {				
+			Wire.beginTransmission(56);
+			Wire.write(pgm_read_byte(&patterns[5]));		//xxxxx
+			Wire.endTransmission();
+			ifEndGame--;
+			endOfGameTick = count;
+		}
+		//}
 	}
+	
 }
