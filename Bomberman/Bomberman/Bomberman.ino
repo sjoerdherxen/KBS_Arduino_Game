@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <MI0283QT9.h>
 
-#include "IrComm.h"
+//#include "IrComm.h"
 #include "Textures.h"
 #include "BasicDisplay.h"
 #include "Game.h"
@@ -12,14 +12,15 @@
 
 int main(void){
 	init();
-	initIrSend();
+	GameInit();
+	//initIrSend();
 	//GameInit();
-	Serial.begin(9600);
+	//Serial.begin(9600);
 	while (1){
 		//IrSendByte(170);
 		//_delay_ms(1000);
 
-		dataRecieve();
+		//dataRecieve();
 	}
 
 	return 1;

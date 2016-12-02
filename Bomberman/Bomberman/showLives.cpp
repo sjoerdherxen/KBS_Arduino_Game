@@ -107,6 +107,7 @@ void loseLife(uint16_t count) {										//Activates the blinking and after that
 	case 0:
 		//blink(lives);
 		endOfGameTick = count;
+		startPlayGameOver(count);
 		ifEndGame = 3;									//xxxxx
 		break;
 	}

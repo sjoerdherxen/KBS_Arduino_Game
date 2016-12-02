@@ -13,13 +13,18 @@ void playStart();
 void playExplosion();
 
 /* tones to play when a player loses a life */
-void playLoseLife();
+void playLoseLife(uint16_t count);
 
 /* tones to play when the player dies */
-void playGameOver();
+void playGameOver(uint16_t count);
 
 /* tones to play when there is music to play */
 void playMusic();
+
+void startLoseLife(uint16_t count);
+
+
+void startPlayGameOver(uint16_t count);
 
 #endif
 

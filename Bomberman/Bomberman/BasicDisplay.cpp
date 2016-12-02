@@ -277,6 +277,7 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 		// check of de speler in de explosie staat
 		if (newLocation == playerLoc) {
 			loseLife(count);
+			startLoseLife(count);
 		}
 
 		// explosie verder tekenen.
