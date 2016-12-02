@@ -17,6 +17,7 @@ const uint8_t patterns[] PROGMEM = {
 };
 
 void setupExpander() {
+	init();
 	Wire.begin();
 }
 
