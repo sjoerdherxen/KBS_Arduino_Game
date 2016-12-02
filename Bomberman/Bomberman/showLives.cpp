@@ -72,7 +72,7 @@ void blink(int check2) {								//Makes the leds blink when a live is lost
 			_delay_ms(200);
 			break;
 		}
-	}
+	}*/
 }
 
 void loseLife() {										//Activates the blinking and after that the amount of leds equal to the amount of lives is set.
@@ -107,6 +107,7 @@ void loseLife() {										//Activates the blinking and after that the amount of
 		endOfGame();									//xxxxxx
 		break;
 	}
+	*/
 }
 
 void endOfGame() {										//Makes the leds animate when there are no more lives and keeps the leds off

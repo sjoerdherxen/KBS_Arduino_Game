@@ -42,7 +42,10 @@
     <ClInclude Include="Textures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IRsend.h">
+    <ClInclude Include="showLives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IrComm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScreenBrightness.h">
@@ -71,7 +74,10 @@
     <ClCompile Include="Textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IrSend.cpp">
+    <ClCompile Include="showLives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IrComm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="screenBrightness.cpp">

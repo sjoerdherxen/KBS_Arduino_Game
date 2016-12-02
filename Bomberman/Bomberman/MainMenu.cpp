@@ -1,5 +1,8 @@
 #include "MainMenu.h"
 
+// het hoofdmenu maken en tonen.
+// geeft 1 terug als start starten is gekozen
+// geeft 2 terug als highscores is gekozen
 uint8_t Mainmenu(){
 
 	uint8_t currentDisplay = 0;
