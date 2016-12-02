@@ -10,7 +10,7 @@ void setupScore();
 needs an amount for points and a target player*/
 void addScore(uint8_t points, uint8_t player);
 
-/*  */
+/* function used to return the score of a specific player */
 uint8_t returnScore(int player);
 
 #endif

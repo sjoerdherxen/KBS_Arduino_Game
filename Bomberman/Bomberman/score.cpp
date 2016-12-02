@@ -22,11 +22,6 @@ void setupScore() {
 /* function to add score to a specific player,
 needs an amount for points and a and a target player*/
 void addScore(uint8_t points, int player) {
-	/* for int player:
-		player 1 = 1
-		player 2 = 2
-		player 3 = 3
-		player 4 = 4 */
 	
 	/* switch case to look which player is the target for the score */
 	switch (player) {
@@ -61,21 +56,38 @@ void addScore(uint8_t points, int player) {
 	}
 }
 
-/*  */
+/* function used to return the score of a specific player */
 uint8_t returnScore(int player) {
 	
+	/* switch case to determine which score has to be returned */
 	switch (player) {
+
+	/* case 1 is equal to player 1 */
 	case 1 : 
 		return scorePlayer1;
+
+		/* the switch case terminates when the case hits this break */
 		break;
+
+	/* case 2 is equal to player 2 */
 	case 2 :
 		return scorePlayer2;
+
+		/* the switch case terminates when the case hits this break */
 		break;
+
+	/* case 3 is equal to player 3 */
 	case 3 :
 		return scorePlayer3;
+
+		/* the switch case terminates when the case hits this break */
 		break;
+
+	/* case 4 is equal to player 4 */
 	case 4 :
 		return scorePlayer4;
+
+		/* the switch case terminates when the case hits this break */
 		break;
 	}
 }
