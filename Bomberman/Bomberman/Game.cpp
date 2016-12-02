@@ -54,11 +54,18 @@ void Game(){
 
 	// set timer voor gametick
 	uint16_t i = 0;
+
+	// led levens opstarten
+	startLives();
+
 	while (1){
 		// verander timing naar timer/counter/interrupt
 		GameTick(i++);
 		_delay_ms(100);
 	}
+
+	
+	
 }
 
 // dit wordt uitgevoerd bij het opstarten van de arduino
@@ -70,6 +77,9 @@ void GameInit(){
 
 	Nunchuck_setpowerpins();
 	Nunchuck_init();
+
+	// ports leds levens instellen
+	setupPorts();
 
 	// testcode
 	initIrSend();
@@ -132,6 +142,10 @@ void PlayerMove(uint8_t direction){
 	}
 
 	player1Location = newLocation;
+}
+
+uint8_t returnPlayerLocation() {
+	return player1Location;
 }
 
 // bom statussen updaten

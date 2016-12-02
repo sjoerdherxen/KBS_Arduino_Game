@@ -23,10 +23,10 @@ void _displayInfo();
 void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]);
 void _clearSquare(uint8_t square);
 void _displayMenuHelpers(uint8_t witch);
-void _displayBoms(uint16_t *boms, uint8_t *crates);
-void _displayExplode(uint8_t location); 
+void _displayBoms(uint16_t *boms, uint8_t *crates, uint8_t player1Location);
+void _displayExplode(uint8_t location);
 void _displayExplodeDone(uint8_t location);
-int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates);
+int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates, uint8_t playerLoc);
 void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates);
 
 

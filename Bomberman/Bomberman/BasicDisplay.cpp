@@ -1,4 +1,5 @@
 #include "BasicDisplay.h"
+#include "Game.h"
 
 MI0283QT9 scherm;
 uint8_t SDcardLoaded = 0;
@@ -67,7 +68,7 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 		_displayPlayer(player2LocationNew, RGB(0, 0, 255));
 		_clearSquare(player2LocationOld);
 	}
-	_displayBoms(boms, newCrates);
+	_displayBoms(boms, newCrates, player1LocationNew);
 }
 
 // highscores tonen verwacht 5 3 letterige namen. 5 scores.
@@ -208,7 +209,7 @@ void _displayMenuHelpers(uint8_t witch){
 }
 
 // de bommen tekenen die geplaatst zijn
-void _displayBoms(uint16_t *boms, uint8_t *crates){
+void _displayBoms(uint16_t *boms, uint8_t *crates, uint8_t player1Location){
 	for (uint16_t i = 0; i < 6; i++){
 		if (boms[i]){
 			if ((boms[i] & 0x1F) < 0x18){ // bom is zichtbaar.
@@ -224,10 +225,10 @@ void _displayBoms(uint16_t *boms, uint8_t *crates){
 				_clearSquare(boms[i] >> 8);
 				_displayExplode(boms[i] >> 8);
 
-				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 1, crates);
-				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -1, crates);
-				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 16, crates);
-				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -16, crates);
+				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 1, crates, player1Location);
+				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -1, crates, player1Location);
+				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 16, crates, player1Location);
+				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -16, crates, player1Location);
 			}
 			else { // bom explosie weghalen.
 				_clearSquare(boms[i] >> 8);
@@ -250,7 +251,7 @@ void _displayExplode(uint8_t location){ // teken bom explosie
 }
 
 // explosie tekenen voor links rechts omhoog en omlaag.
-int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates){
+int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates, uint8_t playerLoc){
 	for (int8_t j = 1; j < max; j++){
 		uint8_t newLocation = location + j*mul;
 
@@ -272,6 +273,12 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 				return j;
 			}
 		}
+
+		// check of de speler in de explosie staat
+		if (newLocation == playerLoc) {
+			loseLife();
+		}
+
 		// explosie verder tekenen.
 		_clearSquare(location + j*mul);
 		_displayExplode(location + j*mul);
