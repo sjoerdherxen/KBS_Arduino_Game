@@ -10,8 +10,8 @@ void DisplayOn(){
 	scherm.begin();
 	scherm.led(40);
 	scherm.fillScreen(RGB(255, 255, 255));
-	
 }
+
 
 // helderheid van scherm aanpassen, wordt door potentiometer bepaalt.
 void DisplayScherpte(uint8_t x){

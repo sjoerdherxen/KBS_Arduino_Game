@@ -15,8 +15,13 @@ int main(void){
 	init();
 	initIrSend();
 	//GameInit();
+	Serial.begin(9600);
+	while (1){
+		//IrSendByte(170);
+		//_delay_ms(1000);
 
-	while (1);
+		dataRecieve();
+	}
 
 	return 1;
 }
