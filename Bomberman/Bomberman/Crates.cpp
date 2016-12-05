@@ -8,7 +8,7 @@ uint8_t* GenerateCrates(){
 
 	/* randomSeed generates a number with analogRead as seed,
 	since analogRead differs in value, the output of randomSeed
-	will differ to, but it will be equal for the same seed
+	will differ too, but it will be equal for the same seed
 	every time */
 	randomSeed(analogRead(0));
 
