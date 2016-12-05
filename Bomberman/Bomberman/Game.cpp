@@ -79,7 +79,7 @@ void GameInit(){
 	Nunchuck_init();
 
 	// ports leds levens instellen
-	setupPorts();
+	//setupPorts();
 
 	// testcode
 	initIrSend();
