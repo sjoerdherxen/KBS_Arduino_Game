@@ -152,16 +152,10 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 
 // dit zal de countdown afspelen aan het begin van het spel
 void _displayCountDown() {
-	scherm.drawChar(5, 80, '5', RGB(255, 0, 0), RGB(255, 255, 255), 9);
-	_delay_ms(1000);
-	scherm.drawChar(5, 80, '4', RGB(255, 0, 0), RGB(255, 255, 255), 9);
-	_delay_ms(1000);
-	scherm.drawChar(5, 80, '3', RGB(255, 0, 0), RGB(255, 255, 255), 9);
-	_delay_ms(1000);
-	scherm.drawChar(5, 80, '2', RGB(255, 0, 0), RGB(255, 255, 255), 9);
-	_delay_ms(1000);
-	scherm.drawChar(5, 80, '1', RGB(255, 0, 0), RGB(255, 255, 255), 9);
-	_delay_ms(1000);
+	for (int i = 5; i > 0; i--) {
+		scherm.drawInteger(5,80,(unsigned long)i,10, RGB(255, 0, 0), RGB(255, 255, 255), 9);
+		_delay_ms(1000);
+	}
 	scherm.drawChar(5, 80, '1', RGB(255, 255, 255), RGB(255, 255, 255), 9);
 	scherm.drawText(5, 80, "GO", RGB(0, 255, 0), RGB(255, 255, 255), 4);
 	_delay_ms(1000);
