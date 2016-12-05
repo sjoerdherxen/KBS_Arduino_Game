@@ -8,7 +8,6 @@
 #include "BasicDisplay.h"
 #include "soundEffects.h"
 
-
 #ifndef showLives
 
 #define showLives
