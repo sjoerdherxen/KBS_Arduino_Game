@@ -31,7 +31,11 @@ void GameTick(uint16_t count){
 
 	UpdateBoms();
 
-	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs);
+	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
+
+	endOfGame(count);
+	playLoseLife(count);
+	playGameOver(count);
 
 	if (screenBrightness != setBrightness()){
 		screenBrightness = setBrightness();
@@ -73,13 +77,14 @@ void GameInit(){
 	// standaard items goedzetten
 	DisplayOn();
 	setupPot();
+	setupSpeaker();
 	screenBrightness = setBrightness();
 
 	Nunchuck_setpowerpins();
 	Nunchuck_init();
 
 	// ports leds levens instellen
-	//setupPorts();
+	setupExpander();
 
 	// testcode
 	initIrSend();
