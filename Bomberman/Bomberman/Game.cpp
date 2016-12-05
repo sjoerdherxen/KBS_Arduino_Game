@@ -29,7 +29,7 @@ void GameTick(uint16_t count){
 		PlaceBomb();
 	}
 
-	UpdateBoms();
+	updatebombs();
 
 	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
 
@@ -151,7 +151,7 @@ uint8_t returnPlayerLocation() {
 }
 
 // bom statussen updaten
-void UpdateBoms(){
+void updatebombs(){
 	for (uint8_t i = 0; i < 6; i++){
 		if (bombs[i]){
 			if ((bombs[i] & 0x001F) < 0x19){ // status ophogen
