@@ -6,6 +6,8 @@ uint8_t ifPlayLoseLife = 0;									//1 = true dus einde, 0 is false dus geen ei
 uint16_t playLoseLifeTick = 0;
 uint8_t ifPlayGameOver = 0;
 uint16_t playGameOverTick = 0;
+uint8_t ifPlayMusic = 0;
+uint16_t playMusicTick = 0;
 
 void setupSpeaker() {
 	/* setting pin 4 as output for the speaker */
@@ -273,28 +275,43 @@ int musicTempo[] = {
 	8,
 };
 
+void startPlayMusic(uint16_t count) {
+	ifPlayMusic = 1;
+	playMusicTick = count;
+}
+
 /* playing the sound */
-void playMusic() {
-
-	/* size is used in the for loop to show the length of the song */
-	int size = sizeof(music) / sizeof(int);
-
-	/* a for loop that plays the notes in the right order */
-	for (int note = 0; note < size; note++) {
-
-		/* for the duration of the note, the tempo from musicTempo[] has to be devided
-		by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
-		a quarter of a note would be 1000 / 4 etc... */
-		int noteDuration = 1000 / musicTempo[note];
-
-		/* here the note is actually being played using the tone() function */
-		tone(4, music[note], noteDuration);
-
-		/* if you don't want the sound to become absolute rubbish, a delay should be
-		put in, a delay of 100 seems to work well */
-		_delay_ms(100);
-
-		/* the noTone() function stops the tones being outputted */
+void playMusic(uint16_t count) {
+	if (ifPlayMusic) {
+		uint8_t t = (count - playGameOverTick);
+		if (t == 120) {
+			noTone(15);
+			ifPlayGameOver = 0;
+			return;
+		}
 		noTone(4);
+		tone(15, music[t / 2], 83);
 	}
+
+	///* size is used in the for loop to show the length of the song */
+	//int size = sizeof(music) / sizeof(int);
+
+	///* a for loop that plays the notes in the right order */
+	//for (int note = 0; note < size; note++) {
+
+	//	/* for the duration of the note, the tempo from musicTempo[] has to be devided
+	//	by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
+	//	a quarter of a note would be 1000 / 4 etc... */
+	//	int noteDuration = 1000 / musicTempo[note];
+
+	//	/* here the note is actually being played using the tone() function */
+	//	tone(4, music[note], noteDuration);
+
+	//	/* if you don't want the sound to become absolute rubbish, a delay should be
+	//	put in, a delay of 100 seems to work well */
+	//	_delay_ms(100);
+
+	//	/* the noTone() function stops the tones being outputted */
+	//	noTone(4);
+	//}
 }
