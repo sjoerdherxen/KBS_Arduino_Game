@@ -1,11 +1,15 @@
 #include <Arduino.h>
 #include "soundEffects.h"
 
-unsigned long time = 0;;
+unsigned long time = 0;
+uint8_t ifPlayLoseLife = 0;									//1 = true dus einde, 0 is false dus geen einde
+uint16_t playLoseLifeTick = 0;
+uint8_t ifPlayGameOver = 0;
+uint16_t playGameOverTick = 0;
 
 void setupSpeaker() {
 	/* setting pin 4 as output for the speaker */
-	DDRD |= (1 << PORTD4);
+	DDRC |= (1 << PORTC1);
 }
 
 // ** Start **
@@ -25,7 +29,7 @@ void playExplosion() {
 		time++;
 
 		/* the tone() function creates a tone on the given pin. the frequenty of the
-		tone is created using the random() function, which creates a random number 
+		tone is created using the random() function, which creates a random number
 		between the given values, so the tone can be changed by changing these values */
 		tone(4, random(100, 1000));
 	}
@@ -39,7 +43,7 @@ void playExplosion() {
 // ** Lose Life **
 
 /* notes to be used in playLoseLife() */
-int loseLife[] = {
+uint16_t loseLife[] = {
 	NOTE_D3, NOTE_E3, NOTE_D3, NOTE_C3,
 };
 
@@ -48,29 +52,50 @@ int loseLifeTempo[] = {
 	12, 12, 12, 12,
 };
 
+void startLoseLife(uint16_t count) {
+	ifPlayLoseLife = 1;
+	playLoseLifeTick = count;
+}
+
 /* playing the sound */
-void playLoseLife() {
+void playLoseLife(uint16_t count) {
+	if (ifPlayLoseLife) {
+		if (count == playLoseLifeTick) {
+			/* size is used in the for loop to show the length of the song */
 
-	/* size is used in the for loop to show the length of the song */
-	int size = sizeof(loseLife) / sizeof(int);
+			/* a for loop that plays the notes in the right order */
+			//for (int note = 0; note < size; note++) {
 
-	/* a for loop that plays the notes in the right order */
-	for (int note = 0; note < size; note++) {
+				/* for the duration of the note, the tempo from musicTempo[] has to be devided
+				by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
+				a quarter of a note would be 1000 / 4 etc... */
 
-		/* for the duration of the note, the tempo from musicTempo[] has to be devided
-		by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
-		a quarter of a note would be 1000 / 4 etc... */
-		int noteDuration = 1000 / loseLifeTempo[note];
+				/* here the note is actually being played using the tone() function */
+				tone(15, loseLife[0], 83);
 
-		/* here the note is actually being played using the tone() function */
-		tone(4, loseLife[note], noteDuration);
+				/* if you don't want the sound to become absolute rubbish, a delay should be
+				put in, a delay of 140 seems to work well */
+				
 
-		/* if you don't want the sound to become absolute rubbish, a delay should be
-		put in, a delay of 140 seems to work well */
-		_delay_ms(100);
-
-		/* the noTone() function stops the tones being outputted */
-		noTone(4);
+				/* the noTone() function stops the tones being outputted */
+			//}
+		}
+		else if (count == playLoseLifeTick + 1) {
+			noTone(15);
+			tone(15, loseLife[1], 83);
+		}
+		else if (count == playLoseLifeTick + 2) {
+			noTone(15);
+			tone(15, loseLife[2], 83);
+		}
+		else if (count == playLoseLifeTick + 3) {
+			noTone(15);
+			tone(15, loseLife[3], 83);
+		}
+		else if (count == playLoseLifeTick + 4) {
+			noTone(15);
+			ifPlayLoseLife = 0;
+		}
 	}
 }
 
@@ -90,30 +115,46 @@ int gameOverTempo[] = {
 	12, 12, 12, 12,
 };
 
+void startPlayGameOver(uint16_t count) {
+	ifPlayGameOver = 1;
+	playGameOverTick = count;
+}
+
 /* playing the sound */
-void playGameOver() {
+void playGameOver(uint16_t count) {
+	if (ifPlayGameOver) {
+		uint8_t t = (count - playGameOverTick);
+		if (t == 23) {
+			noTone(15);
+			ifPlayGameOver = 0;
+			return;
+		}
+		noTone(4);
+		tone(15, gameOver[t / 2], 83);
+	}
+
 
 	/* size is used in the for loop to show the length of the song */
-	int size = sizeof(gameOver) / sizeof(int);
+	//int size = sizeof(gameOver) / sizeof(int);
 
 	/* a for loop that plays the notes in the right order */
-	for (int note = 0; note < size; note++) {
+	//for (int note = 0; note < size; note++) {
 
 		/* for the duration of the note, the tempo from musicTempo[] has to be devided
 		by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
 		a quarter of a note would be 1000 / 4 etc... */
-		int noteDuration = 1000 / gameOverTempo[note];
+		//int noteDuration = 1000 / gameOverTempo[note];
 
 		/* here the note is actually being played using the tone() function */
-		tone(4, gameOver[note], noteDuration);
+		//tone(4, gameOver[note], noteDuration);
 
 		/* if you don't want the sound to become absolute rubbish, a delay should be
 		put in, a delay of 140 seems to work well */
-		_delay_ms(150);
+		//_delay_ms(200);
 
 		/* the noTone() function stops the tones being outputted */
-		noTone(4);
-	}
+		//noTone(4);
+	//}
 }
 
 // ** Music **
@@ -144,7 +185,7 @@ int music[] = {
 	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
 	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
 	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
-	
+
 	NOTE_F3, // BREAK
 
 	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
@@ -241,8 +282,8 @@ void playMusic() {
 	/* a for loop that plays the notes in the right order */
 	for (int note = 0; note < size; note++) {
 
-		/* for the duration of the note, the tempo from musicTempo[] has to be devided 
-		by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and 
+		/* for the duration of the note, the tempo from musicTempo[] has to be devided
+		by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
 		a quarter of a note would be 1000 / 4 etc... */
 		int noteDuration = 1000 / musicTempo[note];
 

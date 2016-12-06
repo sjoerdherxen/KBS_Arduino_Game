@@ -7,6 +7,7 @@
 #include "ScreenBrightness.h"
 #include "IrComm.h"
 #include "showLives.h"
+#include "soundEffects.h"
 
 #ifndef Game_h
 #define Game_h

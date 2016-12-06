@@ -6,7 +6,7 @@
 #include <wire.h>
 #include <MI0283QT9.h>
 #include "BasicDisplay.h"
-
+#include "soundEffects.h"
 
 #ifndef showLives
 

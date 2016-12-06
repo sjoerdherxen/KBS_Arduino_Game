@@ -6,5 +6,9 @@
 void initIrSend();
 void IrSendByte(uint8_t byte);
 void dataRecieve();
+void SendUpdateData(uint8_t playerlocation, uint16_t bomb);
+void SendInitData(uint8_t seed);
+void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3);
+
 
 #endif

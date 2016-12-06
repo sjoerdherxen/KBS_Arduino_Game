@@ -398,6 +398,7 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 
 			/* the player loses a life */
 			loseLife(count);
+			startLoseLife(count);
 		}
 
 		/* clear the location of the explosion */
