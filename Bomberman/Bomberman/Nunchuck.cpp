@@ -97,16 +97,16 @@ uint8_t Nunchuck_get_data()
 		it also contains the least significant bits for the accelerometer,
 		the next lines check if the received data contains this infromation */
 		if (nunchuck_buf[1] > MAX) {
-			nunchuckdata = 1;
+			nunchuckdata |= 1;
 		}
 		else if (nunchuck_buf[1] < MIN) {
-			nunchuckdata = 3;
+			nunchuckdata |= 3;
 		}
 		else if (nunchuck_buf[0] > MAX) {
-			nunchuckdata = 2;
+			nunchuckdata |= 2;
 		}
 		else if (nunchuck_buf[0] < MIN) {
-			nunchuckdata = 4;
+			nunchuckdata |= 4;
 		}
 
 		if ((nunchuck_buf[5] >> 0) & 1)

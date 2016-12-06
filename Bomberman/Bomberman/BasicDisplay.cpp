@@ -235,7 +235,7 @@ void _displayBoms(uint16_t *boms, uint8_t *crates, uint8_t player1Location, uint
 			}
 			else if ((boms[i] & 0x1F) < 0x19){ // bom explodeerd
 				_clearSquare(boms[i] >> 8);
-				_displayExplode(boms[i] >> 8);
+				_displayExplode(boms[i] >> 8, player1Location, count);
 
 				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, 1, crates, player1Location, count);
 				_explodeLoop(((boms[i] & 0x00C0) >> 4) - 1, boms[i] >> 8, -1, crates, player1Location, count);
@@ -253,7 +253,14 @@ void _displayBoms(uint16_t *boms, uint8_t *crates, uint8_t player1Location, uint
 	}
 }
 
-void _displayExplode(uint8_t location){ // teken bom explosie 
+void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){  
+	// check of de speler in de explosie staat
+	if (playerlocation == location){
+		loseLife(count);
+		startLoseLife(count);
+	}
+
+	// teken bom explosie
 	if (SDcardLoaded){
 		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
 	}
@@ -279,22 +286,16 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 		for (uint8_t u = 0; u < 127; u++){
 			if (crates[u] == newLocation){
 				_clearSquare(newLocation);
-				_displayExplode(newLocation);
+				_displayExplode(newLocation, playerLoc, count);
 				// haal krat weg en stop explosie hierna
 				crates[u] = 0xFF;
 				return j;
 			}
 		}
 
-		// check of de speler in de explosie staat
-		if (newLocation == playerLoc) {
-			loseLife(count);
-			startLoseLife(count);
-		}
-
 		// explosie verder tekenen.
 		_clearSquare(location + j*mul);
-		_displayExplode(location + j*mul);
+		_displayExplode(location + j*mul, playerLoc, count);
 	}
 }
 

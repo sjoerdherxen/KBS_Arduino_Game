@@ -24,9 +24,6 @@
     <ClInclude Include="BasicDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="soundEffects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Crates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -34,9 +31,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Highscore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IrComm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MainMenu.h">
@@ -48,24 +42,24 @@
     <ClInclude Include="ScreenBrightness.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="showLives.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Textures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScreenBrightness.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IRsend.h">
+    <ClInclude Include="IrComm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="showLives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="soundEffects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicDisplay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="soundEffects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Crates.cpp">
@@ -77,9 +71,6 @@
     <ClCompile Include="Highscore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IrComm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -89,16 +80,19 @@
     <ClCompile Include="screenBrightness.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="showLives.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="screenBrightness.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IrSend.cpp">
+    <ClCompile Include="IrComm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="showLives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="soundEffects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
