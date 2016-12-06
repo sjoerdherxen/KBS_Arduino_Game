@@ -17,7 +17,7 @@ void Game();
 void GameInit();
 void PlayerMove(uint8_t direction);
 uint8_t returnPlayerLocation();
-void UpdateBoms();
+void UpdateBombs();
 void PlaceBomb();
 
 #endif

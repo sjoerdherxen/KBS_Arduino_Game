@@ -29,7 +29,7 @@ void GameTick(uint16_t count){
 		PlaceBomb();
 	}
 
-	UpdateBoms();
+	updatebombs();
 
 	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
 
@@ -58,14 +58,14 @@ void Game(){
 
 	// set timer voor gametick
 	uint16_t i = 0;
-
+	unsigned long prevGameTick = millis();
 	// led levens opstarten
 	startLives();
 
 	while (1){
-		// verander timing naar timer/counter/interrupt
+		prevGameTick = millis();
 		GameTick(i++);
-		_delay_ms(100);
+		while (millis() < prevGameTick + 100);
 	}
 
 	
@@ -154,7 +154,7 @@ uint8_t returnPlayerLocation() {
 }
 
 // bom statussen updaten
-void UpdateBoms(){
+void updatebombs(){
 	for (uint8_t i = 0; i < 6; i++){
 		if (bombs[i]){
 			if ((bombs[i] & 0x001F) < 0x19){ // status ophogen
