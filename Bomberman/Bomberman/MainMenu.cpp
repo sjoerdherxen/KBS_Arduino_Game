@@ -11,7 +11,7 @@ uint8_t Mainmenu(){
 	/* this loop keeps going on while in the main menu */
 	while (1){
 		/* a delay is used everytime the while-loop runs */
-		_delay_ms(10);
+		_delay_ms(100);
 
 		/* this displays the main menu itself */
 		DisplayMainMenu(currentDisplay);

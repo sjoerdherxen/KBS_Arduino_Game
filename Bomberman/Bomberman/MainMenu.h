@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "BasicDisplay.h"
 #include "Nunchuck.h"
+#include "soundEffects.h"
 
 #ifndef MainMenu
 #define MainMenu

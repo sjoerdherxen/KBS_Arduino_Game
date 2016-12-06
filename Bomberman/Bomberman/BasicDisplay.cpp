@@ -75,6 +75,7 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 
 	/* the crates of the playing field are drawn */
 	_displayCrates(crates);
+	_displayCountDown();
 
 	/* displays info about players */
 	_displayInfo();
@@ -221,6 +222,18 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 	}
 }
 
+// dit zal de countdown afspelen aan het begin van het spel
+void _displayCountDown() {
+	for (int i = 5; i > 0; i--) {
+		scherm.drawInteger(5,80,(unsigned long)i,10, RGB(255, 0, 0), RGB(255, 255, 255), 9);
+		_delay_ms(1000);
+	}
+	scherm.drawChar(5, 80, '1', RGB(255, 255, 255), RGB(255, 255, 255), 9);
+	scherm.drawText(5, 80, "GO", RGB(0, 255, 0), RGB(255, 255, 255), 4);
+	_delay_ms(1000);
+	scherm.drawText(5, 80, "GO", RGB(255, 255, 255), RGB(255, 255, 255), 4);
+}
+// dit zal de score en upgrades van de spelers tonen. 
 /* function to show the score and power-ups of a player */
 void _displayInfo(){
 	// todo getplayercount

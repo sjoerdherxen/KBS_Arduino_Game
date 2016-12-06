@@ -38,62 +38,60 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	received[0] = 0;
 	Pdata = 0;
 	IrSendByte(b1);
-	//IrSendByte(b2);
-	//IrSendByte(b3);
+	IrSendByte(b2);
+	IrSendByte(b3);
 
 	Serial.println("Sending");
-	uint8_t i = 0;
-	/*
+
 	while (1){
 		Pdata = 0;
-		_delay_ms(10);
-		if (received[0] == (uint8_t)(b1 + b2 + b3) || i == 0){
+		_delay_ms(4);
+		if (received[0] == (uint8_t)(b1 + b2 + b3)){
 			Serial.println("received");
 			break;
 		}
-		//IrSendByte(b1);
-		//IrSendByte(b2);
-		//IrSendByte(b3);
-		i++;
-	}*/
+		IrSendByte(b1);
+		IrSendByte(b2);
+		IrSendByte(b3);
+	}
 }
 
 void IrSendByte(uint8_t byte){
 	// start sequence
 	PORTD &= ~(1 << PIND3);
 	_delay_us(90);
-	PORTD |= (1 << PIND3);
-	_delay_us(90);
-	PORTD &= ~(1 << PIND3);
-	_delay_us(90);
+
+	//	Serial.println(byte);
 
 	// loop bits
 	for (uint8_t i = 0; i < 8; i++){
-		// set high
 		if (byte & (1 << i)){
-			_delay_ms(90);
+			_delay_us(90);
 		}
+		// set high
 		PORTD |= (1 << PORTD3);
 		_delay_us(90);
 		// set low
 		PORTD &= ~(1 << PORTD3);
 		_delay_us(90);
+
 	}
 	// set high
 	PORTD |= (1 << PORTD3);
-	_delay_us(90);
+	_delay_us(350);
 
 	// lange delay voor einde data
 	PORTD &= ~(1 << PORTD3);
-	_delay_us(450);
+	_delay_us(90);
 	PORTD |= 1 << PORTD3;
 
-	_delay_us(1500);
+	_delay_us(600);
 }
 
 void dataRecieve(){
 	if (datasend){
 		IrSendByte(received[0] + received[1] + received[2]);
+		_delay_ms(100);
 		Serial.print(received[0]);
 		Serial.print("-");
 		Serial.print(received[1]);
@@ -102,11 +100,12 @@ void dataRecieve(){
 		Serial.println("--");
 		datasend = 0;
 	}
+	/*
 	if (data) {
-		_delay_ms(1000);
-		Serial.println(data);
-		data = 0;
-	}
+	_delay_ms(1000);
+	Serial.println(data);
+	data = 0;
+	}*/
 }
 
 
@@ -115,16 +114,15 @@ ISR(INT0_vect){
 	unsigned long time = micros() - prevMicros;
 	prevMicros = micros();
 	//Serial.println(time);
-	if (time > 900){
-		//Serial.print("-");
+	if (time > 550){
 		//data = 0;
+
 		// start
 	}
-	else if (time > 315){
+	else if (time > 300){
 		// end
-		//Serial.println("end");
 		received[Pdata] = data;
-		//data = 0;
+		data = 0;
 		Pdata++;
 		if (Pdata == 3){
 			datasend = 1;
@@ -133,21 +131,14 @@ ISR(INT0_vect){
 		//datasend = 1;
 	}
 	else { // bit waarde
-		Serial.println(time);
 		if (time > 225){
 			// 1
-			//Serial.println("bit1");
-			data = data >> 1;
-			//data |= 0x80;
-		}
-		else if (time > 150){
-			//Serial.println("bit0");
 			data = data >> 1;
 			data |= 0x80;
-			// 0
 		}
-		else {
-			//Serial.print("?");
+		else if (time > 150){
+			data = data >> 1;
+			// 0
 		}
 	}
 }

@@ -58,14 +58,14 @@ void Game(){
 
 	// set timer voor gametick
 	uint16_t i = 0;
-
+	unsigned long prevGameTick = millis();
 	// led levens opstarten
 	startLives();
 
 	while (1){
-		// verander timing naar timer/counter/interrupt
+		prevGameTick = millis();
 		GameTick(i++);
-		_delay_ms(100);
+		while (millis() < prevGameTick + 100);
 	}
 
 	
@@ -87,7 +87,7 @@ void GameInit(){
 	setupExpander();
 
 	// testcode
-	initIrSend();
+	//initIrSend();
 
 	// hoofdmenu openen
 	uint8_t selected = Mainmenu();
