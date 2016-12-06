@@ -87,7 +87,7 @@ void GameInit(){
 	setupExpander();
 
 	// testcode
-	initIrSend();
+	//initIrSend();
 
 	// hoofdmenu openen
 	uint8_t selected = Mainmenu();

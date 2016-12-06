@@ -47,10 +47,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire;C:\Users\Sjoerd\Documents\Arduino\libraries\MI0283QT9;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Users\Sjoerd\Documents\Arduino\libraries\digitalWriteFast;C:\Users\Sjoerd\Documents\Arduino\libraries\GraphicsLib;C:\Users\Sjoerd\Documents\Arduino\libraries\MI0283QT2;C:\Users\Sjoerd\Documents\Arduino\libraries\DisplaySPI;C:\Users\Sjoerd\Documents\Arduino\libraries\DisplayI2C;C:\Program Files (x86)\Arduino\libraries\SD\src;C:\Users\Sjoerd\Documents\Arduino\libraries\MI0283QT9\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Users\Sjoerd\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;D:\Dev\arduino\KBS_Game\Bomberman\Bomberman;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>D:\Dev\arduino\KBS_Game\Bomberman\Bomberman\__vm\.Bomberman.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src;C:\Users\nicke\Documents\Arduino\libraries\MI0283QT9;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\src;C:\Users\nicke\Documents\Arduino\libraries\digitalWriteFast;C:\Users\nicke\Documents\Arduino\libraries\GraphicsLib;C:\Users\nicke\Documents\Arduino\libraries\MI0283QT2;C:\Users\nicke\Documents\Arduino\libraries\DisplaySPI;C:\Users\nicke\Documents\Arduino\libraries\DisplayI2C;C:\Program Files (x86)\Arduino\libraries\SD\src;C:\Users\nicke\Documents\Arduino\libraries\digitalWriteFast\utility;C:\Users\nicke\Documents\Arduino\libraries\DisplayI2C\utility;C:\Users\nicke\Documents\Arduino\libraries\DisplaySPI\utility;C:\Users\nicke\Documents\Arduino\libraries\GraphicsLib\utility;C:\Users\nicke\Documents\Arduino\libraries\MI0283QT2\utility;C:\Users\nicke\Documents\Arduino\libraries\MI0283QT9\utility;C:\Program Files (x86)\Arduino\libraries\SD\src\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\src\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Users\nicke\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Users\nicke\Desktop\KBS_Arduino_Game_GitHub_project\Bomberman\Bomberman;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src;C:\Users\nicke\Documents\Arduino\libraries\MI0283QT9;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\src;C:\Users\nicke\Documents\Arduino\libraries\digitalWriteFast;C:\Users\nicke\Documents\Arduino\libraries\GraphicsLib;C:\Users\nicke\Documents\Arduino\libraries\MI0283QT2;C:\Users\nicke\Documents\Arduino\libraries\DisplaySPI;C:\Users\nicke\Documents\Arduino\libraries\DisplayI2C;C:\Program Files (x86)\Arduino\libraries\SD\src;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\ipdizh4h.mo4\Micro Platforms\default\debuggers;C:\Users\nicke\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\nicke\Desktop\KBS_Arduino_Game_GitHub_project\Bomberman\Bomberman\__vm\.Bomberman.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega328p__;__AVR_ATmega328P__;F_CPU=16000000L;ARDUINO=10607;ARDUINO_AVR_UNO;ARDUINO_ARCH_AVR;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega328p__;__AVR_ATmega328P__;F_CPU=16000000L;ARDUINO=106011;ARDUINO_AVR_UNO;ARDUINO_ARCH_AVR;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -80,12 +80,10 @@
     <ClInclude Include="Crates.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Highscore.h" />
-    <ClInclude Include="IrComm.h" />
+    <ClInclude Include="IRsend.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Nunchuck.h" />
     <ClInclude Include="ScreenBrightness.h" />
-    <ClInclude Include="showLives.h" />
-    <ClInclude Include="soundEffects.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="__vm\.Bomberman.vsarduino.h" />
   </ItemGroup>
@@ -94,12 +92,10 @@
     <ClCompile Include="Crates.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Highscore.cpp" />
-    <ClCompile Include="IrComm.cpp" />
+    <ClCompile Include="IrSend.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Nunchuck.cpp" />
     <ClCompile Include="screenBrightness.cpp" />
-    <ClCompile Include="showLives.cpp" />
-    <ClCompile Include="soundEffects.cpp" />
     <ClCompile Include="Textures.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -107,7 +103,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM5" />
+      <UserProperties arduino.upload.port="COM3" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
