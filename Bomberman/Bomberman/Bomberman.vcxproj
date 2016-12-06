@@ -80,10 +80,12 @@
     <ClInclude Include="Crates.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Highscore.h" />
-    <ClInclude Include="IRsend.h" />
+    <ClInclude Include="IrComm.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Nunchuck.h" />
     <ClInclude Include="ScreenBrightness.h" />
+    <ClInclude Include="showLives.h" />
+    <ClInclude Include="soundEffects.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="__vm\.Bomberman.vsarduino.h" />
   </ItemGroup>
@@ -92,10 +94,12 @@
     <ClCompile Include="Crates.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Highscore.cpp" />
-    <ClCompile Include="IrSend.cpp" />
+    <ClCompile Include="IrComm.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Nunchuck.cpp" />
     <ClCompile Include="screenBrightness.cpp" />
+    <ClCompile Include="showLives.cpp" />
+    <ClCompile Include="soundEffects.cpp" />
     <ClCompile Include="Textures.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
