@@ -224,13 +224,17 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 
 // dit zal de countdown afspelen aan het begin van het spel
 void _displayCountDown() {
-	for (int i = 5; i > 0; i--) {
+	for (int i = 5; i > 0; i--) { 
+		//Draw the countdown in the info menu (from 5 to 1)
 		scherm.drawInteger(5,80,(unsigned long)i,10, RGB(255, 0, 0), RGB(255, 255, 255), 9);
 		_delay_ms(1000);
 	}
+	//Delete the 1 in the info menu
 	scherm.drawChar(5, 80, '1', RGB(255, 255, 255), RGB(255, 255, 255), 9);
+	//Draw GO in the info menu
 	scherm.drawText(5, 80, "GO", RGB(0, 255, 0), RGB(255, 255, 255), 4);
 	_delay_ms(1000);
+	//Delete Go in the info menu
 	scherm.drawText(5, 80, "GO", RGB(255, 255, 255), RGB(255, 255, 255), 4);
 }
 // dit zal de score en upgrades van de spelers tonen. 
