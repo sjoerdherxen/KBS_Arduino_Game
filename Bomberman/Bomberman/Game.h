@@ -1,4 +1,4 @@
-#define IsMasterGame 1
+#define IsMasterGame 0
 
 #ifndef Game_h
 #define Game_h
