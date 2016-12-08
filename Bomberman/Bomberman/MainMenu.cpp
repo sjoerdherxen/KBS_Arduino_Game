@@ -46,9 +46,9 @@ uint8_t Mainmenu(){
 	// this is displayed on the secondaire arduino, it will say waiting for primary.
 	DisplayMainMenu(0);
 	while (1){
-		uint8_t seed = 2;
-		if (seed){
-			return seed;
+
+		if (dataAvailable()){
+			return 1;
 		}
 	}
 	return 0;

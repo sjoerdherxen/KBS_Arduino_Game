@@ -48,8 +48,8 @@ void GameTick(uint16_t count){
 }
 
 // deze code is voor het initialseren van de game
-void Game(){
-	crates = GenerateCrates();
+void Game(uint8_t seed){
+	crates = GenerateCrates(seed);
 	// initiele weergave van spel
 	DisplayGame(crates, player1Location, player2Location);
 
@@ -87,19 +87,22 @@ void GameInit(){
 	setupExpander();
 
 	// testcode
-	//initIrSend();
+	initIrSend();
 
 	// hoofdmenu openen
 	_delay_ms(100);
 	uint8_t selected = Mainmenu();
-
+#if IsMasterGame == 1
 	if (selected == 1){ // start game
-		Game();
+		Game(0);
 	}
 	else if (selected == 2){
 		// todo highscore
 		return;
 	}
+#else
+	Game(selected);
+#endif
 }
 
 // beweeg de speler en check of nieuwe locatie een geldige locatie is
