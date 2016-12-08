@@ -95,19 +95,23 @@ void IrSendByte(uint8_t byte){
 
 uint8_t* dataRecieve(){
 	if (datasend){
-		if (received[0] + received[1] + received[2] == received[4]){
+		Serial.print(received[0]);
+		Serial.print("-");
+		Serial.print(received[1]);
+		Serial.print("-");
+		Serial.print(received[2]);
+		Serial.print("-");
+		Serial.println(received[3]);
+
+		if (received[0] + received[1] + received[2] == received[3]){
 			IrSendByte(received[0] + received[1] + received[2]);
-			Serial.print(received[0]);
-			Serial.print("-");
-			Serial.print(received[1]);
-			Serial.print("-");
-			Serial.println(received[2]);
-			datasend = 0;
+
 			return received;
 		}
 		else {
 			IrSendByte(0);
 		}
+		datasend = 0;
 	}
 	return 0;
 }
@@ -120,10 +124,12 @@ uint8_t dataAvailable(){
 ISR(INT0_vect){
 	unsigned long time = micros() - prevMicros;
 	prevMicros = micros();
-	if (time > 550){
+	if (time > 8000){
+	}
+	if (time > 1100){
 		// start
 	}
-	else if (time > 300){
+	else if (time > 600){
 		// end
 		received[Pdata] = data;
 		data = 0;
@@ -134,12 +140,12 @@ ISR(INT0_vect){
 		}
 	}
 	else { // bit waarde
-		if (time > 225){
+		if (time > 450){
 			// 1
 			data = data >> 1;
 			data |= 0x80;
 		}
-		else if (time > 150){
+		else if (time > 300){
 			data = data >> 1;
 			// 0
 		}

@@ -55,7 +55,7 @@ uint8_t* GenerateCrates() {
 	}
 	return c;
 #else 
-	for (uint8_t i = 0; i < 127;){
+	for (uint8_t i = 0; i < 1;){
 		uint8_t *data = dataRecieve();
 		if (data) {
 			c[i] = data[0];
