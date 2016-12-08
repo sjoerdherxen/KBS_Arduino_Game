@@ -2,7 +2,8 @@
 #include "BasicDisplay.h"
 #include "Nunchuck.h"
 #include "soundEffects.h"
-#include "IrComm.h"
+#include "Game.h"
+//#include "IrComm.h"
 
 #ifndef MainMenu
 #define MainMenu

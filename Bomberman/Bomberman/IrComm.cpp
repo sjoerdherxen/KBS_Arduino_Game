@@ -28,7 +28,6 @@ void SendUpdateData(uint8_t playerlocation, uint16_t bomb){
 }
 
 void SendInitData(uint8_t seed){
-	//sendTripple(0xAA, 0xAA, 0xAA);
 	sendTripple(seed, 0, 0);
 }
 
@@ -41,13 +40,10 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	IrSendByte(b2);
 	IrSendByte(b3);
 
-	Serial.println("Sending");
-
 	while (1){
 		Pdata = 0;
 		_delay_ms(4);
 		if (received[0] == (uint8_t)(b1 + b2 + b3)){
-			Serial.println("received");
 			break;
 		}
 		IrSendByte(b1);
@@ -92,9 +88,9 @@ uint8_t dataRecieve(){
 	if (datasend){
 		IrSendByte(received[0] + received[1] + received[2]);
 		datasend = 0;
-		//return received;
+		return received[0];
 	}
-	return 1;
+	return 0;
 }
 
 
@@ -102,10 +98,7 @@ uint8_t dataRecieve(){
 ISR(INT0_vect){
 	unsigned long time = micros() - prevMicros;
 	prevMicros = micros();
-	//Serial.println(time);
 	if (time > 550){
-		//data = 0;
-
 		// start
 	}
 	else if (time > 300){
@@ -117,7 +110,6 @@ ISR(INT0_vect){
 			datasend = 1;
 			Pdata = 0;
 		}
-		//datasend = 1;
 	}
 	else { // bit waarde
 		if (time > 225){
