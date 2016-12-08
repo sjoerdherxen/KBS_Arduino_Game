@@ -50,17 +50,20 @@ uint8_t* GenerateCrates() {
 		x++;
 	}
 	
-	for(uint8_t i = 0; i < 1; i+=3){
+	for(uint8_t i = 0; i < 127; i+=3){
 		sendTripple(c[i], c[i+1], c[i+2]);
 	}
 	return c;
 #else 
-	for (uint8_t i = 0; i < 1;){
+	for (uint8_t i = 0; i < 127;){
 		uint8_t *data = dataRecieve();
 		if (data) {
 			c[i] = data[0];
 			c[i + 1] = data[1];
 			c[i + 2] = data[2];
+			data[0] = 0;
+			data[1] = 0;
+			data[2] = 0;
 			i += 3;
 		}
 	}
