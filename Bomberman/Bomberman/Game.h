@@ -15,7 +15,7 @@
 #include "soundEffects.h"
 
 void GameTick(uint16_t count);
-void Game(uint8_t seed);
+void Game();
 void GameInit();
 void PlayerMove(uint8_t direction);
 uint8_t returnPlayerLocation();
