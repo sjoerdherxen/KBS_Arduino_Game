@@ -21,7 +21,7 @@ void initIrSend(){
 	TCCR2B = _BV(CS20);   // No prescaler
 	OCR2A = 209;
 	*/
-	received = (uint8_t *)malloc(3);
+	received = (uint8_t *)malloc(4);
 }
 
 void SendUpdateData(uint8_t playerlocation, uint16_t bomb){
@@ -37,9 +37,15 @@ void SendInitData(uint8_t seed){
 void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	received[0] = 0;
 	Pdata = 0;
+	Serial.print(b1);
+	Serial.print("-");
+	Serial.print(b2);
+	Serial.print("-");
+	Serial.println(b3);
 	IrSendByte(b1);
 	IrSendByte(b2);
 	IrSendByte(b3);
+	IrSendByte(b1 + b2 + b3);
 
 	while (1){
 		Pdata = 0;
@@ -50,7 +56,9 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 		IrSendByte(b1);
 		IrSendByte(b2);
 		IrSendByte(b3);
+		IrSendByte(b1 + b2 + b3);
 	}
+	_delay_ms(50);
 }
 
 void IrSendByte(uint8_t byte){
@@ -87,12 +95,19 @@ void IrSendByte(uint8_t byte){
 
 uint8_t* dataRecieve(){
 	if (datasend){
-		IrSendByte(received[0] + received[1] + received[2]);
-		Serial.println(received[0]);
-		Serial.println(received[1]);
-		Serial.println(received[2]);
-		datasend = 0;
-		return received;
+		if (received[0] + received[1] + received[2] == received[4]){
+			IrSendByte(received[0] + received[1] + received[2]);
+			Serial.print(received[0]);
+			Serial.print("-");
+			Serial.print(received[1]);
+			Serial.print("-");
+			Serial.println(received[2]);
+			datasend = 0;
+			return received;
+		}
+		else {
+			IrSendByte(0);
+		}
 	}
 	return 0;
 }
@@ -113,7 +128,7 @@ ISR(INT0_vect){
 		received[Pdata] = data;
 		data = 0;
 		Pdata++;
-		if (Pdata == 3){
+		if (Pdata == 4){
 			datasend = 1;
 			Pdata = 0;
 		}

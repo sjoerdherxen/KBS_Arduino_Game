@@ -101,7 +101,7 @@ void GameInit(){
 		return;
 	}
 #else
-	Game(selected);
+	Game();
 #endif
 }
 
