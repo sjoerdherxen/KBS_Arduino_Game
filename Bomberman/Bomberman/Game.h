@@ -1,4 +1,4 @@
-#define IsMasterGame 1
+#define IsMasterGame 0
 
 #ifndef Game_h
 #define Game_h
@@ -10,12 +10,12 @@
 #include "MainMenu.h"
 #include "Textures.h"
 #include "ScreenBrightness.h"
-//#include "IrComm.h"
+#include "IrComm.h"
 #include "showLives.h"
 #include "soundEffects.h"
 
 void GameTick(uint16_t count);
-void Game();
+void Game(uint8_t seed);
 void GameInit();
 void PlayerMove(uint8_t direction);
 uint8_t returnPlayerLocation();

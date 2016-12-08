@@ -3,7 +3,7 @@
 volatile uint8_t datasend = 0;
 volatile unsigned long prevMicros = 0;
 volatile uint8_t data = 0;
-volatile uint8_t received[3];
+uint8_t *received;
 volatile uint8_t Pdata = 0;
 
 void initIrSend(){
@@ -21,6 +21,7 @@ void initIrSend(){
 	TCCR2B = _BV(CS20);   // No prescaler
 	OCR2A = 209;
 	*/
+	received = (uint8_t *)malloc(3);
 }
 
 void SendUpdateData(uint8_t playerlocation, uint16_t bomb){
@@ -84,15 +85,21 @@ void IrSendByte(uint8_t byte){
 	_delay_us(600);
 }
 
-uint8_t dataRecieve(){
+uint8_t* dataRecieve(){
 	if (datasend){
 		IrSendByte(received[0] + received[1] + received[2]);
+		Serial.println(received[0]);
+		Serial.println(received[1]);
+		Serial.println(received[2]);
 		datasend = 0;
-		return received[0];
+		return received;
 	}
 	return 0;
 }
 
+uint8_t dataAvailable(){
+	return datasend;
+}
 
 // pinchange op pin2,van hoog naar laag.
 ISR(INT0_vect){
