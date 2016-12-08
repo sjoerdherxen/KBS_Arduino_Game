@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "BasicDisplay.h"
 #include <Arduino.h>
 #include "Nunchuck.h"

@@ -283,10 +283,10 @@ void startPlayMusic(uint16_t count) {
 /* playing the sound */
 void playMusic(uint16_t count) {
 	if (ifPlayMusic) {
-		uint8_t t = (count - playGameOverTick);
+		uint8_t t = (count - playMusicTick);
 		if (t == 120) {
 			noTone(15);
-			ifPlayGameOver = 0;
+			ifPlayMusic = 0;
 			return;
 		}
 		noTone(4);

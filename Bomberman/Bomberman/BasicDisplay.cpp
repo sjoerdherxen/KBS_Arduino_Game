@@ -116,7 +116,7 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 	}
 
 	/*  */
-	_displaybombs(bombs, newCrates, player1LocationNew, count);
+	_displayBombs(bombs, newCrates, player1LocationNew, count);
 }
 
 // highscores tonen verwacht 5 3 letterige namen. 5 scores.
