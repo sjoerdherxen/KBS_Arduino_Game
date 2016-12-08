@@ -70,9 +70,6 @@ void Game(){
 		GameTick(i++);
 		while (millis() < prevGameTick + 100);
 	}
-
-
-
 }
 
 // dit wordt uitgevoerd bij het opstarten van de arduino
