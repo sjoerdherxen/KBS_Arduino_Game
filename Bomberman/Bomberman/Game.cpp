@@ -32,7 +32,7 @@ void GameTick(uint16_t count){
 	}
 	
 
-	updatebombs();
+	UpdateBombs();
 
 	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
 
@@ -93,6 +93,7 @@ void GameInit(){
 	//initIrSend();
 
 	// hoofdmenu openen
+	
 	uint8_t selected = Mainmenu();
 
 	if (selected == 1){ // start game
@@ -165,7 +166,7 @@ uint8_t returnPlayerLocation() {
 }
 
 // bom statussen updaten
-void updatebombs(){
+void UpdateBombs(){
 	for (uint8_t i = 0; i < 6; i++){
 		if (bombs[i]){
 			if ((bombs[i] & 0x001F) < 0x19){ // status ophogen
