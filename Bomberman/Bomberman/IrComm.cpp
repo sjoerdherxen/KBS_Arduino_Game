@@ -42,6 +42,7 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	Serial.print(b2);
 	Serial.print("-");
 	Serial.println(b3);
+
 	IrSendByte(b1);
 	IrSendByte(b2);
 	IrSendByte(b3);
@@ -49,13 +50,15 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 
 	while (1){
 		Pdata = 0;
-		_delay_ms(4);
+		_delay_ms(10);
 		if (received[0] == (uint8_t)(b1 + b2 + b3)){
 			break;
 		}
+		
 		IrSendByte(b1);
 		IrSendByte(b2);
 		IrSendByte(b3);
+	
 		IrSendByte(b1 + b2 + b3);
 	}
 	_delay_ms(50);
@@ -64,33 +67,33 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 void IrSendByte(uint8_t byte){
 	// start sequence
 	PORTD &= ~(1 << PIND3);
-	_delay_us(90);
+	_delay_us(180);
 
 	//	Serial.println(byte);
 
 	// loop bits
 	for (uint8_t i = 0; i < 8; i++){
 		if (byte & (1 << i)){
-			_delay_us(90);
+			_delay_us(180);
 		}
 		// set high
 		PORTD |= (1 << PORTD3);
-		_delay_us(90);
+		_delay_us(180);
 		// set low
 		PORTD &= ~(1 << PORTD3);
-		_delay_us(90);
+		_delay_us(180);
 
 	}
 	// set high
 	PORTD |= (1 << PORTD3);
-	_delay_us(350);
+	_delay_us(700);
 
 	// lange delay voor einde data
 	PORTD &= ~(1 << PORTD3);
-	_delay_us(90);
+	_delay_us(180);
 	PORTD |= 1 << PORTD3;
 
-	_delay_us(600);
+	_delay_us(1200);
 }
 
 uint8_t* dataRecieve(){
