@@ -14,18 +14,10 @@
 
 int main(void){
 	init();
-	initIrSend();
-	//GameInit();
-	Serial.begin(9600);
-	while (1){
-		//IrSendByte(170);
-		//_delay_ms(1000);
-		dataRecieve();
-		if (Serial.available()){
-			Serial.println(Serial.readString());
-			SendInitData(0x11);
-		}
-	}
+	//initIrSend();
+	GameInit();
+
+	while (1);
 
 	return 1;
 }
