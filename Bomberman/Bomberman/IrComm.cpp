@@ -29,7 +29,7 @@ void SendUpdateData(uint8_t playerlocation, uint16_t bomb){
 
 void SendInitData(uint8_t seed){
 	//sendTripple(0xAA, 0xAA, 0xAA);
-	sendTripple(seed, seed, seed);
+	sendTripple(seed, 0, 0);
 }
 
 
@@ -88,24 +88,13 @@ void IrSendByte(uint8_t byte){
 	_delay_us(600);
 }
 
-void dataRecieve(){
+uint8_t dataRecieve(){
 	if (datasend){
 		IrSendByte(received[0] + received[1] + received[2]);
-		_delay_ms(100);
-		Serial.print(received[0]);
-		Serial.print("-");
-		Serial.print(received[1]);
-		Serial.print("-");
-		Serial.print(received[2]);
-		Serial.println("--");
 		datasend = 0;
+		//return received;
 	}
-	/*
-	if (data) {
-	_delay_ms(1000);
-	Serial.println(data);
-	data = 0;
-	}*/
+	return 1;
 }
 
 

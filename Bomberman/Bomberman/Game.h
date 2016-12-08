@@ -1,3 +1,5 @@
+#define IsMasterGame 1
+
 #include "BasicDisplay.h"
 #include <Arduino.h>
 #include "Nunchuck.h"
