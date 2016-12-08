@@ -16,6 +16,11 @@ void GameTick(uint16_t count){
 	uint8_t nunchuck = Nunchuck_get_data();
 
 	uint8_t oldpl1Loc = player1Location;
+	
+	if (nunchuck & 0x40){
+		PlaceBomb();
+	}
+	
 	if (nextPlayerMove){
 		nextPlayerMove--;
 	}
@@ -25,11 +30,9 @@ void GameTick(uint16_t count){
 			nextPlayerMove = 1;
 		}
 	}
-	if (nunchuck & 0x40){
-		PlaceBomb();
-	}
+	
 
-	updatebombs();
+	UpdateBombs();
 
 	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
 
@@ -68,9 +71,6 @@ void Game(){
 		GameTick(i++);
 		while (millis() < prevGameTick + 100);
 	}
-
-	
-	
 }
 
 // dit wordt uitgevoerd bij het opstarten van de arduino
@@ -88,11 +88,12 @@ void GameInit(){
 	setupExpander();
 
 	// testcode
-	//initIrSend();
+	initIrSend();
 
 	// hoofdmenu openen
+	_delay_ms(100);
 	uint8_t selected = Mainmenu();
-
+#if IsMasterGame == 1
 	if (selected == 1){ // start game
 		Game();
 	}
@@ -100,6 +101,9 @@ void GameInit(){
 		// todo highscore
 		return;
 	}
+#else
+	Game();
+#endif
 }
 
 // beweeg de speler en check of nieuwe locatie een geldige locatie is
@@ -131,21 +135,29 @@ void PlayerMove(uint8_t direction){
 	}
 	// is statisch block
 	if ((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1){
-		newLocation = player1Location;
+		return;
 	}
-	else {
-		// is krat
-		for (uint8_t i = 0; i < 127; i++){
-			if (crates[i] == newLocation){
-				newLocation = player1Location;
-				break;
+
+	// is krat
+	for (uint8_t i = 0; i < 127; i++){
+		if (crates[i] == newLocation){
+			return;
+		}
+	}
+	// is andere speler hier
+	if (newLocation == player2Location){
+		return;
+	}
+
+	// is bom
+	for (uint8_t i = 0; i < 6; i++){
+		if (bombs[i]){
+			if ((bombs[i] & 0xFF00) >> 8 == newLocation){
+				return;
 			}
 		}
-		// is andere speler hier
-		if (newLocation == player2Location){
-			newLocation = player1Location;
-		}
 	}
+
 
 	player1Location = newLocation;
 }
@@ -155,7 +167,7 @@ uint8_t returnPlayerLocation() {
 }
 
 // bom statussen updaten
-void updatebombs(){
+void UpdateBombs(){
 	for (uint8_t i = 0; i < 6; i++){
 		if (bombs[i]){
 			if ((bombs[i] & 0x001F) < 0x19){ // status ophogen

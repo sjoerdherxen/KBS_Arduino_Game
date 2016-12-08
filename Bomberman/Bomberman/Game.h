@@ -1,4 +1,8 @@
-#include <stdint.h>
+#define IsMasterGame 1
+
+#ifndef Game_h
+#define Game_h
+
 #include "BasicDisplay.h"
 #include <Arduino.h>
 #include "Nunchuck.h"
@@ -9,9 +13,6 @@
 #include "IrComm.h"
 #include "showLives.h"
 #include "soundEffects.h"
-
-#ifndef Game_h
-#define Game_h
 
 void GameTick(uint16_t count);
 void Game();

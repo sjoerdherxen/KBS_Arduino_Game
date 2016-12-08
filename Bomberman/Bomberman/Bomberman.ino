@@ -3,19 +3,14 @@
 #include <Arduino.h>
 #include <MI0283QT9.h>
 
-//#include "IrComm.h"
 #include "Textures.h"
 #include "BasicDisplay.h"
 #include "Game.h"
 
-#define MasterGame
-//#define SlaveGame
-
-//uint8_t crates[127];
-
 int main(void){
 	init();
 	//initIrSend();
+	Serial.begin(9600);
 	GameInit();
 
 	while (1);
