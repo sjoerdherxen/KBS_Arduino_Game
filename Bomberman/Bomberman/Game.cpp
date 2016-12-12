@@ -93,6 +93,7 @@ void GameInit(){
 	// hoofdmenu openen
 	_delay_ms(100);
 	uint8_t selected = Mainmenu();
+
 #if IsMasterGame == 1
 	if (selected == 1){ // start game
 		Game();
