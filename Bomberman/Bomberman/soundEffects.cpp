@@ -281,37 +281,26 @@ void startPlayMusic(uint16_t count) {
 }
 
 /* playing the sound */
-void playMusic(uint16_t count) {
-	if (ifPlayMusic) {
-		uint8_t t = (count - playMusicTick);
-		if (t == 120) {
-			noTone(15);
-			ifPlayMusic = 0;
-			return;
-		}
+void playMusic() {
+	/* size is used in the for loop to show the length of the song */
+	int size = sizeof(music) / sizeof(int);
+
+	/* a for loop that plays the notes in the right order */
+	for (int note = 0; note < size; note++) {
+
+		/* for the duration of the note, the tempo from musicTempo[] has to be devided
+		by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
+		a quarter of a note would be 1000 / 4 etc... */
+		int noteDuration = 1000 / musicTempo[note];
+
+		/* here the note is actually being played using the tone() function */
+		tone(4, music[note], noteDuration);
+
+		/* if you don't want the sound to become absolute rubbish, a delay should be
+		put in, a delay of 100 seems to work well */
+		_delay_ms(100);
+
+		/* the noTone() function stops the tones being outputted */
 		noTone(4);
-		tone(15, music[t / 2], 83);
 	}
-
-	///* size is used in the for loop to show the length of the song */
-	//int size = sizeof(music) / sizeof(int);
-
-	///* a for loop that plays the notes in the right order */
-	//for (int note = 0; note < size; note++) {
-
-	//	/* for the duration of the note, the tempo from musicTempo[] has to be devided
-	//	by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
-	//	a quarter of a note would be 1000 / 4 etc... */
-	//	int noteDuration = 1000 / musicTempo[note];
-
-	//	/* here the note is actually being played using the tone() function */
-	//	tone(4, music[note], noteDuration);
-
-	//	/* if you don't want the sound to become absolute rubbish, a delay should be
-	//	put in, a delay of 100 seems to work well */
-	//	_delay_ms(100);
-
-	//	/* the noTone() function stops the tones being outputted */
-	//	noTone(4);
-	//}
 }
