@@ -39,7 +39,7 @@ void GameTick(uint16_t count){
 	endOfGame(count);
 	playLoseLife(count);
 	playGameOver(count);
-	playMusic(count);
+	playMusic();
 
 	if (screenBrightness != setBrightness()){
 		screenBrightness = setBrightness();
@@ -93,6 +93,7 @@ void GameInit(){
 	// hoofdmenu openen
 	_delay_ms(100);
 	uint8_t selected = Mainmenu();
+
 #if IsMasterGame == 1
 	if (selected == 1){ // start game
 		Game();

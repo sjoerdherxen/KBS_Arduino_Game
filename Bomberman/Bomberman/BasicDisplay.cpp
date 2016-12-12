@@ -4,6 +4,58 @@
 MI0283QT9 scherm;
 uint8_t SDcardLoaded = 0;
 
+/* function to display bombs on the playing field */
+void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count) {
+
+	/* for-loop to loop through all the bombs */
+	for (uint16_t i = 0; i < 6; i++) {
+
+		/* the function only works if the called bomb is a bomb */
+		if (bombs[i]) {
+
+			/* if the bomb is visible */
+			if ((bombs[i] & 0x1F) < 0x18) {
+
+				/* clear the square where the bomb is placed */
+				_clearSquare(bombs[i] >> 8);
+
+				/* if the SD-card is inserted, draw the texture of the bomb */
+				if (SDcardLoaded) {
+					drawTexture(1, ((bombs[i] & 0xF000) >> 12) * 16 + 96, ((bombs[i] & 0x0F00) >> 8) * 16 + 16, &scherm);
+				}
+
+				/* if the SD-card is not inserted, draw the default texture of the bomb */
+				else {
+					scherm.drawCircle(((bombs[i] & 0xF000) >> 12) * 16 + 104, ((bombs[i] & 0x0F00) >> 8) * 16 + 24, 7, RGB(0, 0, 0));
+				}
+			}
+			/* if the bomb explodes */
+			else if ((bombs[i] & 0x1F) < 0x19) {
+				/* clear the square where the bomb is placed, so the explosion can be drawn */
+				_clearSquare(bombs[i] >> 8);
+
+				/* display the explosion of the bomb */
+				_displayExplode(bombs[i] >> 8, player1Location, count);
+
+				/* display the explosion of the bomb in all four directions */
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 1, crates, player1Location, count);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates, player1Location, count);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates, player1Location, count);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates, player1Location, count);
+			}
+
+			/* remove the explosion */
+			else {
+				_clearSquare(bombs[i] >> 8);
+				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 1, crates);
+				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates);
+				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates);
+				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates);
+			}
+		}
+	}
+}
+
 /* function to be used to start the lcd-screen */
 void DisplayOn(){
 	/* this tries to open the SD-card */
@@ -218,6 +270,7 @@ void _displayCrates(uint8_t crates[]){
 		}
 	}
 }
+
 /* function to draw the players at the beginning of the game */
 void _displayPlayer(int_least16_t position, uint16_t playerColor){
 
@@ -231,13 +284,15 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 	}
 }
 
-// dit zal de countdown afspelen aan het begin van het spel
+// this function will be executed when the game starts
 void _displayCountDown() {
+	// For-loop to repeat the following code 5 times
 	for (int i = 5; i > 0; i--) {
 		//Draw the countdown in the info menu (from 5 to 1)
 		scherm.drawInteger(5, 80, (unsigned long)i, 10, RGB(255, 0, 0), RGB(255, 255, 255), 9);
 		_delay_ms(1000);
 	}
+
 	//Delete the 1 in the info menu
 	scherm.drawChar(5, 80, '1', RGB(255, 255, 255), RGB(255, 255, 255), 9);
 	//Draw GO in the info menu
@@ -246,7 +301,7 @@ void _displayCountDown() {
 	//Delete Go in the info menu
 	scherm.drawText(5, 80, "GO", RGB(255, 255, 255), RGB(255, 255, 255), 4);
 }
-// dit zal de score en upgrades van de spelers tonen. 
+
 /* function to show the score and power-ups of a player */
 void _displayInfo(){
 	// todo getplayercount
@@ -294,7 +349,7 @@ void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]){
 	}
 }
 
-/* clear a square in the playing field */
+/* function to clear a square in the playing field */
 void _clearSquare(uint8_t square){
 	scherm.fillRect(96 + ((square & 0xF0) >> 4) * 16, 16 + (square & 0x0F) * 16, 16, 16, RGB(255, 255, 255));
 }
@@ -346,24 +401,7 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, ui
 				/* display the explosion of the bomb */
 				_displayExplode(bombs[i] >> 8, player1Location, count);
 
-				/* display the explosion of the bomb in all four directions */
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 1, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates, player1Location, count);
-			}
 
-			/* remove the explosion */
-			else {
-				_clearSquare(bombs[i] >> 8);
-				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 1, crates);
-				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates);
-				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates);
-				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates);
-			}
-		}
-	}
-}
 
 void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
 	// check of de speler in de explosie staat

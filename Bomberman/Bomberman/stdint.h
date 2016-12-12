@@ -36,6 +36,8 @@ POSSIBILITY OF SUCH DAMAGE. */
 * ISO/IEC 9899:1999  7.18 Integer types <stdint.h>
 */
 
+typedef unsigned char uint8_t;
+
 #ifndef __STDINT_H_
 #define __STDINT_H_
 
