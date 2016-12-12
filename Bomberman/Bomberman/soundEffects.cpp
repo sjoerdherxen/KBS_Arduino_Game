@@ -2,6 +2,8 @@
 #include "soundEffects.h"
 
 unsigned long time = 0;
+uint8_t ifPlayExplosion = 0;
+uint16_t playExplosionTick = 0;
 uint8_t ifPlayLoseLife = 0;									//1 = true dus einde, 0 is false dus geen einde
 uint16_t playLoseLifeTick = 0;
 uint8_t ifPlayGameOver = 0;
@@ -23,23 +25,38 @@ void playStart() {
 
 // ** Explosion **
 
-void playExplosion() {
+void startPlayExplosion(uint16_t count) {
+	ifPlayExplosion = 1;
+	playExplosionTick = count;
+}
 
-	/* a loop of 2000 ms (the time that the explosion is heard) this can be
-	changed by changing the value to a different one */
-	while (time <= 2000) {
-		time++;
-
-		/* the tone() function creates a tone on the given pin. the frequenty of the
-		tone is created using the random() function, which creates a random number
-		between the given values, so the tone can be changed by changing these values */
-		tone(4, random(100, 1000));
+void playExplosion(uint16_t count) {
+	if (ifPlayExplosion) {
+		uint8_t t = (count - playExplosionTick);
+		if (t = 10) {
+			noTone(15);
+			ifPlayExplosion = 0;
+			return;
+		}
+		noTone(15);
+		tone(15, random(100, 1000));
 	}
 
-	/* the noTone() function stops the tone being outputted */
-	noTone(4);
+	///* a loop of 2000 ms (the time that the explosion is heard) this can be
+	//changed by changing the value to a different one */
+	//while (time <= 2000) {
+	//	time++;
 
-	time = 0;
+	//	/* the tone() function creates a tone on the given pin. the frequenty of the
+	//	tone is created using the random() function, which creates a random number
+	//	between the given values, so the tone can be changed by changing these values */
+	//	tone(4, random(100, 1000));
+	//}
+
+	///* the noTone() function stops the tone being outputted */
+	//noTone(4);
+
+	//time = 0;
 }
 
 // ** Lose Life **
@@ -131,7 +148,7 @@ void playGameOver(uint16_t count) {
 			ifPlayGameOver = 0;
 			return;
 		}
-		noTone(4);
+		noTone(15);
 		tone(15, gameOver[t / 2], 83);
 	}
 
@@ -151,7 +168,7 @@ void playGameOver(uint16_t count) {
 		//tone(4, gameOver[note], noteDuration);
 
 		/* if you don't want the sound to become absolute rubbish, a delay should be
-		put in, a delay of 140 seems to work well */
+		put in, a delay of 200 seems to work well */
 		//_delay_ms(200);
 
 		/* the noTone() function stops the tones being outputted */
@@ -272,7 +289,7 @@ int musicTempo[] = {
 	12, 12, 12, 12,
 	12, 12, 12, 12,
 
-	8,
+	8, // END
 };
 
 void startPlayMusic(uint16_t count) {
@@ -281,26 +298,37 @@ void startPlayMusic(uint16_t count) {
 }
 
 /* playing the sound */
-void playMusic() {
-	/* size is used in the for loop to show the length of the song */
-	int size = sizeof(music) / sizeof(int);
-
-	/* a for loop that plays the notes in the right order */
-	for (int note = 0; note < size; note++) {
-
-		/* for the duration of the note, the tempo from musicTempo[] has to be devided
-		by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
-		a quarter of a note would be 1000 / 4 etc... */
-		int noteDuration = 1000 / musicTempo[note];
-
-		/* here the note is actually being played using the tone() function */
-		tone(4, music[note], noteDuration);
-
-		/* if you don't want the sound to become absolute rubbish, a delay should be
-		put in, a delay of 100 seems to work well */
-		_delay_ms(100);
-
-		/* the noTone() function stops the tones being outputted */
-		noTone(4);
+void playMusic(uint16_t count) {
+	if (ifPlayMusic) {
+		uint8_t t = (count - playMusicTick);
+		if (t == 323) {
+			noTone(15);
+			ifPlayMusic = 0;
+			return;
+		}
+		noTone(15);
+		tone(15, music[t / 2], 83);
 	}
+
+	///* size is used in the for loop to show the length of the song */
+	//int size = sizeof(music) / sizeof(int);
+
+	///* a for loop that plays the notes in the right order */
+	//for (int note = 0; note < size; note++) {
+
+	//	/* for the duration of the note, the tempo from musicTempo[] has to be devided
+	//	by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
+	//	a quarter of a note would be 1000 / 4 etc... */
+	//	int noteDuration = 1000 / musicTempo[note];
+
+	//	/* here the note is actually being played using the tone() function */
+	//	tone(4, music[note], noteDuration);
+
+	//	/* if you don't want the sound to become absolute rubbish, a delay should be
+	//	put in, a delay of 100 seems to work well */
+	//	_delay_ms(100);
+
+	//	/* the noTone() function stops the tones being outputted */
+	//	noTone(4);
+	//}
 }
