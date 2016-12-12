@@ -6,29 +6,33 @@
 /* used to setup the speaker */
 void setupSpeaker();
 
-/* tones to play at the start of the game */
-void playStart();
+/* function to start the explosion sound */
+void startPlayExplosion(uint16_t count);
 
-/* tones to play when a bomb explodes */
-void playExplosion();
+/* function that contains the tones of the explosion */
+void playExplosion(uint16_t count);
 
-/* tones to play when a player loses a life */
-void playLoseLife(uint16_t count);
-
-/* tones to play when the player dies */
-void playGameOver(uint16_t count);
-
-/* tones to play when there is music to play */
-void playMusic(uint16_t count);
-
+/* function to start the lose life sound */
 void startLoseLife(uint16_t count);
 
+/* function that contains the tones of the lose life sound */
+void playLoseLife(uint16_t count);
 
-void startPlayGameOver(uint16_t count);
+/* function to start the game over sound */
+void startGameOver(uint16_t count);
+
+/* function that contains the tones of the game over sound */
+void playGameOver(uint16_t count);
+
+/* function to start the music */
+void startMusic(uint16_t count);
+
+/* function that contains the tones of the music */
+void playMusic(uint16_t count);
 
 #endif
 
-/* notes to be used by the tone() function */
+/* notes to be used by the tone() function (not all are used) */
 #define NOTE_B0  31
 #define NOTE_C1  33
 #define NOTE_CS1 35

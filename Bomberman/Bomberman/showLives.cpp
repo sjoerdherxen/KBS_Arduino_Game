@@ -60,7 +60,7 @@ void loseLife(uint16_t count) {
 		//The endOfGameTick integer gets the current gametick value
 		endOfGameTick = count;
 		//Starts the gameOver animation and gives the current gametick value with it
-		startPlayGameOver(count);
+		startGameOver(count);
 		//ifEndGame gets the value 3, it is set to 3 so the animation will be executed 3 times
 		ifEndGame = 3;									
 	}

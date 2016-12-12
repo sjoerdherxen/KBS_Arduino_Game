@@ -1,8 +1,18 @@
 #include "MainMenu.h"
 
+int ifStartMusic = 0;
+
+void mainMenuTick(uint16_t count) {
+	if (ifStartMusic) {
+		startMusic(count);
+	}
+}
+
 /* function used to make the main menu and to display it,
 it returns values of selected menu items */
 uint8_t Mainmenu(){
+	ifStartMusic = 1;
+
 #if IsMasterGame == 1
 	/* the currentdisplay variable is used to
 	determine which	menu item is selected */
