@@ -84,7 +84,8 @@ void DisplayScherpte(uint8_t x){
 /* function to draw the main menu, it needs a selected menu item to function */
 void DisplayMainMenu(uint8_t selected){
 #if IsMasterGame == 1
-	/* when the screen opens for the first time, selected equals 0 */
+	/* when the screen opens for the first 
+	, selected equals 0 */
 	if (selected == 0){
 		/* fills the screen with a white color */
 		scherm.fillScreen(RGB(255, 255, 255));
