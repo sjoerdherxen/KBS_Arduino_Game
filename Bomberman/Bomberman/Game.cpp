@@ -39,7 +39,10 @@ void GameTick(uint16_t count){
 	endOfGame(count);
 	playLoseLife(count);
 	playGameOver(count);
-	playMusic();
+	playExplosion(count);
+
+	mainMenuTick(count);
+	playMusic(count);
 
 	if (screenBrightness != setBrightness()){
 		screenBrightness = setBrightness();

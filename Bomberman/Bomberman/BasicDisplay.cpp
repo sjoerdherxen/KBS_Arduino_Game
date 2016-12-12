@@ -31,6 +31,9 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, ui
 			}
 			/* if the bomb explodes */
 			else if ((bombs[i] & 0x1F) < 0x19) {
+				/* make an explosion sound */
+				playExplosion(count);
+
 				/* clear the square where the bomb is placed, so the explosion can be drawn */
 				_clearSquare(bombs[i] >> 8);
 
