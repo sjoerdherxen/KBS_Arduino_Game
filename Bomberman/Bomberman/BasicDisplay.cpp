@@ -284,13 +284,15 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 	}
 }
 
-// dit zal de countdown afspelen aan het begin van het spel
+// this function will be executed when the game starts
 void _displayCountDown() {
+	// For-loop to repeat the following code 5 times
 	for (int i = 5; i > 0; i--) {
 		//Draw the countdown in the info menu (from 5 to 1)
 		scherm.drawInteger(5, 80, (unsigned long)i, 10, RGB(255, 0, 0), RGB(255, 255, 255), 9);
 		_delay_ms(1000);
 	}
+
 	//Delete the 1 in the info menu
 	scherm.drawChar(5, 80, '1', RGB(255, 255, 255), RGB(255, 255, 255), 9);
 	//Draw GO in the info menu
