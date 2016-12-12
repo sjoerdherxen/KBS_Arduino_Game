@@ -7,20 +7,32 @@ uint8_t *received;
 volatile uint8_t Pdata = 0;
 
 void initIrSend(){
-	PORTD |= (1 << PIND6);
-	DDRD |= (1 << PIND6);
+	PORTD |= (1 << PIND3);
+	DDRD |= (1 << PIND3);
 
 	DDRD &= ~(1 << PIND2);
 	PORTD |= (1 << PIND2);
 	EICRA = 2;	// pinchange on falling edge pd2 / pin2
 	EIMSK = 1;  // Set interupt enable on pin 2
 
-	//set up Timer 2
-	/*
-	TCCR2A = _BV(COM2A0) | _BV(WGM21);  // CTC, toggle OC2A on Compare Match
-	TCCR2B = _BV(CS20);   // No prescaler
-	OCR2A = 209;
-	*/
+	cli();
+	//set up Timer 1
+	TCCR1C = 0x80; // zet pin 9 (pb1) op timer
+	TCNT1L = 0;
+	TCNT1H = 0;
+	ICR1H = 255;
+	ICR1L = 255;
+	OCR1AL = 255;
+	OCR1AH = 255;
+	TIMSK1 = (1 << 5) | (1 << 1);
+	TIFR1 = (1 << 5) | (1 << 1) | 1;
+
+
+	//TCCR2A = _BV(COM2A0) | _BV(WGM21);  // CTC, toggle OC2A on Compare Match
+	//TCCR2B = _BV(CS20);   // No prescaler
+	//OCR2A = 209;
+	
+	sei();
 	received = (uint8_t *)malloc(4);
 }
 
@@ -37,11 +49,13 @@ void SendInitData(uint8_t seed){
 void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	received[0] = 0;
 	Pdata = 0;
-	Serial.print(b1);
+	/*Serial.print(b1);
 	Serial.print("-");
 	Serial.print(b2);
 	Serial.print("-");
-	Serial.println(b3);
+	Serial.print(b3);
+	Serial.print("-");
+	Serial.println((uint8_t)(b1 + b2 + b3));*/
 
 	IrSendByte(b1);
 	IrSendByte(b2);
@@ -51,7 +65,7 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	while (1){
 		Pdata = 0;
 		_delay_ms(10);
-		if (received[0] == (uint8_t)(b1 + b2 + b3)){
+		if (received[0] == (uint8_t)(b1 + b2 + b3) || 1){
 			break;
 		}
 		
@@ -61,51 +75,51 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	
 		IrSendByte(b1 + b2 + b3);
 	}
-	_delay_ms(50);
+	_delay_ms(10);
 }
 
 void IrSendByte(uint8_t byte){
 	// start sequence
-	PORTD &= ~(1 << PIND6);
-	_delay_us(180);
+	PORTD &= ~(1 << PIND3);
+	_delay_us(45);
 
 	//	Serial.println(byte);
 
 	// loop bits
 	for (uint8_t i = 0; i < 8; i++){
 		if (byte & (1 << i)){
-			_delay_us(180);
+			_delay_us(45);
 		}
 		// set high
-		PORTD |= (1 << PORTD6);
-		_delay_us(180);
+		PORTD |= (1 << PORTD3);
+		_delay_us(45);
 		// set low
-		PORTD &= ~(1 << PORTD6);
-		_delay_us(180);
+		PORTD &= ~(1 << PORTD3);
+		_delay_us(45);
 
 	}
 	// set high
-	PORTD |= (1 << PORTD6);
-	_delay_us(700);
+	PORTD |= (1 << PORTD3);
+	_delay_us(175);
 
 	// lange delay voor einde data
-	PORTD &= ~(1 << PORTD6);
-	_delay_us(180);
-	PORTD |= 1 << PORTD6;
+	PORTD &= ~(1 << PORTD3);
+	_delay_us(45);
+	PORTD |= 1 << PORTD3;
 
-	_delay_us(1200);
+	_delay_us(300);
 }
 
 uint8_t* dataRecieve(){
 	if (datasend){
-		Serial.print(received[0]);
+		/*Serial.print(received[0]);
 		Serial.print("-");
 		Serial.print(received[1]);
 		Serial.print("-");
 		Serial.print(received[2]);
 		Serial.print("-");
 		Serial.println(received[3]);
-
+		*/
 		if ((uint8_t)(received[0] + received[1] + received[2]) == received[3]){
 			IrSendByte(received[0] + received[1] + received[2]);
 
@@ -127,12 +141,12 @@ uint8_t dataAvailable(){
 ISR(INT0_vect){
 	unsigned long time = micros() - prevMicros;
 	prevMicros = micros();
-	if (time > 8000){
+	if (time > 2000){
 	}
-	if (time > 1100){
+	if (time > 275){
 		// start
 	}
-	else if (time > 600){
+	else if (time > 150){
 		// end
 		received[Pdata] = data;
 		data = 0;
@@ -143,12 +157,12 @@ ISR(INT0_vect){
 		}
 	}
 	else { // bit waarde
-		if (time > 450){
+		if (time > 112){
 			// 1
 			data = data >> 1;
 			data |= 0x80;
 		}
-		else if (time > 300){
+		else if (time > 75){
 			data = data >> 1;
 			// 0
 		}

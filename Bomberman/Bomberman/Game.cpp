@@ -25,7 +25,7 @@ void GameTick(uint16_t count){
 		nextPlayerMove--;
 	}
 	else {
-		PlayerMove((nunchuck << 2) >> 2);
+		PlayerMove(nunchuck & 0x07);
 		if (oldpl1Loc != player1Location){
 			nextPlayerMove = 1;
 		}
@@ -73,9 +73,9 @@ void Game(){
 	}
 }
 
-// dit wordt uitgevoerd bij het opstarten van de arduino
+// Executed on startup 
 void GameInit(){
-	// standaard items goedzetten
+	// Setup
 	DisplayOn();
 	setupPot();
 	setupSpeaker();
@@ -88,7 +88,7 @@ void GameInit(){
 	setupExpander();
 
 	// testcode
-	initIrSend();
+	//initIrSend();
 
 	// hoofdmenu openen
 	_delay_ms(100);
@@ -106,7 +106,7 @@ void GameInit(){
 #endif
 }
 
-// beweeg de speler en check of nieuwe locatie een geldige locatie is
+// Move player to direction if valid newlocation
 void PlayerMove(uint8_t direction){
 	uint8_t newLocation = player1Location;
 
@@ -133,23 +133,23 @@ void PlayerMove(uint8_t direction){
 		}
 		break;
 	}
-	// is statisch block
+	// is static block
 	if ((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1){
 		return;
 	}
 
-	// is krat
+	// is crate
 	for (uint8_t i = 0; i < 127; i++){
 		if (crates[i] == newLocation){
 			return;
 		}
 	}
-	// is andere speler hier
+	// is other player here
 	if (newLocation == player2Location){
 		return;
 	}
 
-	// is bom
+	// is bomb
 	for (uint8_t i = 0; i < 6; i++){
 		if (bombs[i]){
 			if ((bombs[i] & 0xFF00) >> 8 == newLocation){

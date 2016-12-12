@@ -7,7 +7,7 @@ uint8_t SDcardLoaded = 0;
 /* function to be used to start the lcd-screen */
 void DisplayOn(){
 	/* this tries to open the SD-card */
-	SDcardLoaded = loadTextures();
+	SDcardLoaded = /*loadTextures()*/0;
 
 	/* turn on the screen */
 	scherm.begin();
@@ -153,7 +153,7 @@ void _displayBorder(){
 
 				/* if the SD-card is inserted, the textures are loaded */
 				if (SDcardLoaded){
-					drawTexture(3, 80 + i * 16, j * 16, &scherm);
+					//drawTexture(3, 80 + i * 16, j * 16, &scherm);
 				}
 
 				/* if the SD-card is not inserted, the default textures are used */
@@ -177,7 +177,7 @@ void _displayInnerStatic(){
 
 			/* if the SD-card is inserted, the textures are loaded */
 			if (SDcardLoaded){
-				drawTexture(3, 80 + i * 16, j * 16, &scherm);
+				//drawTexture(3, 80 + i * 16, j * 16, &scherm);
 			}
 
 			/* if the SD-card is not inserted, the default textures are used */
@@ -199,7 +199,7 @@ void _displayCrates(uint8_t crates[]){
 
 			/* if the SD-card is inserted, the textures are loaded */
 			if (SDcardLoaded){
-				drawTexture(2, (((crates[i] & 0xF0) >> 4) * 16) + 96, 16 + (crates[i] & 0x0F) * 16, &scherm);
+				//drawTexture(2, (((crates[i] & 0xF0) >> 4) * 16) + 96, 16 + (crates[i] & 0x0F) * 16, &scherm);
 			}
 
 			/* if the SD-card is not inserted, the default textures are used */
@@ -223,7 +223,7 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 
 	/* if the SD-card is inserted, the player texture will be loaded */
 	if (SDcardLoaded){
-		drawTexture(5, 96 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, &scherm);
+		//drawTexture(5, 96 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, &scherm);
 	}
 	/* if the SD-card is not inserted, the default texture will be used (an X with the player color) */
 	else {
@@ -314,7 +314,7 @@ void _displayMenuHelpers(uint8_t which){
 }
 
 /* function to display bombs on the playing field */
-void _displaybombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count){
+void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count){
 
 	/* for-loop to loop through all the bombs */
 	for (uint16_t i = 0; i < 6; i++){
@@ -330,7 +330,7 @@ void _displaybombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, ui
 
 				/* if the SD-card is inserted, draw the texture of the bomb */
 				if (SDcardLoaded){
-					drawTexture(1, ((bombs[i] & 0xF000) >> 12) * 16 + 96, ((bombs[i] & 0x0F00) >> 8) * 16 + 16, &scherm);
+					//drawTexture(1, ((bombs[i] & 0xF000) >> 12) * 16 + 96, ((bombs[i] & 0x0F00) >> 8) * 16 + 16, &scherm);
 				}
 
 				/* if the SD-card is not inserted, draw the default texture of the bomb */
@@ -374,7 +374,7 @@ void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
 
 	// teken bom explosie
 	if (SDcardLoaded){
-		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
+		//drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
 
 		// TODO: explosion animation
 	}

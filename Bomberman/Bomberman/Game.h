@@ -1,4 +1,4 @@
-#define IsMasterGame 0
+#define IsMasterGame 1
 
 #ifndef Game_h
 #define Game_h
@@ -8,7 +8,7 @@
 #include "Nunchuck.h"
 #include "Crates.h"
 #include "MainMenu.h"
-#include "Textures.h"
+//#include "Textures.h"
 #include "ScreenBrightness.h"
 #include "IrComm.h"
 #include "showLives.h"

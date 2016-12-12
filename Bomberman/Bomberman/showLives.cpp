@@ -12,12 +12,12 @@ uint16_t endOfGameTick = 0;
 //A 1 stands for no output, a 0 stands for output.
 const uint8_t patterns[] PROGMEM = {
 	//These 6 patterns are for showing the lives
-	0b11100000,
-	0b11110000,
-	0b11111000,
-	0b11111100,
+	0b11111111, 
 	0b11111110,
-	0b11111111,
+	0b11111100,
+	0b11111000,
+	0b11110000,
+	0b11100000,
 
 	//These patterns are used to show to the endGame animation
 	0b11111011,
@@ -36,7 +36,7 @@ void startLives() {
 	//Begins transmission to adress 56
 	Wire.beginTransmission(56);
 	//Writes the pattern that corresponds to 0 to the adres
-	Wire.write(pgm_read_byte(&patterns[0]));
+	Wire.write(pgm_read_byte(&patterns[5]));
 	//Ends all transmissions
 	Wire.endTransmission();
 	//Sets lives to 5		
@@ -48,44 +48,21 @@ void loseLife(uint16_t count) {
 	//Sets lives to one less, for instance: from 4 to 3
 	lives--;		
 	//Checks how many lives the player has and which leds have to be displayed
-	//What the leds should look like: (o = on and x = off)
-	switch (lives) {
-	//If the amount of lives is 4, this part of the switch statement will be executed, etc.
-	case 4:											
+	if (lives){
 		//Begins transmission to adress 56, etc.												
 		Wire.beginTransmission(56);
-		//Writes the pattern that corresponds to 1 to the adres, etc.
-		Wire.write(pgm_read_byte(&patterns[1])); //oooox	
+		//Writes the pattern that corresponds to lives to the adress, etc.
+		Wire.write(pgm_read_byte(&patterns[lives])); 
 		//Ends all transmissions
-		Wire.endTransmission();							
-		break;
-	case 3:
-		
-		Wire.beginTransmission(56);
-		Wire.write(pgm_read_byte(&patterns[2])); //oooxx
-		Wire.endTransmission();							
-		break;
-	case 2:
-		
-		Wire.beginTransmission(56);
-		Wire.write(pgm_read_byte(&patterns[3])); //ooxxx
-		Wire.endTransmission();							
-		break;
-	case 1:
-		
-		Wire.beginTransmission(56);
-		Wire.write(pgm_read_byte(&patterns[4])); //oxxxx
-		Wire.endTransmission();							
-		break;
-	//When a player has 0 lives this part of the switch statement will be executed
-	case 0:
+		Wire.endTransmission();
+		//When a player has 0 lives this part of the switch statement will be executed
+	}else {
 		//The endOfGameTick integer gets the current gametick value
 		endOfGameTick = count;
 		//Starts the gameOver animation and gives the current gametick value with it
 		startPlayGameOver(count);
 		//ifEndGame gets the value 3, it is set to 3 so the animation will be executed 3 times
 		ifEndGame = 3;									
-		break;
 	}
 }
 
@@ -119,7 +96,7 @@ void endOfGame(uint16_t count) {
 		}
 		else if (count == endOfGameTick + 8) {
 			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[5])); //xxxxx
+			Wire.write(pgm_read_byte(&patterns[0])); //xxxxx
 			Wire.endTransmission();
 			//ifEndGame - 1
 			ifEndGame--;

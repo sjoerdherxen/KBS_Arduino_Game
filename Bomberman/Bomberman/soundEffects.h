@@ -19,7 +19,7 @@ void playLoseLife(uint16_t count);
 void playGameOver(uint16_t count);
 
 /* tones to play when there is music to play */
-void playMusic();
+void playMusic(uint16_t count);
 
 void startLoseLife(uint16_t count);
 

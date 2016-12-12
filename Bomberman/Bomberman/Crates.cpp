@@ -2,6 +2,7 @@
 
 /* function used to generate crates into the game */
 uint8_t* GenerateCrates() {
+	//Serial.println(millis());
 	uint8_t *c;
 	/* make variables with a malloc of 127 */
 	c = (uint8_t*)malloc(127);
@@ -16,7 +17,7 @@ uint8_t* GenerateCrates() {
 	/* since analogRead differs in value, the value of seed
 		will differ too, but it will be equal for the same seed every time*/
 		/* randomSeed generates a number with seed */
-	randomSeed(millis());
+	randomSeed(analogRead(A1));
 
 
 
@@ -49,10 +50,12 @@ uint8_t* GenerateCrates() {
 		c[i] = x;
 		x++;
 	}
-	
+	/*
 	for(uint8_t i = 0; i < 127; i+=3){
 		sendTripple(c[i], c[i+1], c[i+2]);
 	}
+	Serial.println(millis());
+	*/
 	return c;
 #else 
 	for (uint8_t i = 0; i < 127;){
