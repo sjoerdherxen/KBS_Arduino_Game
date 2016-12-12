@@ -62,7 +62,7 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, ui
 /* function to be used to start the lcd-screen */
 void DisplayOn(){
 	/* this tries to open the SD-card */
-	SDcardLoaded = loadTextures();
+	SDcardLoaded = /*loadTextures()*/0;
 
 	/* turn on the screen */
 	scherm.begin();
@@ -208,7 +208,7 @@ void _displayBorder(){
 
 				/* if the SD-card is inserted, the textures are loaded */
 				if (SDcardLoaded){
-					drawTexture(3, 80 + i * 16, j * 16, &scherm);
+					//drawTexture(3, 80 + i * 16, j * 16, &scherm);
 				}
 
 				/* if the SD-card is not inserted, the default textures are used */
@@ -232,7 +232,7 @@ void _displayInnerStatic(){
 
 			/* if the SD-card is inserted, the textures are loaded */
 			if (SDcardLoaded){
-				drawTexture(3, 80 + i * 16, j * 16, &scherm);
+				//drawTexture(3, 80 + i * 16, j * 16, &scherm);
 			}
 
 			/* if the SD-card is not inserted, the default textures are used */
@@ -254,7 +254,7 @@ void _displayCrates(uint8_t crates[]){
 
 			/* if the SD-card is inserted, the textures are loaded */
 			if (SDcardLoaded){
-				drawTexture(2, (((crates[i] & 0xF0) >> 4) * 16) + 96, 16 + (crates[i] & 0x0F) * 16, &scherm);
+				//drawTexture(2, (((crates[i] & 0xF0) >> 4) * 16) + 96, 16 + (crates[i] & 0x0F) * 16, &scherm);
 			}
 
 			/* if the SD-card is not inserted, the default textures are used */
@@ -279,7 +279,7 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 
 	/* if the SD-card is inserted, the player texture will be loaded */
 	if (SDcardLoaded){
-		drawTexture(5, 96 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, &scherm);
+		//drawTexture(5, 96 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, &scherm);
 	}
 	/* if the SD-card is not inserted, the default texture will be used (an X with the player color) */
 	else {
@@ -287,13 +287,15 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 	}
 }
 
-// dit zal de countdown afspelen aan het begin van het spel
+// this function will be executed when the game starts
 void _displayCountDown() {
+	// For-loop to repeat the following code 5 times
 	for (int i = 5; i > 0; i--) {
 		//Draw the countdown in the info menu (from 5 to 1)
 		scherm.drawInteger(5, 80, (unsigned long)i, 10, RGB(255, 0, 0), RGB(255, 255, 255), 9);
 		_delay_ms(1000);
 	}
+
 	//Delete the 1 in the info menu
 	scherm.drawChar(5, 80, '1', RGB(255, 255, 255), RGB(255, 255, 255), 9);
 	//Draw GO in the info menu
@@ -369,6 +371,39 @@ void _displayMenuHelpers(uint8_t which){
 	}
 }
 
+/* function to display bombs on the playing field */
+void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count){
+
+	/* for-loop to loop through all the bombs */
+	for (uint16_t i = 0; i < 6; i++){
+
+		/* the function only works if the called bomb is a bomb */
+		if (bombs[i]){
+
+			/* if the bomb is visible */
+			if ((bombs[i] & 0x1F) < 0x18){
+
+				/* clear the square where the bomb is placed */
+				_clearSquare(bombs[i] >> 8);
+
+				/* if the SD-card is inserted, draw the texture of the bomb */
+				if (SDcardLoaded){
+					//drawTexture(1, ((bombs[i] & 0xF000) >> 12) * 16 + 96, ((bombs[i] & 0x0F00) >> 8) * 16 + 16, &scherm);
+				}
+
+				/* if the SD-card is not inserted, draw the default texture of the bomb */
+				else{
+					scherm.drawCircle(((bombs[i] & 0xF000) >> 12) * 16 + 104, ((bombs[i] & 0x0F00) >> 8) * 16 + 24, 7, RGB(0, 0, 0));
+				}
+			}
+			/* if the bomb explodes */
+			else if ((bombs[i] & 0x1F) < 0x19){
+				/* clear the square where the bomb is placed, so the explosion can be drawn */
+				_clearSquare(bombs[i] >> 8);
+
+				/* display the explosion of the bomb */
+				_displayExplode(bombs[i] >> 8, player1Location, count);
+
 
 
 void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
@@ -380,7 +415,7 @@ void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
 
 	// teken bom explosie
 	if (SDcardLoaded){
-		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
+		//drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
 
 		// TODO: explosion animation
 	}

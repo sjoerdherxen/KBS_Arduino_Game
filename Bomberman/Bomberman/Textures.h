@@ -1,13 +1,6 @@
-#include <Wire.h>
 #include <Arduino.h>
-#include <SPI.h>
 #include <Arduino.h>
-#include <digitalWriteFast.h>
-#include <GraphicsLib.h>
-#include <MI0283QT2.h>
 #include <MI0283QT9.h>
-#include <DisplaySPI.h>
-#include <DisplayI2C.h>
 #include <SD.h>
 #include <BMPheader.h>
 

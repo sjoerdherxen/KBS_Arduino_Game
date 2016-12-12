@@ -20,7 +20,7 @@ void setupSpeaker() {
 
 void playStart() {
 	/* this only plays the games music for now, maybe more imput later */
-	playMusic();
+	playMusic(0);
 }
 
 // ** Explosion **
