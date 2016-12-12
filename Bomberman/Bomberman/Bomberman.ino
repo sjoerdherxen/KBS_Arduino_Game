@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <MI0283QT9.h>
 
-//#include "Textures.h"
+#include "Textures.h"
 #include "BasicDisplay.h"
 #include "Game.h"
 

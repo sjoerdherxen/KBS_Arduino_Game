@@ -54,7 +54,7 @@ void GameTick(uint16_t count){
 // deze code is voor het initialseren van de game
 void Game(){
 	crates = GenerateCrates();
-	// initiele weergave van spel
+	// initiele weergave van 
 	DisplayGame(crates, player1Location, player2Location);
 
 	// standaard spelwaarden zetten

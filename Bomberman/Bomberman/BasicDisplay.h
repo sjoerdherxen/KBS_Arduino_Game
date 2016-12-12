@@ -1,6 +1,6 @@
 #include <MI0283QT9.h>
 #include <Arduino.h>
-//#include "Textures.h"
+#include "Textures.h"
 
 #ifndef BasicDisplay
 #define BasicDisplay
