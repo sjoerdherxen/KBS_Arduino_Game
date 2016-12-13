@@ -8,6 +8,8 @@
 #ifndef MainMenu
 #define MainMenu
 
+int ifStartMusic = 0;
+
 /* function used to get the gametick */
 void mainMenuTick(uint16_t count);
 
