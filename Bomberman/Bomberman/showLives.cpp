@@ -40,7 +40,7 @@ void startLives() {
 	//Ends all transmissions
 	Wire.endTransmission();
 	//Sets lives to 5		
-	lives = 5;											
+	lives = 1;											
 }
 
 //Activates the blinking and after that the amount of leds equal to the amount of lives is set.
@@ -62,7 +62,7 @@ void loseLife(uint16_t count) {
 		//Starts the gameOver animation and gives the current gametick value with it
 		startGameOver(count);
 		//ifEndGame gets the value 3, it is set to 3 so the animation will be executed 3 times
-		ifEndGame = 3;									
+		ifEndGame = 3;
 	}
 }
 
@@ -102,6 +102,10 @@ void endOfGame(uint16_t count) {
 			ifEndGame--;
 			//endOfGameTick gets the current tick value of the game
 			endOfGameTick = count;
+		}
+		if(ifEndGame == 0){
+			//This will start the GameOverMenu
+			gameOverMenu();
 		}
 	}
 }
