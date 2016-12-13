@@ -11,7 +11,7 @@ void mainMenuTick(uint16_t count) {
 /* function used to make the main menu and to display it,
 it returns values of selected menu items */
 uint8_t Mainmenu(){
-	ifStartMusic = 1;
+	ifStartMusic = 0;
 
 #if IsMasterGame == 1
 	/* the currentdisplay variable is used to
