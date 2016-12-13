@@ -1,7 +1,5 @@
 #include "MainMenu.h"
 
-int ifStartMusic = 0;
-
 void mainMenuTick(uint16_t count) {
 	if (ifStartMusic) {
 		startMusic(count);
@@ -45,6 +43,7 @@ uint8_t Mainmenu(){
 		Z-button, the menu item which is selected will be pressed */
 		if (value & (1 << 6)){
 			if (currentDisplay == 1 || currentDisplay == 2){
+				ifStartMusic = 0;
 				return currentDisplay;
 			}
 		}
