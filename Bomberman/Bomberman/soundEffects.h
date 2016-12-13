@@ -13,7 +13,7 @@ void startPlayExplosion(uint16_t count);
 void playExplosion(uint16_t count);
 
 /* function to start the lose life sound */
-void start
+void startLoseLife
 (uint16_t count);
 
 /* function that contains the tones of the lose life sound */
