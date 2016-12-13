@@ -6,7 +6,7 @@ uint8_t* GenerateCrates() {
 	uint8_t *c;
 	/* make variables with a malloc of 127 */
 	c = (uint8_t*)malloc(127);
-	
+	Serial.println("start");
 	for (uint8_t i = 0; i < 127; i++) {
 		/* the default location of crate is set to outside the playing field */
 		c[i] = 0xFF;
@@ -52,7 +52,10 @@ uint8_t* GenerateCrates() {
 	}
 	
 	for(uint8_t i = 0; i < 127; i+=3){
+		Serial.println("send1");
+//		sendTripple(255, 255, 255);
 		sendTripple(c[i], c[i+1], c[i+2]);
+		Serial.println("send2");
 	}
 	Serial.println(millis());
 	
