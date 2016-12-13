@@ -27,7 +27,7 @@ void setupSpeaker() {
 // ** Explosion **
 
 /* function to start the explosion sound */
-void startPlayExplosion(uint16_t count) {
+void startExplosion(uint16_t count) {
 	ifPlayExplosion = 1;
 	playExplosionTick = count;
 }

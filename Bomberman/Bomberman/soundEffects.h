@@ -7,14 +7,13 @@
 void setupSpeaker();
 
 /* function to start the explosion sound */
-void startPlayExplosion(uint16_t count);
+void startExplosion(uint16_t count);
 
 /* function that contains the tones of the explosion */
 void playExplosion(uint16_t count);
 
 /* function to start the lose life sound */
-void start
-(uint16_t count);
+void startLoseLife(uint16_t count);
 
 /* function that contains the tones of the lose life sound */
 void playLoseLife(uint16_t count);
