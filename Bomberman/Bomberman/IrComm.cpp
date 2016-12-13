@@ -5,6 +5,9 @@ volatile unsigned long prevMicros = 0;
 volatile uint8_t data = 0;
 uint8_t *received;
 volatile uint8_t Pdata = 0;
+volatile uint8_t PrevDataItemSend = 1;
+volatile uint8_t PrevDataItemRec = 0;
+
 
 void initIrSend(){
 
@@ -25,7 +28,7 @@ void initIrSend(){
 	OCR1A = 209;
 
 	sei();
-	received = (uint8_t *)malloc(4);
+	received = (uint8_t *)malloc(5);
 }
 
 void SendUpdateData(uint8_t playerlocation, uint16_t bomb){
@@ -41,32 +44,32 @@ void SendInitData(uint8_t seed){
 void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	received[0] = 0;
 	Pdata = 0;
-	Serial.print(b1);
+	/*Serial.print(b1);
 	Serial.print("-");
 	Serial.print(b2);
 	Serial.print("-");
 	Serial.print(b3);
 	Serial.print("-");
-	Serial.println((uint8_t)(b1 + b2 + b3));
-
-
+	Serial.println((uint8_t)(b1 + b2 + b3));*/
+	PrevDataItemSend += 2;
+	IrSendByte(PrevDataItemSend);
 	IrSendByte(b1);
 	IrSendByte(b2);
 	IrSendByte(b3);
-	IrSendByte(b1 + b2 + b3);
+	IrSendByte(PrevDataItemSend + b1 + b2 + b3);
 
 	while (1){
 		Pdata = 0;
 		_delay_ms(20);
-		if (received[0] == (uint8_t)(b1 + b2 + b3)){
+		if (received[0] == (uint8_t)(PrevDataItemSend + b1 + b2 + b3)){
 			break;
 		}
-
+		IrSendByte(PrevDataItemSend);
 		IrSendByte(b1);
 		IrSendByte(b2);
 		IrSendByte(b3);
-		IrSendByte(b1 + b2 + b3);
 
+		IrSendByte(PrevDataItemSend + b1 + b2 + b3);
 	}
 	_delay_ms(30);
 }
@@ -111,12 +114,16 @@ uint8_t* dataRecieve(){
 		Serial.print("-");
 		Serial.print(received[2]);
 		Serial.print("-");
-		Serial.println(received[3]);
-	
-		if ((uint8_t)(received[0] + received[1] + received[2]) == received[3]){
-			IrSendByte(received[0] + received[1] + received[2]);
+		Serial.print(received[3]);
+		Serial.print("-");
+		Serial.println(received[4]);
 
-			return received;
+		if ((uint8_t)(received[0] + received[1] + received[2] + received[3]) == received[4]){
+			IrSendByte(received[0] + received[1] + received[2] + received[3]);
+			if (received[0] != PrevDataItemRec){
+				return received;
+			}
+			PrevDataItemRec = received[0];
 		}
 		else {
 			IrSendByte(0);
@@ -127,6 +134,7 @@ uint8_t* dataRecieve(){
 }
 
 uint8_t dataAvailable(){
+
 	return datasend;
 }
 
@@ -136,6 +144,8 @@ ISR(INT0_vect){
 	prevMicros = micros();
 	//Serial.println(time);
 	if (time > 20000){
+		Pdata = 0;
+
 	}
 	if (time > 2750){
 		// start
@@ -145,7 +155,7 @@ ISR(INT0_vect){
 		received[Pdata] = data;
 		data = 0;
 		Pdata++;
-		if (Pdata == 4){
+		if (Pdata == 5){
 			datasend = 1;
 			Pdata = 0;
 		}
