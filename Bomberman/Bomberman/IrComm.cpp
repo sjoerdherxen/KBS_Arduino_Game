@@ -15,7 +15,7 @@ void initIrSend(){
 	PORTD |= (1 << PIND2);
 
 	//while (1);
-	EICRA = 2;	// pinchange on falling edge pd2 / pin2
+	EICRA = 3;	// pinchange on falling edge pd2 / pin2
 	EIMSK = 1;  // Set interupt enable on pin 2
 
 	cli();
@@ -104,14 +104,14 @@ void IrSendByte(uint8_t byte){
 
 uint8_t* dataRecieve(){
 	if (datasend){
-		/*Serial.print(received[0]);
+		Serial.print(received[0]);
 		Serial.print("-");
 		Serial.print(received[1]);
 		Serial.print("-");
 		Serial.print(received[2]);
 		Serial.print("-");
 		Serial.println(received[3]);
-		*/
+	
 		if ((uint8_t)(received[0] + received[1] + received[2]) == received[3]){
 			IrSendByte(received[0] + received[1] + received[2]);
 
@@ -133,12 +133,13 @@ uint8_t dataAvailable(){
 ISR(INT0_vect){
 	unsigned long time = micros() - prevMicros;
 	prevMicros = micros();
-	if (time > 2000){
+	//Serial.println(time);
+	if (time > 20000){
 	}
-	if (time > 275){
+	if (time > 2750){
 		// start
 	}
-	else if (time > 150){
+	else if (time > 1500){
 		// end
 		received[Pdata] = data;
 		data = 0;
@@ -149,12 +150,12 @@ ISR(INT0_vect){
 		}
 	}
 	else { // bit waarde
-		if (time > 112){
+		if (time > 1120){
 			// 1
 			data = data >> 1;
 			data |= 0x80;
 		}
-		else if (time > 75){
+		else if (time > 750){
 			data = data >> 1;
 			// 0
 		}
