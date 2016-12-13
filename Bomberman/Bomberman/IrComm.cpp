@@ -7,31 +7,23 @@ uint8_t *received;
 volatile uint8_t Pdata = 0;
 
 void initIrSend(){
+
 	PORTD |= (1 << PIND3);
 	DDRD |= (1 << PIND3);
 
 	DDRD &= ~(1 << PIND2);
 	PORTD |= (1 << PIND2);
+
+	//while (1);
 	EICRA = 2;	// pinchange on falling edge pd2 / pin2
 	EIMSK = 1;  // Set interupt enable on pin 2
 
 	cli();
 	//set up Timer 1
-	TCCR1C = 0x80; // zet pin 9 (pb1) op timer
-	TCNT1L = 0;
-	TCNT1H = 0;
-	ICR1H = 255;
-	ICR1L = 255;
-	OCR1AL = 255;
-	OCR1AH = 255;
-	TIMSK1 = (1 << 5) | (1 << 1);
-	TIFR1 = (1 << 5) | (1 << 1) | 1;
+	TCCR1B = _BV(WGM12) | (1 << CS10);
+	TCCR1A = _BV(COM1A0);
+	OCR1A = 209;
 
-
-	//TCCR2A = _BV(COM2A0) | _BV(WGM21);  // CTC, toggle OC2A on Compare Match
-	//TCCR2B = _BV(CS20);   // No prescaler
-	//OCR2A = 209;
-	
 	sei();
 	received = (uint8_t *)malloc(4);
 }
@@ -68,11 +60,11 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 		if (received[0] == (uint8_t)(b1 + b2 + b3) || 1){
 			break;
 		}
-		
+
 		IrSendByte(b1);
 		IrSendByte(b2);
 		IrSendByte(b3);
-	
+
 		IrSendByte(b1 + b2 + b3);
 	}
 	_delay_ms(10);
