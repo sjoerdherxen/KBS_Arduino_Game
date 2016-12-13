@@ -61,7 +61,7 @@ uint8_t* GenerateCrates() {
 	
 	return c;
 #else 
-	for (uint8_t i = 0; i < 127;){
+	for (uint8_t i = 0; i < 125; ){
 		uint8_t *data = dataRecieve();
 		if (data) {
 			Serial.println("Ontvangen");
@@ -74,6 +74,7 @@ uint8_t* GenerateCrates() {
 			i += 3;
 		}
 	}
+	Serial.println("al;sdk");
 	return c;
 #endif
 }
