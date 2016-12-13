@@ -314,7 +314,7 @@ void _displayMenuHelpers(uint8_t which){
 }
 
 /* function to display bombs on the playing field */
-void _displaybombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count){
+void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count){
 
 	/* for-loop to loop through all the bombs */
 	for (uint16_t i = 0; i < 6; i++){
