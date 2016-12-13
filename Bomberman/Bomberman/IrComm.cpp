@@ -56,7 +56,7 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 
 	while (1){
 		Pdata = 0;
-		_delay_ms(10);
+		_delay_ms(20);
 		if (received[0] == (uint8_t)(b1 + b2 + b3)){
 			break;
 		}
@@ -67,7 +67,7 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 
 		IrSendByte(b1 + b2 + b3);
 	}
-	_delay_ms(10);
+	_delay_ms(30);
 }
 
 void IrSendByte(uint8_t byte){
