@@ -41,13 +41,14 @@ void SendInitData(uint8_t seed){
 void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	received[0] = 0;
 	Pdata = 0;
-	/*Serial.print(b1);
+	Serial.print(b1);
 	Serial.print("-");
 	Serial.print(b2);
 	Serial.print("-");
 	Serial.print(b3);
 	Serial.print("-");
-	Serial.println((uint8_t)(b1 + b2 + b3));*/
+	Serial.println((uint8_t)(b1 + b2 + b3));
+
 
 	IrSendByte(b1);
 	IrSendByte(b2);
@@ -64,8 +65,8 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 		IrSendByte(b1);
 		IrSendByte(b2);
 		IrSendByte(b3);
-
 		IrSendByte(b1 + b2 + b3);
+
 	}
 	_delay_ms(30);
 }

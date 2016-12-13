@@ -51,9 +51,9 @@ uint8_t* GenerateCrates() {
 		x++;
 	}
 	
-	for(uint8_t i = 0; i < 127; i+=3){
+	for(uint8_t i = 0; i < 125; i+=3){
 		Serial.println("send1");
-//		sendTripple(255, 255, 255);
+		//sendTripple(255, 255, 255);
 		sendTripple(c[i], c[i+1], c[i+2]);
 		Serial.println("send2");
 	}
