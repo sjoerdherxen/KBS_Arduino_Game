@@ -64,13 +64,10 @@ uint8_t* GenerateCrates() {
 	for (uint8_t i = 0; i < 125; ){
 		uint8_t *data = dataRecieve();
 		if (data) {
-			Serial.println("Ontvangen");
-			c[i] = data[0];
-			c[i + 1] = data[1];
-			c[i + 2] = data[2];
-			data[0] = 0;
-			data[1] = 0;
-			data[2] = 0;
+			Serial.println(6);
+			c[i] = data[1];
+			c[i + 1] = data[2];
+			c[i + 2] = data[3];
 			i += 3;
 		}
 	}

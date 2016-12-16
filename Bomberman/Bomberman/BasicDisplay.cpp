@@ -128,6 +128,11 @@ void DisplayMainMenu(uint8_t selected){
 #endif
 }
 
+void DisplayStartingGame(){
+	scherm.fillScreen(RGB(255, 255, 255));
+	scherm.drawText(56, 45, "Starting game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+}
+
 /* display the game for the first time */
 void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
 	/* reset the screen to a white color */

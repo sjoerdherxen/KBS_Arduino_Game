@@ -51,6 +51,9 @@ void GameTick(uint16_t count){
 
 // deze code is voor het initialseren van de game
 void Game(){
+#if IsMasterGame == 1
+	DisplayStartingGame();
+#endif
 	crates = GenerateCrates();
 	// initiele weergave van 
 	DisplayGame(crates, player1Location, player2Location);
@@ -93,7 +96,7 @@ void GameInit(){
 
 	// hoofdmenu openen
 	_delay_ms(100);
-	uint8_t selected = 1;//Mainmenu();
+	uint8_t selected = Mainmenu();
 
 #if IsMasterGame == 1
 	if (selected == 1){ // start game

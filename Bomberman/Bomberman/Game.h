@@ -1,4 +1,5 @@
 #define IsMasterGame 0
+#define UseTextures 0
 
 #ifndef Game_h
 #define Game_h

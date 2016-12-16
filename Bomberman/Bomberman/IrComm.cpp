@@ -21,13 +21,6 @@ void initIrSend(){
 	EICRA = 3;	// pinchange on falling edge pd2 / pin2
 	EIMSK = 1;  // Set interupt enable on pin 2
 
-	cli();
-	//set up Timer 1
-	TCCR1B = _BV(WGM12) | (1 << CS10);
-	TCCR1A = _BV(COM1A0);
-	OCR1A = 209;
-
-	sei();
 	received = (uint8_t *)malloc(5);
 }
 
@@ -44,14 +37,14 @@ void SendInitData(uint8_t seed){
 void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	received[0] = 0;
 	Pdata = 0;
-	/*Serial.print(b1);
+	Serial.print(b1);
 	Serial.print("-");
 	Serial.print(b2);
 	Serial.print("-");
 	Serial.print(b3);
 	Serial.print("-");
-	Serial.println((uint8_t)(b1 + b2 + b3));*/
-	PrevDataItemSend += 2;
+	Serial.println((uint8_t)(b1 + b2 + b3));
+	PrevDataItemSend++;
 	IrSendByte(PrevDataItemSend);
 	IrSendByte(b1);
 	IrSendByte(b2);
@@ -108,26 +101,32 @@ void IrSendByte(uint8_t byte){
 
 uint8_t* dataRecieve(){
 	if (datasend){
+		//Serial.print("count: ");
 		Serial.print(received[0]);
-		Serial.print("-");
-		Serial.print(received[1]);
-		Serial.print("-");
-		Serial.print(received[2]);
-		Serial.print("-");
-		Serial.print(received[3]);
-		Serial.print("-");
-		Serial.println(received[4]);
+		//Serial.print(" - ");
+		//Serial.print(PrevDataItemRec);
 
 		if ((uint8_t)(received[0] + received[1] + received[2] + received[3]) == received[4]){
 			IrSendByte(received[0] + received[1] + received[2] + received[3]);
+			
 			if (received[0] != PrevDataItemRec){
+				PrevDataItemRec = received[0];
+		//		Serial.println(" - other");
 				return received;
 			}
+			else{
+		//		Serial.print(" - same");
+				PrevDataItemRec = received[0];
+				IrSendByte(received[0] + received[1] + received[2] + received[3]);
+			}
+		//	Serial.print(" - next");
 			PrevDataItemRec = received[0];
 		}
 		else {
-			IrSendByte(0);
+		//	Serial.print(" - paraty false");
+			IrSendByte(255);
 		}
+		//Serial.println(" - End");
 		datasend = 0;
 	}
 	return 0;
@@ -142,6 +141,7 @@ uint8_t dataAvailable(){
 ISR(INT0_vect){
 	unsigned long time = micros() - prevMicros;
 	prevMicros = micros();
+	//Serial.print(time);
 	//Serial.println(time);
 	if (time > 20000){
 		Pdata = 0;
