@@ -1,4 +1,4 @@
-#define IsMasterGame 0
+#define IsMasterGame 1
 #define UseTextures 0
 
 #ifndef Game_h
@@ -21,6 +21,6 @@ void GameInit();
 void PlayerMove(uint8_t direction);
 uint8_t returnPlayerLocation();
 void UpdateBombs();
-void PlaceBomb();
+uint16_t PlaceBomb();
 
 #endif

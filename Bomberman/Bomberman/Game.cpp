@@ -2,8 +2,13 @@
 
 uint8_t *crates;
 volatile uint8_t gameTickReady;
+#if IsMasterGame == 1
 uint8_t player1Location = 0x00;
 uint8_t player2Location = 0xCC;
+#else 
+uint8_t player1Location = 0xCC;
+uint8_t player2Location = 0x00;
+#endif
 uint16_t bombs[6];
 uint8_t nextPlayerMove;
 uint8_t screenBrightness = 0;
@@ -16,37 +21,64 @@ void GameTick(uint16_t count){
 	uint8_t nunchuck = Nunchuck_get_data();
 
 	uint8_t oldpl1Loc = player1Location;
-	
+
+	// place bomb
+	uint16_t bomb = 0;
 	if (nunchuck & 0x40){
-		PlaceBomb();
+		bomb = PlaceBomb();
+		Serial.println(bomb);
 	}
-	
+
+	// cool down on player move
 	if (nextPlayerMove){
 		nextPlayerMove--;
 	}
-	else {
+	else { // move player
 		PlayerMove(nunchuck & 0x07);
 		if (oldpl1Loc != player1Location){
 			nextPlayerMove = 1;
 		}
 	}
-	
-
+	// ticks op bommen updaten
 	UpdateBombs();
 
-	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
-
+	// play sounds
 	endOfGame(count);
 	playLoseLife(count);
 	playGameOver(count);
 	playExplosion(count);
 
-
 	if (screenBrightness != setBrightness()){
 		screenBrightness = setBrightness();
 		DisplayScherpte(screenBrightness);
 	}
-
+	uint8_t oldpl2Loc = player2Location;
+#if IsMasterGame == 1
+	sendTripple(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
+	while (1){
+		uint8_t *data = dataRecieve();
+		if (data){
+			player2Location = data[1];
+			bombs[3] = 0;
+			bombs[3] = data[2];
+			bombs[3] |= data[3] >> 8;
+			break;
+		}
+	}
+#else
+	while (1){
+		uint8_t *data = dataRecieve();
+		if (data){
+			player2Location = data[1];
+			bombs[3] = 0;
+			bombs[3] = data[2];
+			bombs[3] |= data[3] >> 8;
+			break;
+		}
+	}
+	sendTripple(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
+#endif
+	UpdateGame(crates, oldpl1Loc, player1Location, oldpl2Loc, player2Location, bombs, count);
 }
 
 // deze code is voor het initialseren van de game
@@ -95,8 +127,11 @@ void GameInit(){
 	initIrSend();
 
 	// hoofdmenu openen
-	_delay_ms(100);
+#if IsMasterGame == 1
+	uint8_t selected = 1;// Mainmenu();
+#else
 	uint8_t selected = Mainmenu();
+#endif
 
 #if IsMasterGame == 1
 	if (selected == 1){ // start game
@@ -186,9 +221,11 @@ void UpdateBombs(){
 }
 
 // een bom plaatsen door speler
-void PlaceBomb(){
+uint16_t PlaceBomb(){
 	if (!bombs[0]){
 		bombs[0] = 0;
 		bombs[0] |= (player1Location << 8) | 1 | (1 << 6);
+		return bombs[0];
 	}
+	return 0;
 }

@@ -7,8 +7,7 @@
 
 void DisplayOn();
 void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location);
-void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *bombs, uint16_t count);
-void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *bombs, uint16_t count);
+void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *bombs, uint16_t count);
 void DisplayStartingGame();
 
 void DisplayMainMenu(uint8_t selected);
@@ -16,6 +15,8 @@ void DisplayMainMenu(uint8_t selected);
 void DisplayScherpte(uint8_t x);
 
 void DisplayHighscore(char **names, uint8_t *scores);
+
+void ShowLoader(uint8_t progress);
 
 void _displayBorder();
 void _displayInnerStatic();

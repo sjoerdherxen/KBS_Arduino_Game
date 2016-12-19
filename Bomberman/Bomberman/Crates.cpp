@@ -2,11 +2,9 @@
 
 /* function used to generate crates into the game */
 uint8_t* GenerateCrates() {
-	//Serial.println(millis());
 	uint8_t *c;
 	/* make variables with a malloc of 127 */
 	c = (uint8_t*)malloc(127);
-	Serial.println("start");
 	for (uint8_t i = 0; i < 127; i++) {
 		/* the default location of crate is set to outside the playing field */
 		c[i] = 0xFF;
@@ -51,27 +49,26 @@ uint8_t* GenerateCrates() {
 		x++;
 	}
 	
+	ShowLoader(0);
 	for(uint8_t i = 0; i < 125; i+=3){
-		Serial.println("send1");
-		//sendTripple(255, 255, 255);
 		sendTripple(c[i], c[i+1], c[i+2]);
-		Serial.println("send2");
+		ShowLoader(i);
 	}
-	Serial.println(millis());
-	
+
 	return c;
 #else 
+
 	for (uint8_t i = 0; i < 125; ){
 		uint8_t *data = dataRecieve();
 		if (data) {
-			Serial.println(6);
 			c[i] = data[1];
 			c[i + 1] = data[2];
 			c[i + 2] = data[3];
+
+			ShowLoader(i);
 			i += 3;
 		}
 	}
-	Serial.println("al;sdk");
 	return c;
 #endif
 }

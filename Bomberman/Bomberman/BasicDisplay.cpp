@@ -159,9 +159,8 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 }
 
 /* function to display updates in the game */
-void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *bombs, uint16_t count){
+void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *bombs, uint16_t count){
 	/* display an updated crate */
-	_displayCrates(oldCrates, newCrates);
 
 	/* display the updated info */
 	_displayInfo();
@@ -187,7 +186,7 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 	}
 
 	/*  */
-	_displayBombs(bombs, newCrates, player1LocationNew, count);
+	_displayBombs(bombs, crates, player1LocationNew, count);
 }
 
 // highscores tonen verwacht 5 3 letterige namen. 5 scores.
@@ -226,6 +225,15 @@ void _displayBorder(){
 				}
 			}
 		}
+	}
+}
+
+void ShowLoader(uint8_t progress){
+	if (!progress){
+		scherm.drawRect(93, 100, 125, 20, RGB(0,0,0));
+	}
+	else {
+		scherm.fillRect(91 + progress, 100, 3, 20, RGB(0, 0, 0));
 	}
 }
 
