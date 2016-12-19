@@ -22,8 +22,6 @@ uint8_t* GenerateCrates() {
 	/* an 8-bit integer x is declared as 2, to be used in
 	the following code */
 	uint8_t x = 2;
-
-	/* for-loop loops through all the 127 possible crates */
 	
 	/* for-loop loops through all the 127 possible crates */
 	for (uint8_t i = 0; i < 127; i++) {

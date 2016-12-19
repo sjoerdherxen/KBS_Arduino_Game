@@ -23,6 +23,7 @@ void _displayInnerStatic();
 void _displayCrates(uint8_t crates[]);
 void _displayPlayer(int_least16_t position, uint16_t playerColor);
 void _displayInfo();
+void _displayLives(uint8_t lives);
 void _displayCountDown();
 void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]);
 void _clearSquare(uint8_t square);

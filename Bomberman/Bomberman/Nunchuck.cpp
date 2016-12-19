@@ -4,7 +4,7 @@
 uint8_t nunchuck_buf[6];
 
 /* function used to setup the nunchuck */
-void Nunchuck_setpowerpins() {
+void setupNunchuck() {
 /* PORTC3 (Analog 3) is used as the power-pin (pwrpin) */
 #define pwrpin PORTC3
 
@@ -22,17 +22,16 @@ void Nunchuck_setpowerpins() {
 
 	/* this delay waits for the program to stabilize */
 	delay(100);
-}
 
-/* function used to initialize the I2C protocol, join the I2C bus and
-tell the nunchuck that we are talking to it */
-void Nunchuck_init() {
+	/* from here the code is used to initialize the I2C protocol, join the I2C bus and
+	tell the nunchuck that we are talking to it */
+
 	/* this sets begins the transmision by I2C, using the Wire library,
 	the I2C bus is joined as a master */
 	Wire.begin();
 
 	/* the address of the nunchuck is 52 (this is the same for every white
-	nunchuck), this address is send to all the divices connected by I2C, 
+	nunchuck), this address is send to all the divices connected by I2C,
 	the nunchuck now knows that we are talking to it */
 	Wire.beginTransmission(0x52);
 

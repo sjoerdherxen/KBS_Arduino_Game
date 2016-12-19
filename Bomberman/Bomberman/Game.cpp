@@ -21,14 +21,14 @@ void GameTick(uint16_t count){
 	uint8_t nunchuck = Nunchuck_get_data();
 
 	uint8_t oldpl1Loc = player1Location;
-
+	
 	// place bomb
 	uint16_t bomb = 0;
 	if (nunchuck & 0x40){
 		bomb = PlaceBomb();
 		Serial.println(bomb);
 	}
-
+	
 	// cool down on player move
 	if (nextPlayerMove){
 		nextPlayerMove--;
@@ -115,16 +115,12 @@ void GameInit(){
 	DisplayOn();
 	setupPot();
 	setupSpeaker();
-	screenBrightness = setBrightness();
-
-	Nunchuck_setpowerpins();
-	Nunchuck_init();
-
-	// ports leds levens instellen
 	setupExpander();
-
+	setupNunchuck();
 	// testcode
-	initIrSend();
+	setupIR();
+
+	screenBrightness = setBrightness();		//TODO wanneer de arduino wordt opgestart blijft de helderheid van het scherm hetzelfde en leest hij niet de waarde van de potmeter uit zoals in deze regel staat dat hij dat wel moet doen. Pas wanneer de game wordt opgestart veranderd de helderheid na de countdown
 
 	// hoofdmenu openen
 #if IsMasterGame == 1
@@ -133,6 +129,7 @@ void GameInit(){
 	uint8_t selected = Mainmenu();
 #endif
 
+	// checks if the specific arduino is the master or the slave
 #if IsMasterGame == 1
 	if (selected == 1){ // start game
 		Game();

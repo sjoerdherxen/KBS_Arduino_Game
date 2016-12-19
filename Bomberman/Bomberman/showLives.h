@@ -7,6 +7,7 @@
 #include <MI0283QT9.h>
 #include "BasicDisplay.h"
 #include "soundEffects.h"
+#include "BasicDisplay.h"
 
 #ifndef showLives
 
