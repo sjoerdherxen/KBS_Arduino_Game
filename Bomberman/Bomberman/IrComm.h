@@ -3,7 +3,7 @@
 #ifndef IrComm_h
 #define IrComm_h
 
-void initIrSend();
+void setupIR();
 void IrSendByte(uint8_t byte);
 uint8_t* dataRecieve();
 void SendUpdateData(uint8_t playerlocation, uint16_t bomb);

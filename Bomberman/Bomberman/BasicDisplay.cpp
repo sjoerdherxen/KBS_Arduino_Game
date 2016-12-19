@@ -202,7 +202,7 @@ void DisplayHighscore(char **names, uint8_t *scores){
 	_displayMenuHelpers(1);
 }
 
-/* function to drawt the border of the game */
+/* function to draw the border of the game */
 void _displayBorder(){
 	/* for every block in the length of 15 blocks */
 	for (uint8_t i = 0; i < 15; i++){

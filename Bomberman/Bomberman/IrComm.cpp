@@ -9,7 +9,7 @@ volatile uint8_t PrevDataItemSend = 1;
 volatile uint8_t PrevDataItemRec = 0;
 
 
-void initIrSend(){
+void setupIR(){
 
 	PORTD |= (1 << PIND3);
 	DDRD |= (1 << PIND3);
