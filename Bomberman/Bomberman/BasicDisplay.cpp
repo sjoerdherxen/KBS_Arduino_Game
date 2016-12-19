@@ -317,23 +317,16 @@ void _displayInfo(){
 	// todo getplayercount
 
 	scherm.drawChar(5, 5, 'X', RGB(255, 0, 0), RGB(255, 255, 255), 2);
-	scherm.drawChar(5, 125, 'X', RGB(0, 0, 255), RGB(255, 255, 255), 2);
+	scherm.drawChar(5, 125, 'X', RGB(0, 0, 255), RGB(255, 255, 255), 2);	
+}
 
+void _displayLives(uint8_t lives) {
 	// score:
-	uint8_t pl1Score = 0;
-	uint8_t pl2Score = 0;
-	int i = 2;
-	while (pl1Score > 0){
-		scherm.drawInteger(27 + i * 16, 5, (long unsigned int)(pl1Score % 10), 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
-		i--;
-		pl1Score = pl1Score / 10;
-	}
-	i = 2;
-	while (pl2Score > 0){
-		scherm.drawInteger(27 + i * 16, 125, (long unsigned int)(pl2Score % 10), 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
-		i--;
-		pl2Score = pl2Score / 10;
-	}
+	uint8_t pl1Score = lives;
+	uint8_t pl2Score = 0;	//TODO deze levens moeten overgestuurd worden via de infrarood of bijgehouden worden in de eigen game
+
+	scherm.drawInteger(5, 23, pl1Score, 10, RGB(155, 0, 0), RGB(255, 255, 255), 2);
+	scherm.drawInteger(5, 143, pl2Score, 10, RGB(0, 0, 155), RGB(255, 255, 255), 2);
 }
 
 /* function to display crates once their updated */

@@ -40,13 +40,19 @@ void startLives() {
 	//Ends all transmissions
 	Wire.endTransmission();
 	//Sets lives to 5		
-	lives = 5;											
+	lives = 5;
+
+	//Displays the integer 5 at the info screen at the screen
+	_displayLives(lives);
 }
 
 //Activates the blinking and after that the amount of leds equal to the amount of lives is set.
 void loseLife(uint16_t count) {				
 	//Sets lives to one less, for instance: from 4 to 3
-	lives--;		
+	lives--;
+
+	//Displays the current lives at the screen info menu
+	_displayLives(lives);
 	//Checks how many lives the player has and which leds have to be displayed
 	if (lives){
 		//Begins transmission to adress 56, etc.												
