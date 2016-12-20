@@ -18,13 +18,25 @@ int main() {
 
 	printHighscore();*/
 
-	char text = 'h';
+	/*char text = 'h';
 
 	eeprom_write_byte((uint8_t*)1, (uint8_t)text);
 
 	delay(10);
 
-	Serial.println(eeprom_read_byte((uint8_t*)1));
+	Serial.write(eeprom_read_byte((uint8_t*)1));
+	delay(10);*/
+
+	saveScore(4332, 't', 'a', 'a');
+
+	delay(10);
+
+	
+	Serial.write(eeprom_read_dword((uint32_t*)10));
+	delay(10);
+	Serial.write(eeprom_read_dword((uint32_t*)11));
+	delay(10);
+	Serial.write(eeprom_read_dword((uint32_t*)11));
 	delay(10);
 
 	return 1;

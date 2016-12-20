@@ -2,9 +2,14 @@
 #include "score.h"
 #include "eeprom.h"
 
-void saveScore(uint16_t scorePlayer, uint16_t id) {
+void saveScore(uint16_t scorePlayer, uint8_t lttr1, uint8_t lttr2, uint8_t lttr3) {
+	//uint32_t name = lttr1 | (lttr2 << 8) | (lttr3 << 16) | (0xFF << 24);
 
-	_delay_ms(10);
+	//eeprom_write_dword((uint32_t*)10, name);
+
+	eeprom_write_byte((uint8_t*)10, lttr1);
+	eeprom_write_byte((uint8_t*)11, lttr2);
+	eeprom_write_byte((uint8_t*)12, lttr3);
 
 	isHighscore(scorePlayer);
 }
