@@ -1,26 +1,45 @@
+#include <Arduino.h>
 #include "score.h"
+#include "eeprom.h"
 
-/* array to store the scores in, 0 is skipped */
-uint8_t scores[4];
+void saveScore(uint16_t scorePlayer, uint16_t id) {
+	isHighscore(scorePlayer);
+}
 
-/* function used to setup scores at the beginning of the game */
-void setupScore() {
-	/* for-loop that sets every score to 0 */
-	for (int i = 0; i <= 4; i++) {
-		scores[i] = 0;
+uint16_t getScore(uint16_t id) {
+	uint16_t value = eeprom_read_word(&id);
+	eeprom_busy_wait();
+
+	return value;
+}
+
+int isHighscore(uint16_t scorePlayer) {
+	uint16_t score1 = eeprom_read_word((uint16_t*)0);
+	uint16_t score2 = eeprom_read_word((uint16_t*)2);
+	uint16_t score3 = eeprom_read_word((uint16_t*)4);
+	
+	if (scorePlayer > score1) {
+		eeprom_write_word((uint16_t*)0, scorePlayer);
+		return 1;
+	}
+	else if (scorePlayer > score2) {
+		eeprom_write_word((uint16_t*)2, scorePlayer);
+		return 1;
+	}
+	else if (scorePlayer > score3) {
+		eeprom_write_word((uint16_t*)4, scorePlayer);
+		return 1;
+	}
+	else {
+		return 0;
 	}
 }
 
-/* function to add score to a specific player,
-needs an amount for points and a and a target player*/
-void addScore(uint8_t points, int player) {
-	/* the amount of points is given to the specified player */
-	scores[player] = points;
+void resetScore() {
+	eeprom_write_word((uint16_t*)0, 0);
+	eeprom_busy_wait();
+	eeprom_write_word((uint16_t*)2, 0);
+	eeprom_busy_wait();
+	eeprom_write_word((uint16_t*)4, 0);
+	eeprom_busy_wait();
 }
-
-/* function used to return the score of a specific player */
-uint8_t returnScore(int player) {
-	/* the score of teh specified player is returned */
-	return scores[player];
-}
-

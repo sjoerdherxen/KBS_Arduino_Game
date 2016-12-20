@@ -1,16 +1,12 @@
-#include <Arduino.h>
-
 #ifndef score
 #define score
 
-/* function used to setup the scores at the beginning of the game */
-void setupScore();
+void saveScore(uint16_t scorePlayer, uint16_t id);
 
-/* function to add score to a specific player,
-needs an amount for points and a target player*/
-void addScore(uint8_t points, int player);
+uint16_t getScore(uint16_t id);
 
-/* function used to return the score of a specific player */
-uint8_t returnScore(int player);
+int isHighscore(uint16_t scorePlayer);
+
+void resetScore();
 
 #endif

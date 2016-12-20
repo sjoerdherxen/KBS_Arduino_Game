@@ -1,26 +1,25 @@
-#include <Wire.h>
 #include <Arduino.h>
-#include <MI0283QT9.h>
+#include "score.h"
 
-#include "IrComm.h"
-#include "Textures.h"
-#include "BasicDisplay.h"
-#include "Game.h"
-
-
-//uint8_t crates[127];
-
-int main(void){
+int main() {
 	init();
-	initIrSend();
-	//GameInit();
 	Serial.begin(9600);
-	while (1){
-		//IrSendByte(170);
-		//_delay_ms(1000);
 
-		dataRecieve();
-	}
+	resetScore();
+	_delay_ms(50);
+
+	//saveScore(322, 0);
+
+
+	
+	Serial.println(getScore(0));
+	_delay_ms(10);
+
+	Serial.println(getScore(2));
+	_delay_ms(10);
+
+	Serial.println(getScore(4));
+	_delay_ms(10);
 
 	return 1;
 }
