@@ -12,10 +12,6 @@ int main(void) {
 
 	while (1);
 
-	delay(10);
-	printHighscore();
-	delay(10);
-	//DisplayHighscore();
 	return 1;
 }
 
