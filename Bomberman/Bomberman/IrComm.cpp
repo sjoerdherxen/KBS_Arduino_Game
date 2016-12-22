@@ -27,6 +27,10 @@ void setupIR(){
 
 // send 3 bytes of information. and receive checksum byte
 void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
+
+	// test
+	return;
+
 	received[0] = 0;
 	Pdata = 0;
 	if (PrevDataItemSend >= 7)
@@ -96,6 +100,13 @@ void IrSendByte(uint8_t byte, uint8_t byteSize){
 }
 
 uint8_t* dataRecieve(){
+	received[0] = 0; 
+	received[1] = 0xCC;
+	received[2] = 0xCC;
+	received[3] = 0xCC; 
+	received[4] = 0;
+
+	return received;
 	if (datasend){
 
 		if ((uint8_t)((uint8_t)(received[0] + received[1] + received[2] + received[3]) & 0x1F) == received[4]){

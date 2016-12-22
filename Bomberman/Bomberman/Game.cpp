@@ -12,8 +12,10 @@ uint8_t player2Location = 0x00;
 uint16_t bombs[6];
 uint8_t nextPlayerMove;
 uint8_t screenBrightness = 0;
-uint8_t player1Score = 0;
-uint8_t player2Score = 0;
+uint16_t player1Score = 0;
+uint16_t player2Score = 0;
+uint8_t player1Lives = 5;
+uint8_t player2Lives = 5;
 
 
 // dit is de code van een gametick. dit wordt 10x per seconde uitgevoerd.
@@ -80,7 +82,11 @@ void GameTick(uint16_t count){
 }
 	sendTripple(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
 #endif
-	UpdateGame(crates, oldpl1Loc, player1Location, oldpl2Loc, player2Location, bombs, count);
+	if (count % 10 == 9){
+		player1Score++;
+		player2Score++;
+	}
+	UpdateGame(crates, oldpl1Loc, oldpl2Loc, bombs, count);
 }
 
 // deze code is voor het initialseren van de game
@@ -90,7 +96,7 @@ void Game(){
 #endif
 	crates = GenerateCrates();
 	// initiele weergave van 
-	DisplayGame(crates, player1Location, player2Location);
+	DisplayGame(crates);
 
 	// standaard spelwaarden zetten
 	nextPlayerMove = 0;
@@ -125,7 +131,7 @@ void GameInit(){
 	screenBrightness = setBrightness();		//TODO wanneer de arduino wordt opgestart blijft de helderheid van het scherm hetzelfde en leest hij niet de waarde van de potmeter uit zoals in deze regel staat dat hij dat wel moet doen. Pas wanneer de game wordt opgestart veranderd de helderheid na de countdown
 	// hoofdmenu openen
 #if IsMasterGame == 1
-	uint8_t selected = 1;// Mainmenu();
+	uint8_t selected = Mainmenu();
 #else
 	uint8_t selected = Mainmenu();
 #endif
