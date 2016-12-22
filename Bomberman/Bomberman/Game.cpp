@@ -121,14 +121,13 @@ void GameInit(){
 	setupIR();
 
 	screenBrightness = setBrightness();		//TODO wanneer de arduino wordt opgestart blijft de helderheid van het scherm hetzelfde en leest hij niet de waarde van de potmeter uit zoals in deze regel staat dat hij dat wel moet doen. Pas wanneer de game wordt opgestart veranderd de helderheid na de countdown
-
 	// hoofdmenu openen
 #if IsMasterGame == 1
 	uint8_t selected = 1;// Mainmenu();
 #else
 	uint8_t selected = Mainmenu();
 #endif
-
+	
 	// checks if the specific arduino is the master or the slave
 #if IsMasterGame == 1
 	if (selected == 1){ // start game

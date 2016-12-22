@@ -29,36 +29,49 @@ void setupIR(){
 void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	received[0] = 0;
 	Pdata = 0;
-	PrevDataItemSend++;
-	IrSendByte(PrevDataItemSend);
-	IrSendByte(b1);
-	IrSendByte(b2);
-	IrSendByte(b3);
-	IrSendByte(PrevDataItemSend + b1 + b2 + b3);
+	if (PrevDataItemSend >= 7)
+		PrevDataItemSend = 0;
+	else
+		PrevDataItemSend++;
 
+	IrSendByte(PrevDataItemSend, 2);
+	IrSendByte(b1, 7);
+	IrSendByte(b2, 7);
+	IrSendByte(b3, 7);
+	IrSendByte((PrevDataItemSend + b1 + b2 + b3), 4);
+	Serial.print(PrevDataItemSend);
+	Serial.print("-");
+	Serial.print(b1);
+	Serial.print("-");
+	Serial.print(b2);
+	Serial.print("-");
+	Serial.print(b3);
+	Serial.print("-");
+	Serial.println((PrevDataItemSend + b1 + b2 + b3));
 	while (1){
+
 		Pdata = 0;
-		_delay_ms(20);
-		if (received[0] == (uint8_t)(PrevDataItemSend + b1 + b2 + b3)){
+		_delay_ms(10);
+		if (received[0] == (uint8_t)((PrevDataItemSend + b1 + b2 + b3) & 0x1F)){
 			break;
 		}
-		IrSendByte(PrevDataItemSend);
-		IrSendByte(b1);
-		IrSendByte(b2);
-		IrSendByte(b3);
+		IrSendByte(PrevDataItemSend, 2);
+		IrSendByte(b1, 7);
+		IrSendByte(b2, 7);
+		IrSendByte(b3, 7);
 
-		IrSendByte(PrevDataItemSend + b1 + b2 + b3);
+		IrSendByte((PrevDataItemSend + b1 + b2 + b3), 4);
 	}
-	_delay_ms(30);
+	_delay_ms(10);
 }
 
-void IrSendByte(uint8_t byte){
+void IrSendByte(uint8_t byte, uint8_t byteSize){
 	// start sequence
 	PORTD &= ~(1 << PIND3);
 	_delay_us(450);
 
 	// loop bits
-	for (uint8_t i = 0; i < 8; i++){
+	for (int8_t i = byteSize; i >= 0; i--){
 		if (byte & (1 << i)){
 			_delay_us(450);
 		}
@@ -84,18 +97,28 @@ void IrSendByte(uint8_t byte){
 
 uint8_t* dataRecieve(){
 	if (datasend){
-		if ((uint8_t)(received[0] + received[1] + received[2] + received[3]) == received[4]){
-			IrSendByte(received[0] + received[1] + received[2] + received[3]);
+
+		if ((uint8_t)((uint8_t)(received[0] + received[1] + received[2] + received[3]) & 0x1F) == received[4]){
+			IrSendByte(received[4], 4);
 
 			if (received[0] != PrevDataItemRec){
 				PrevDataItemRec = received[0];
 				return received;
 			}
 			PrevDataItemRec = received[0];
-			IrSendByte(received[0] + received[1] + received[2] + received[3]);
+			//IrSendByte(received[0] + received[1] + received[2] + received[3], 2);
 		}
 		else {
-			IrSendByte(255);
+			Serial.print(received[0]);
+			Serial.print("-");
+			Serial.print(received[1]);
+			Serial.print("-");
+			Serial.print(received[2]);
+			Serial.print("-");
+			Serial.print(received[3]);
+			Serial.print("-");
+			Serial.println(received[4]);
+			IrSendByte(0xFF, 4);
 		}
 		datasend = 0;
 	}
@@ -130,11 +153,11 @@ ISR(INT0_vect){
 	else { // bit waarde
 		if (time > 1120){
 			// 1
-			data = data >> 1;
-			data |= 0x80;
+			data = data << 1;
+			data |= 0x01;
 		}
 		else if (time > 750){
-			data = data >> 1;
+			data = data << 1;
 			// 0
 		}
 	}

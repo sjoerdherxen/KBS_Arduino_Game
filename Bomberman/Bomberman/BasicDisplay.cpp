@@ -5,8 +5,8 @@ MI0283QT9 scherm;
 uint8_t SDcardLoaded = 0;
 
 /* function to display bombs on the playing field */
-void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count) {
-
+void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location,uint8_t player2Location, uint16_t count) {
+	if (bombs[3]) Serial.println(bombs[3]);
 	/* for-loop to loop through all the bombs */
 	for (uint16_t i = 0; i < 6; i++) {
 
@@ -55,6 +55,7 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, ui
 				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates);
 				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates);
 				_displayPlayer(player1Location, RGB(255,0,0));
+				_displayPlayer(player2Location, RGB(0, 255, 0));
 			}
 		}
 	}
@@ -186,7 +187,7 @@ void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player1Loc
 	}
 
 	/*  */
-	_displayBombs(bombs, crates, player1LocationNew, count);
+	_displayBombs(bombs, crates, player1LocationNew, player2LocationNew, count);
 }
 
 // highscores tonen verwacht 5 3 letterige namen. 5 scores.
@@ -333,8 +334,8 @@ void _displayLives(uint8_t lives) {
 	uint8_t pl1Score = lives;
 	uint8_t pl2Score = 0;	//TODO deze levens moeten overgestuurd worden via de infrarood of bijgehouden worden in de eigen game
 
-	scherm.drawInteger(5, 23, pl1Score, 10, RGB(155, 0, 0), RGB(255, 255, 255), 2);
-	scherm.drawInteger(5, 143, pl2Score, 10, RGB(0, 0, 155), RGB(255, 255, 255), 2);
+	scherm.drawInteger(5, 23, pl1Score, 10, RGB(200, 0, 0), RGB(255, 255, 255), 2);
+	scherm.drawInteger(5, 143, pl2Score, 10, RGB(0, 0, 200), RGB(255, 255, 255), 2);
 }
 
 /* function to display crates once their updated */

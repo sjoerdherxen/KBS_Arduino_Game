@@ -3,7 +3,6 @@
 
 #ifndef Game_h
 #define Game_h
-
 #include "BasicDisplay.h"
 #include <Arduino.h>
 #include "Nunchuck.h"
