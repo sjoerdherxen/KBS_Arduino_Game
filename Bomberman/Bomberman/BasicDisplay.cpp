@@ -134,7 +134,7 @@ void DisplayGameOverMenu(uint8_t selected) {
 		scherm.fillScreen(RGB(255, 255, 255));
 
 		/* displays Game Over! on the screen */
-		scherm.drawText(40,40,"Game Over!",RGB(0,0,0),RGB(255,255,255),3);
+		scherm.drawText(40,5,"Game Over!",RGB(0,0,0),RGB(255,255,255),3);
 
 		/* displays help text in the main menu */
 		_displayMenuHelpers(2);
@@ -142,26 +142,42 @@ void DisplayGameOverMenu(uint8_t selected) {
 
 	/* if "Start Game" is selected the 'selected' visuals will show */
 	if (selected == 1) {
-		scherm.drawRect(84, 99, 145, 18, RGB(0, 0, 0));
-		scherm.drawRect(79, 144, 162, 18, RGB(255, 255, 255));
-		scherm.drawText(85, 100, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
-		scherm.drawText(80, 145, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawRect(84, 35, 145, 18, RGB(0, 0, 0));
+		scherm.drawRect(79, 54, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 36, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+		scherm.drawText(80, 55, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
 
 	/* if "Highscores" is selected the 'selected' visuals will show */
 	else if (selected == 2) {
-		scherm.drawRect(79, 144, 162, 18, RGB(0, 0, 0));
-		scherm.drawRect(84, 99, 145, 18, RGB(255, 255, 255));
-		scherm.drawText(85, 100, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
-		scherm.drawText(80, 145, "Save Score", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+		scherm.drawRect(79, 54, 162, 18, RGB(0, 0, 0));
+		scherm.drawRect(84, 35, 145, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 36, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 55, "Save Score", RGB(255, 255, 255), RGB(0, 0, 0), 2);
 	}
 
 	/* if nothing is selected the main menu will show as normal */
 	else {
-		scherm.drawRect(84, 99, 145, 18, RGB(255, 255, 255));
-		scherm.drawRect(79, 144, 162, 18, RGB(255, 255, 255));
-		scherm.drawText(85, 100, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
-		scherm.drawText(80, 145, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawRect(84, 35, 145, 18, RGB(255, 255, 255));
+		scherm.drawRect(79, 54, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 36, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 55, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
+
+	char neem[10];
+	for (uint8_t i = 0; i < 3; i++) {
+		uint8_t b = 0;
+		for (uint8_t x = 10 + i * 3; x < i * 3 + 13; x++) {
+			neem[b] = getName(x);
+			b++;
+		}
+		scherm.drawText(80, 141 + i * 21, neem, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
+	}
+
+	//Print iedere score
+	for (uint8_t i = 0; i < 3; i++) {
+		uint8_t a = i * 2;
+		scherm.drawInteger(192, 141 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 	}
 
 }
@@ -223,7 +239,7 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 	_displayBombs(bombs, newCrates, player1LocationNew, count);
 }
 
-// highscores tonen verwacht 3 3 letterige namen. 3 scores.
+/*// highscores tonen verwacht 3 3 letterige namen. 3 scores.
 void DisplayHighscore() {
 	//Print "Highscores"
 	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
@@ -244,7 +260,7 @@ void DisplayHighscore() {
 		uint8_t a = i * 2;
 		scherm.drawInteger(192, 41 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 	}
-}
+}*/
 
 /* function to drawt the border of the game */
 void _displayBorder(){
