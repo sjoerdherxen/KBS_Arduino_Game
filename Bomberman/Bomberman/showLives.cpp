@@ -105,7 +105,17 @@ void endOfGame(uint16_t count) {
 		}
 		if(ifEndGame == 0){
 			//This will start the GameOverMenu
-			gameOverMenu();
+			setGameover(1);
+			uint8_t selectie = gameOverMenu();
+
+			if (selectie == 1) {
+			/*Rebooting the arduino to go to the main menu and clear the memory*/
+				asm volatile ("  jmp 0");
+			}
+			else if (selectie == 2) {
+				//TODO higscores aanroepen
+			}
+			
 		}
 	}
 }

@@ -6,6 +6,6 @@
 #define GameOverMenu
 /* function used to show the main menu, it returns
 the value of the menu item that is selected */
-void gameOverMenu();
+uint8_t gameOverMenu();
 
 #endif

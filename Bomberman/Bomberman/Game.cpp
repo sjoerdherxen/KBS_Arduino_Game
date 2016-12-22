@@ -57,6 +57,8 @@ void GameTick(uint16_t count, int gameover) {
 
 // deze code is voor het initialseren van de game
 void Game() {
+	free(crates);
+
 	crates = GenerateCrates();
 	// initiele weergave van 
 	DisplayGame(crates, player1Location, player2Location);
@@ -97,6 +99,12 @@ void GameInit() {
 	// testcode
 	//initIrSend();
 
+	showMainMenu();
+
+}
+
+void showMainMenu() {
+	setGameover(0);
 	// hoofdmenu openen
 	_delay_ms(100);
 	uint8_t selected = Mainmenu();

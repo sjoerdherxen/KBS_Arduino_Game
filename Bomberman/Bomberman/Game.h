@@ -18,6 +18,7 @@ void setGameover(int gameoverSet);
 void GameTick(uint16_t count, int gameover);
 void Game();
 void GameInit();
+void showMainMenu();
 void PlayerMove(uint8_t direction);
 uint8_t returnPlayerLocation();
 void UpdateBombs();
