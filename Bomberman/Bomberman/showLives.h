@@ -8,6 +8,7 @@
 #include "BasicDisplay.h"
 #include "soundEffects.h"
 #include "BasicDisplay.h"
+#include "GameOverMenu.h"
 
 #ifndef showLives
 

@@ -3,19 +3,19 @@
 
 //unsigned long time = 0;
 
-/* booleans for the explosion sound */
+/* integers for the explosion sound */
 uint8_t ifPlayExplosion = 0;
 uint16_t playExplosionTick = 0;
 
-/* booleans for the lose life sound */
+/* integers for the lose life sound */
 uint8_t ifPlayLoseLife = 0;
 uint16_t playLoseLifeTick = 0;
 
-/* booleans for the game over sound */
+/* integers for the game over sound */
 uint8_t ifPlayGameOver = 0;
 uint16_t playGameOverTick = 0;
 
-/* booleans for the music */
+/* integers for the music */
 uint8_t ifPlayMusic = 0;
 uint16_t playMusicTick = 0;
 
@@ -27,7 +27,7 @@ void setupSpeaker() {
 // ** Explosion **
 
 /* function to start the explosion sound */
-void startPlayExplosion(uint16_t count) {
+void startExplosion(uint16_t count) {
 	ifPlayExplosion = 1;
 	playExplosionTick = count;
 }
@@ -82,10 +82,10 @@ uint16_t loseLife[] = {
 	NOTE_D3, NOTE_E3, NOTE_D3, NOTE_C3,
 };
 
-/* tempo of the notes */
-int loseLifeTempo[] = {
-	12, 12, 12, 12,
-};
+///* tempo of the notes */
+//int loseLifeTempo[] = {
+//	12, 12, 12, 12,
+//};
 
 /* function to start the lose life sound */
 void startLoseLife(uint16_t count) {
@@ -139,12 +139,12 @@ int gameOver[] = {
 	NOTE_B2, NOTE_A2, NOTE_F2, NOTE_D2,
 };
 
-/* tempo of the notes */
-int gameOverTempo[] = {
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-};
+///* tempo of the notes */
+//int gameOverTempo[] = {
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//};
 
 /* function to start the game over sound */
 void startGameOver(uint16_t count) {
@@ -238,62 +238,62 @@ int music[] = {
 	0,
 };
 
-/* tempo of the notes */
-int musicTempo[] = {
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	4, // BREAK
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-	12, 12, 12, 12,
-
-	8, // END
-};
+///* tempo of the notes */
+//int musicTempo[] = {
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	4, // BREAK
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//	12, 12, 12, 12,
+//
+//	8, // END
+//};
 
 /* function to start the music */
 void startMusic(uint16_t count) {

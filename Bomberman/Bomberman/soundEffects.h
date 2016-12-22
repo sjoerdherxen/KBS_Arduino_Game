@@ -7,7 +7,7 @@
 void setupSpeaker();
 
 /* function to start the explosion sound */
-void startPlayExplosion(uint16_t count);
+void startExplosion(uint16_t count);
 
 /* function that contains the tones of the explosion */
 void playExplosion(uint16_t count);

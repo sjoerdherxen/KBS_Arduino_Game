@@ -16,12 +16,15 @@ uint16_t player1Score = 0;
 uint16_t player2Score = 0;
 uint8_t player1Lives = 5;
 uint8_t player2Lives = 5;
+int gameover = 0;
 
-
+void setGameover(int gameoverSet) {
+	gameover = gameoverSet;
+}
 // dit is de code van een gametick. dit wordt 10x per seconde uitgevoerd.
 // todo zorg ervoor dat timing via een timer/interupt werkt.
-void GameTick(uint16_t count){
-
+void GameTick(uint16_t count, int gameover) {
+	if (!gameover) {
 	uint8_t nunchuck = Nunchuck_get_data();
 
 	uint8_t oldpl1Loc = player1Location;
@@ -39,7 +42,7 @@ void GameTick(uint16_t count){
 	}
 	else { // move player
 		PlayerMove(nunchuck & 0x07);
-		if (oldpl1Loc != player1Location){
+			if (oldpl1Loc != player1Location) {
 			nextPlayerMove = 1;
 		}
 	}
@@ -94,13 +97,15 @@ void Game(){
 #if IsMasterGame == 1
 	DisplayStartingGame();
 #endif
+	free(crates);
+
 	crates = GenerateCrates();
 	// initiele weergave van 
 	DisplayGame(crates);
 
 	// standaard spelwaarden zetten
 	nextPlayerMove = 0;
-	for (uint8_t i = 0; i < 6; i++){
+	for (uint8_t i = 0; i < 6; i++) {
 		bombs[i] = 0;
 	}
 
@@ -110,15 +115,15 @@ void Game(){
 	// led levens opstarten
 	startLives();
 
-	while (1){
+	while (1) {
 		prevGameTick = millis();
-		GameTick(i++);
+		GameTick(i++,gameover);
 		while (millis() < prevGameTick + 100);
 	}
 }
 
 // Executed on startup 
-void GameInit(){
+void GameInit() {
 	// Setup
 	DisplayOn();
 	setupPot();
@@ -128,7 +133,12 @@ void GameInit(){
 	// testcode
 	setupIR();
 
-	screenBrightness = setBrightness();		//TODO wanneer de arduino wordt opgestart blijft de helderheid van het scherm hetzelfde en leest hij niet de waarde van de potmeter uit zoals in deze regel staat dat hij dat wel moet doen. Pas wanneer de game wordt opgestart veranderd de helderheid na de countdown
+	showMainMenu();
+
+}
+
+void showMainMenu() {
+	setGameover(0);
 	// hoofdmenu openen
 #if IsMasterGame == 1
 	uint8_t selected = Mainmenu();
@@ -138,10 +148,10 @@ void GameInit(){
 
 	// checks if the specific arduino is the master or the slave
 #if IsMasterGame == 1
-	if (selected == 1){ // start game
+	if (selected == 1) { // start game
 		Game();
 	}
-	else if (selected == 2){
+	else if (selected == 2) {
 		// todo highscore
 		return;
 	}
@@ -151,52 +161,52 @@ void GameInit(){
 }
 
 // Move player to direction if valid newlocation
-void PlayerMove(uint8_t direction){
+void PlayerMove(uint8_t direction) {
 	uint8_t newLocation = player1Location;
 
 	switch (direction)
 	{
 	case 1: //up
-		if ((player1Location & 0x0F) > 0){
+		if ((player1Location & 0x0F) > 0) {
 			newLocation--;
 		}
 		break;
 	case 2: // right
-		if ((player1Location >> 4) < 12){
+		if ((player1Location >> 4) < 12) {
 			newLocation += 0x10;
 		}
 		break;
 	case 3: // down
-		if ((player1Location & 0x0F) < 12){
+		if ((player1Location & 0x0F) < 12) {
 			newLocation++;
 		}
 		break;
 	case 4: //left
-		if ((player1Location >> 4) > 0){
+		if ((player1Location >> 4) > 0) {
 			newLocation -= 0x10;
 		}
 		break;
 	}
 	// is static block
-	if ((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1){
+	if ((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1) {
 		return;
 	}
 
 	// is crate
-	for (uint8_t i = 0; i < 127; i++){
-		if (crates[i] == newLocation){
+	for (uint8_t i = 0; i < 127; i++) {
+		if (crates[i] == newLocation) {
 			return;
 		}
 	}
 	// is other player here
-	if (newLocation == player2Location){
+	if (newLocation == player2Location) {
 		return;
 	}
 
 	// is bomb
-	for (uint8_t i = 0; i < 6; i++){
-		if (bombs[i]){
-			if ((bombs[i] & 0xFF00) >> 8 == newLocation){
+	for (uint8_t i = 0; i < 6; i++) {
+		if (bombs[i]) {
+			if ((bombs[i] & 0xFF00) >> 8 == newLocation) {
 				return;
 			}
 		}
@@ -211,10 +221,10 @@ uint8_t returnPlayerLocation() {
 }
 
 // bom statussen updaten
-void UpdateBombs(){
-	for (uint8_t i = 0; i < 6; i++){
-		if (bombs[i]){
-			if ((bombs[i] & 0x001F) < 0x19){ // status ophogen
+void UpdateBombs() {
+	for (uint8_t i = 0; i < 6; i++) {
+		if (bombs[i]) {
+			if ((bombs[i] & 0x001F) < 0x19) { // status ophogen
 				bombs[i]++;
 			}
 			else { // bom resetten

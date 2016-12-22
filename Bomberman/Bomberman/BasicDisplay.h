@@ -1,6 +1,7 @@
 #include <MI0283QT9.h>
 #include <Arduino.h>
 #include "Textures.h"
+#include "score.h"
 
 #ifndef BasicDisplay
 #define BasicDisplay
@@ -11,9 +12,11 @@ void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2Loc
 
 void DisplayMainMenu(uint8_t selected);
 
+void DisplayGameOverMenu(uint8_t selected);
+
 void DisplayScherpte(uint8_t x);
 
-void DisplayHighscore(char **names, uint8_t *scores);
+void DisplayHighscore();
 
 void DisplayStartingGame();
 void ShowLoader(uint8_t progress);
