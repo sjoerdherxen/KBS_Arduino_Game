@@ -7,6 +7,8 @@ uint8_t player2Location = 0xCC;
 uint16_t bombs[6];
 uint8_t nextPlayerMove;
 uint8_t screenBrightness = 0;
+uint8_t player1Score = 0;
+uint8_t player2Score = 0;
 
 
 // dit is de code van een gametick. dit wordt 10x per seconde uitgevoerd.
@@ -34,7 +36,7 @@ void GameTick(uint16_t count){
 
 	UpdateBombs();
 
-	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
+	UpdateGame(crates, crates, oldpl1Loc, player2Location, bombs, count);
 
 	endOfGame(count);
 	playLoseLife(count);

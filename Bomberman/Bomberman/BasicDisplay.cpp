@@ -3,9 +3,11 @@
 
 MI0283QT9 scherm;
 uint8_t SDcardLoaded = 0;
+extern uint8_t player1Location;
+extern uint8_t player2Location;
 
 /* function to display bombs on the playing field */
-void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count) {
+void _displayBombs(uint16_t *bombs, uint8_t *crates, uint16_t count) {
 
 	/* for-loop to loop through all the bombs */
 	for (uint16_t i = 0; i < 6; i++) {
@@ -38,13 +40,13 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, ui
 				_clearSquare(bombs[i] >> 8);
 
 				/* display the explosion of the bomb */
-				_displayExplode(bombs[i] >> 8, player1Location, count);
+				_displayExplode(bombs[i] >> 8, count);
 
 				/* display the explosion of the bomb in all four directions */
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 1, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates, player1Location, count);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 1, crates, count);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates, count);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates, count);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates, count);
 			}
 
 			/* remove the explosion */
@@ -128,7 +130,7 @@ void DisplayMainMenu(uint8_t selected){
 }
 
 /* display the game for the first time */
-void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
+void DisplayGame(uint8_t crates[]){
 	/* reset the screen to a white color */
 	scherm.fillScreen(RGB(255, 255, 255));
 
@@ -146,14 +148,14 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 	_displayInfo();
 
 	/* displays player 1 */
-	_displayPlayer(player1Location, RGB(255, 0, 0));
+	_displayPlayer(RGB(255, 0, 0));
 
 	/* displays player 2 */
-	_displayPlayer(player2Location, RGB(0, 0, 255));
+	_displayPlayer(RGB(0, 0, 255));
 }
 
 /* function to display updates in the game */
-void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *bombs, uint16_t count){
+void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player2LocationOld, uint16_t *bombs, uint16_t count){
 	/* display an updated crate */
 	_displayCrates(oldCrates, newCrates);
 
@@ -162,9 +164,9 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 
 	/* if player 1 has been moved since the last update,
 	the player is drawn at it's new location */
-	if (player1LocationNew != player1LocationOld){
+	if (player1Location != player1LocationOld){
 		/* draw a player */
-		_displayPlayer(player1LocationNew, RGB(255, 0, 0));
+		_displayPlayer(RGB(255, 0, 0));
 
 		/* clear the square of the last posion of the player */
 		_clearSquare(player1LocationOld);
@@ -172,16 +174,16 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 
 	/* if player 2 has been moved since the last update,
 	the player is drawn at it's new location */
-	if (player2LocationNew != player2LocationOld){
+	if (player2Location != player2LocationOld){
 		/* draw a player */
-		_displayPlayer(player2LocationNew, RGB(0, 0, 255));
+		_displayPlayer(RGB(0, 0, 255));
 
 		/* clear the square of the last posion of the player */
 		_clearSquare(player2LocationOld);
 	}
 
 	/*  */
-	_displayBombs(bombs, newCrates, player1LocationNew, count);
+	_displayBombs(bombs, newCrates, count);
 }
 
 // highscores tonen verwacht 5 3 letterige namen. 5 scores.
@@ -373,18 +375,20 @@ void _displayMenuHelpers(uint8_t which){
 }
 
 
-void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
+void _displayExplode(uint8_t location, uint16_t count){
 	// check of de speler in de explosie staat
-	if (playerlocation == location){
+	if (player1Location == location){
 		loseLife(count);
 		startLoseLife(count);
+	}
+
+	if (player2Location == location){
+
 	}
 
 	// teken bom explosie
 	if (SDcardLoaded){
 		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
-
-		// TODO: explosion animation
 	}
 
 	/* if the SD-card is not inserted, draw the default texture of the explosion (a black tirangle) */
@@ -394,7 +398,7 @@ void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
 }
 
 /* function to display the explosion in different directions (up, down, right, left) */
-int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates, uint8_t playerLoc, uint16_t count){
+int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates, uint16_t count){
 
 	/* for-loop to loop through the distance of the explosion */
 	for (int8_t j = 1; j < max; j++){
@@ -421,7 +425,7 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 				_clearSquare(newLocation);
 
 				/* display the explosion on the location of the crate */
-				_displayExplode(newLocation, playerLoc, count);
+				_displayExplode(newLocation, count);
 
 				/* remove the crate after the explosion */
 				crates[u] = 0xFF;
@@ -435,7 +439,7 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 		_clearSquare(location + j*mul);
 
 		/* display the explosion */
-		_displayExplode(location + j*mul, playerLoc, count);
+		_displayExplode(location + j*mul, count);
 	}
 }
 
