@@ -9,7 +9,7 @@
 int main(void){
 	init();
 	//initIrSend();
-	//Serial.begin(9600);
+	Serial.begin(9600);
 	GameInit();
 
 	while (1);

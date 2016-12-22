@@ -15,11 +15,14 @@ void DisplayScherpte(uint8_t x);
 
 void DisplayHighscore(char **names, uint8_t *scores);
 
+void ShowLoader(uint8_t progress);
+
 void _displayBorder();
 void _displayInnerStatic();
 void _displayCrates(uint8_t crates[]);
 void _displayPlayer(uint16_t playerColor);
 void _displayInfo();
+void _displayLives(uint8_t lives);
 void _displayCountDown();
 void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]);
 void _clearSquare(uint8_t square);

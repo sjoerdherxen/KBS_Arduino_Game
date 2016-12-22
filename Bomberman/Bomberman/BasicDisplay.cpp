@@ -56,6 +56,8 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint16_t count) {
 				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates);
 				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates);
 				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates);
+				_displayPlayer(RGB(255,0,0));
+				_displayPlayer(RGB(0, 255, 0));
 			}
 		}
 	}
@@ -129,6 +131,11 @@ void DisplayMainMenu(uint8_t selected){
 #endif
 }
 
+void DisplayStartingGame(){
+	scherm.fillScreen(RGB(255, 255, 255));
+	scherm.drawText(56, 45, "Starting game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+}
+
 /* display the game for the first time */
 void DisplayGame(uint8_t crates[]){
 	/* reset the screen to a white color */
@@ -157,7 +164,6 @@ void DisplayGame(uint8_t crates[]){
 /* function to display updates in the game */
 void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player2LocationOld, uint16_t *bombs, uint16_t count){
 	/* display an updated crate */
-	_displayCrates(oldCrates, newCrates);
 
 	/* display the updated info */
 	_displayInfo();
@@ -198,7 +204,7 @@ void DisplayHighscore(char **names, uint8_t *scores){
 	_displayMenuHelpers(1);
 }
 
-/* function to drawt the border of the game */
+/* function to draw the border of the game */
 void _displayBorder(){
 	/* for every block in the length of 15 blocks */
 	for (uint8_t i = 0; i < 15; i++){
@@ -222,6 +228,15 @@ void _displayBorder(){
 				}
 			}
 		}
+	}
+}
+
+void ShowLoader(uint8_t progress){
+	if (!progress){
+		scherm.drawRect(93, 100, 125, 20, RGB(0,0,0));
+		}
+	else {
+		scherm.fillRect(91 + progress, 100, 3, 20, RGB(0, 0, 0));
 	}
 }
 
@@ -314,22 +329,15 @@ void _displayInfo(){
 
 	scherm.drawChar(5, 5, 'X', RGB(255, 0, 0), RGB(255, 255, 255), 2);
 	scherm.drawChar(5, 125, 'X', RGB(0, 0, 255), RGB(255, 255, 255), 2);
+}
 
+void _displayLives(uint8_t lives) {
 	// score:
-	uint8_t pl1Score = 0;
-	uint8_t pl2Score = 0;
-	int i = 2;
-	while (pl1Score > 0){
-		scherm.drawInteger(27 + i * 16, 5, (long unsigned int)(pl1Score % 10), 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
-		i--;
-		pl1Score = pl1Score / 10;
-	}
-	i = 2;
-	while (pl2Score > 0){
-		scherm.drawInteger(27 + i * 16, 125, (long unsigned int)(pl2Score % 10), 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
-		i--;
-		pl2Score = pl2Score / 10;
-	}
+	uint8_t pl1Score = lives;
+	uint8_t pl2Score = 0;	//TODO deze levens moeten overgestuurd worden via de infrarood of bijgehouden worden in de eigen game
+
+	scherm.drawInteger(5, 23, pl1Score, 10, RGB(200, 0, 0), RGB(255, 255, 255), 2);
+	scherm.drawInteger(5, 143, pl2Score, 10, RGB(0, 0, 200), RGB(255, 255, 255), 2);
 }
 
 /* function to display crates once their updated */

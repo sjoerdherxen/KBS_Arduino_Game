@@ -5,10 +5,7 @@
 #define Nunchuck
 
 /* function used to setup the nunchuck */
-void Nunchuck_setpowerpins();
-
-/* function used to initialize the nunchuk */
-void Nunchuck_init();
+void setupNunchuck();
 
 /* function used to send a request to the nunchuck */
 void Nunchuck_send_request();

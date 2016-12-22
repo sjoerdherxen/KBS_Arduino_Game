@@ -2,11 +2,9 @@
 
 /* function used to generate crates into the game */
 uint8_t* GenerateCrates() {
-	//Serial.println(millis());
 	uint8_t *c;
 	/* make variables with a malloc of 127 */
 	c = (uint8_t*)malloc(127);
-	
 	for (uint8_t i = 0; i < 127; i++) {
 		/* the default location of crate is set to outside the playing field */
 		c[i] = 0xFF;
@@ -24,8 +22,6 @@ uint8_t* GenerateCrates() {
 	/* an 8-bit integer x is declared as 2, to be used in
 	the following code */
 	uint8_t x = 2;
-
-	/* for-loop loops through all the 127 possible crates */
 	
 	/* for-loop loops through all the 127 possible crates */
 	for (uint8_t i = 0; i < 127; i++) {
@@ -50,23 +46,24 @@ uint8_t* GenerateCrates() {
 		c[i] = x;
 		x++;
 	}
-	/*
-	for(uint8_t i = 0; i < 127; i+=3){
+	
+	ShowLoader(0);
+	for(uint8_t i = 0; i < 125; i+=3){
 		sendTripple(c[i], c[i+1], c[i+2]);
+		ShowLoader(i);
 	}
-	Serial.println(millis());
-	*/
+
 	return c;
 #else 
-	for (uint8_t i = 0; i < 127;){
+
+	for (uint8_t i = 0; i < 125; ){
 		uint8_t *data = dataRecieve();
 		if (data) {
-			c[i] = data[0];
-			c[i + 1] = data[1];
-			c[i + 2] = data[2];
-			data[0] = 0;
-			data[1] = 0;
-			data[2] = 0;
+			c[i] = data[1];
+			c[i + 1] = data[2];
+			c[i + 2] = data[3];
+
+			ShowLoader(i);
 			i += 3;
 		}
 	}
