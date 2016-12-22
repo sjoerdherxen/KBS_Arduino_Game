@@ -13,6 +13,8 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 
 void DisplayMainMenu(uint8_t selected);
 
+void DisplayGameOverMenu(uint8_t selected);
+
 void DisplayScherpte(uint8_t x);
 
 void DisplayHighscore();

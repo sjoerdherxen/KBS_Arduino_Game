@@ -127,6 +127,45 @@ void DisplayMainMenu(uint8_t selected){
 #endif
 }
 
+/* function to draw the main menu, it needs a selected menu item to function */
+void DisplayGameOverMenu(uint8_t selected) {
+	if (selected == 0) {
+		/* fills the screen with a white color */
+		scherm.fillScreen(RGB(255, 255, 255));
+
+		/* displays Game Over! on the screen */
+		scherm.drawText(40,40,"Game Over!",RGB(0,0,0),RGB(255,255,255),3);
+
+		/* displays help text in the main menu */
+		_displayMenuHelpers(2);
+	}
+
+	/* if "Start Game" is selected the 'selected' visuals will show */
+	if (selected == 1) {
+		scherm.drawRect(84, 99, 145, 18, RGB(0, 0, 0));
+		scherm.drawRect(79, 144, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 100, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+		scherm.drawText(80, 145, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
+
+	/* if "Highscores" is selected the 'selected' visuals will show */
+	else if (selected == 2) {
+		scherm.drawRect(79, 144, 162, 18, RGB(0, 0, 0));
+		scherm.drawRect(84, 99, 145, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 100, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 145, "Save Score", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+	}
+
+	/* if nothing is selected the main menu will show as normal */
+	else {
+		scherm.drawRect(84, 99, 145, 18, RGB(255, 255, 255));
+		scherm.drawRect(79, 144, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 100, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 145, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	}
+
+}
+
 /* display the game for the first time */
 void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
 	/* reset the screen to a white color */
@@ -140,7 +179,7 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 
 	/* the crates of the playing field are drawn */
 	_displayCrates(crates);
-	_displayCountDown();
+	//_displayCountDown();
 
 	/* displays info about players */
 	_displayInfo();
@@ -380,6 +419,7 @@ void _displayMenuHelpers(uint8_t which){
 	/* display text that explains the Z-button */
 	if (which & (1 << 1)){
 		scherm.drawText(187, 219, "Z select", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+
 	}
 }
 
