@@ -86,7 +86,7 @@ uint8_t Nunchuck_get_data()
 	/* a new data request is send to the nunchuck for a new data payload */
 	Nunchuck_send_request();
 
-	/* when the counter hits 5, we recieved 6 bytes,
+	/* when the counter hits 5, we received 6 bytes,
 	then we can print the full data payload */
 	if (cnt >= 5) {
 		/* default data is set to binary 1100 0000 (0xC0) */
