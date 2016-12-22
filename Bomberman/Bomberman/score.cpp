@@ -5,21 +5,27 @@ void saveScore(uint16_t scorePlayer, char name[]) {
 }
 
 void saveName(uint8_t nameid, char name[]) {
-	if (nameid == 1) {
+	switch (nameid) {
+	case 1:
 		for (uint8_t x = 0; x < 3; x++) {
 			eeprom_write_byte((uint8_t*)x + 10, name[x]);
 		}
-	}
-	else if (nameid == 2) {
+		break;
+	case 2:
 		for (uint8_t x = 0; x < 3; x++) {
 			eeprom_write_byte((uint8_t*)x + 13, name[x]);
 		}
-	}
-	else if (nameid == 3) {
+		break;
+	case 3:
 		for (uint8_t x = 0; x < 3; x++) {
 			eeprom_write_byte((uint8_t*)x + 16, name[x]);
 		}
+		break;
 	}
+}
+
+void saveLetter(uint8_t id, uint16_t letter) {
+	eeprom_write_word((uint16_t*)id, letter);
 }
 
 uint16_t getName(uint16_t id) {
@@ -39,6 +45,20 @@ char getNameForDisplay(uint8_t id) {
 	return *nm;
 }
 
+void downGradeName(uint8_t id) {
+	if (id == 1) {
+		for (uint8_t i = 10; i < 12; i++) {
+			saveLetter(i + 3, getName(i));
+		}
+	}
+	else if (id == 2) {
+		for (uint8_t i = 13; i < 15; i++) {
+			saveLetter(i + 3, getName(i));
+		}
+	}
+
+}
+
 uint16_t getScore(uint16_t id) {
 	uint16_t value = eeprom_read_word((uint16_t*)id);
 	eeprom_busy_wait();
@@ -50,18 +70,18 @@ void isHighscore(uint16_t current, char name[]) {
 	uint16_t score1 = eeprom_read_word((uint16_t*)0);
 	uint16_t score2 = eeprom_read_word((uint16_t*)2);
 	uint16_t score3 = eeprom_read_word((uint16_t*)4);
-
 	if (current > score1) {
 		eeprom_write_word((uint16_t*)2, score1);
 		eeprom_write_word((uint16_t*)4, score2);
 		eeprom_write_word((uint16_t*)0, current);
-
+		downGradeName(2);
+		downGradeName(1);
 		saveName(1, name);
 	}
 	else if (current > score2) {
 		eeprom_write_word((uint16_t*)4, score2);
 		eeprom_write_word((uint16_t*)2, current);
-
+		downGradeName(2);
 		saveName(2, name);
 	}
 	else if (current > score3) {

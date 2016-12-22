@@ -15,6 +15,7 @@ char getNameForDisplay(uint8_t id);
 
 void isHighscore(uint16_t current, char name[]);
 
-
+void saveLetter(uint8_t id, uint16_t letter);
+void downGradeName(uint8_t id);
 
 #endif

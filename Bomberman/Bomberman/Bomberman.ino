@@ -10,19 +10,26 @@ int main() {
 	DisplayOn();
 	Serial.begin(9600);
 
-	//resetScore();
+	resetScore();
 
 	_delay_ms(50);
 
 	//TESTCODE
-	/* 
-	saveScore(22, "MIK");
-	saveScore(36, "RIK");
-	saveScore(4353, "MAN");
-	saveScore(423, "GEK");
-	saveScore(6544, "NIK");
-	saveScore(1134, "LOL");
-	saveScore(9001, "MIK");
+	saveScore(22, "AAA");
+	saveScore(11, "BBB");
+	saveScore(5, "CCC");
+	saveScore(6, "DDD");
+	saveScore(12, "EEE");
+	saveScore(123, "FFF");
+
+	/*
+	_delay_ms(100);
+	saveScore(9001, "GGG");	// 1
+	_delay_ms(100);
+	saveScore(59302, "HHH");// 1
+	_delay_ms(100);
+	saveScore(474, "III");	// 3
+	_delay_ms(100);
 	*/
 
 	delay(10);
@@ -38,7 +45,7 @@ void DisplayHighscore() {
 	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
 
 	//Print iedere naam
-	char neem[15];
+	char neem[10];
 	for (uint8_t i = 0; i < 3; i++) {
 		uint8_t b = 0;
 		for (uint8_t x = 10 + i * 3; x < i * 3 + 13; x++) {
