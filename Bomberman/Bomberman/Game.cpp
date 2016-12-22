@@ -2,13 +2,21 @@
 
 uint8_t *crates;
 volatile uint8_t gameTickReady;
+#if IsMasterGame == 1
 uint8_t player1Location = 0x00;
 uint8_t player2Location = 0xCC;
+#else 
+uint8_t player1Location = 0xCC;
+uint8_t player2Location = 0x00;
+#endif
 uint16_t bombs[6];
 uint8_t nextPlayerMove;
 uint8_t screenBrightness = 0;
+uint16_t player1Score = 0;
+uint16_t player2Score = 0;
+uint8_t player1Lives = 5;
+uint8_t player2Lives = 5;
 int gameover = 0;
-
 
 void setGameover(int gameoverSet) {
 	gameover = gameoverSet;
@@ -17,51 +25,83 @@ void setGameover(int gameoverSet) {
 // todo zorg ervoor dat timing via een timer/interupt werkt.
 void GameTick(uint16_t count, int gameover) {
 	if (!gameover) {
-		uint8_t nunchuck = Nunchuck_get_data();
+	uint8_t nunchuck = Nunchuck_get_data();
 
-		uint8_t oldpl1Loc = player1Location;
-
-		if (nunchuck & 0x40) {
-			PlaceBomb();
-		}
-
-		if (nextPlayerMove) {
-			nextPlayerMove--;
-		}
-		else {
-			PlayerMove(nunchuck & 0x07);
+	uint8_t oldpl1Loc = player1Location;
+	
+	// place bomb
+	uint16_t bomb = 0;
+	if (nunchuck & 0x40){
+		bomb = PlaceBomb();
+		Serial.println(bomb);
+	}
+	
+	// cool down on player move
+	if (nextPlayerMove){
+		nextPlayerMove--;
+	}
+	else { // move player
+		PlayerMove(nunchuck & 0x07);
 			if (oldpl1Loc != player1Location) {
-				nextPlayerMove = 1;
-			}
-		}
-
-
-		UpdateBombs();
-
-		UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
-
-		endOfGame(count);
-		playLoseLife(count);
-		playGameOver(count);
-		playExplosion(count);
-
-		mainMenuTick(count);
-		playMusic(count);
-
-		if (screenBrightness != setBrightness()) {
-			screenBrightness = setBrightness();
-			DisplayScherpte(screenBrightness);
+			nextPlayerMove = 1;
 		}
 	}
+	// ticks op bommen updaten
+	UpdateBombs();
+
+	// play sounds
+	endOfGame(count);
+	playLoseLife(count);
+	playGameOver(count);
+	playExplosion(count);
+
+	if (screenBrightness != setBrightness()){
+		screenBrightness = setBrightness();
+		DisplayScherpte(screenBrightness);
+	}
+	uint8_t oldpl2Loc = player2Location;
+#if IsMasterGame == 1
+	sendTripple(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
+	while (1){
+		uint8_t *data = dataRecieve();
+		if (data){
+			player2Location = data[1];
+			bombs[3] = 0;
+			bombs[3] = data[2];
+			bombs[3] |= data[3] >> 8;
+			break;
+		}
+	}
+#else
+	while (1){
+		uint8_t *data = dataRecieve();
+		if (data){
+			player2Location = data[1];
+			bombs[3] = 0;
+			bombs[3] = data[2];
+			bombs[3] |= data[3] >> 8;
+			break;
+		}
+}
+	sendTripple(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
+#endif
+	if (count % 10 == 9){
+		player1Score++;
+		player2Score++;
+	}
+	UpdateGame(crates, oldpl1Loc, oldpl2Loc, bombs, count);
 }
 
 // deze code is voor het initialseren van de game
-void Game() {
+void Game(){
+#if IsMasterGame == 1
+	DisplayStartingGame();
+#endif
 	free(crates);
 
 	crates = GenerateCrates();
 	// initiele weergave van 
-	DisplayGame(crates, player1Location, player2Location);
+	DisplayGame(crates);
 
 	// standaard spelwaarden zetten
 	nextPlayerMove = 0;
@@ -88,16 +128,10 @@ void GameInit() {
 	DisplayOn();
 	setupPot();
 	setupSpeaker();
-	screenBrightness = setBrightness();
-
-	Nunchuck_setpowerpins();
-	Nunchuck_init();
-
-	// ports leds levens instellen
 	setupExpander();
-
+	setupNunchuck();
 	// testcode
-	//initIrSend();
+	setupIR();
 
 	showMainMenu();
 
@@ -106,16 +140,19 @@ void GameInit() {
 void showMainMenu() {
 	setGameover(0);
 	// hoofdmenu openen
-	_delay_ms(100);
+#if IsMasterGame == 1
 	uint8_t selected = Mainmenu();
+#else
+	uint8_t selected = Mainmenu();
+#endif
 
+	// checks if the specific arduino is the master or the slave
 #if IsMasterGame == 1
 	if (selected == 1) { // start game
 		Game();
 	}
 	else if (selected == 2) {
-		// todo highscore
-		return;
+		DisplayHighscore();
 	}
 #else
 	Game();
@@ -197,9 +234,11 @@ void UpdateBombs() {
 }
 
 // een bom plaatsen door speler
-void PlaceBomb() {
-	if (!bombs[0]) {
+uint16_t PlaceBomb(){
+	if (!bombs[0]){
 		bombs[0] = 0;
 		bombs[0] |= (player1Location << 8) | 1 | (1 << 6);
+		return bombs[0];
 	}
+	return 0;
 }

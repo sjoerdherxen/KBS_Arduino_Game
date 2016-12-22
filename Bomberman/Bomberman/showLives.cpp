@@ -2,7 +2,7 @@
 #include "showLives.h"									
 
 //Initializes and declares lives to 0
-int lives = 0;
+extern uint8_t player1Lives;
 //>=1 = true so that means the end of the game, 0 is false so not the end of the game
 uint8_t ifEndGame = 0;
 //Initializes and declares endOfGameTick to 0, endOfGameTcik will store the tick number
@@ -40,19 +40,20 @@ void startLives() {
 	//Ends all transmissions
 	Wire.endTransmission();
 	//Sets lives to 5		
-	lives = 1;											
+	player1Lives = 5;
 }
 
 //Activates the blinking and after that the amount of leds equal to the amount of lives is set.
 void loseLife(uint16_t count) {				
 	//Sets lives to one less, for instance: from 4 to 3
-	lives--;		
+	player1Lives--;
+
 	//Checks how many lives the player has and which leds have to be displayed
-	if (lives){
+	if (player1Lives){
 		//Begins transmission to adress 56, etc.												
 		Wire.beginTransmission(56);
 		//Writes the pattern that corresponds to lives to the adress, etc.
-		Wire.write(pgm_read_byte(&patterns[lives])); 
+		Wire.write(pgm_read_byte(&patterns[player1Lives])); 
 		//Ends all transmissions
 		Wire.endTransmission();
 		//When a player has 0 lives this part of the switch statement will be executed
@@ -62,7 +63,7 @@ void loseLife(uint16_t count) {
 		//Starts the gameOver animation and gives the current gametick value with it
 		startGameOver(count);
 		//ifEndGame gets the value 3, it is set to 3 so the animation will be executed 3 times
-		ifEndGame = 3;
+		ifEndGame = 3;									
 	}
 }
 
@@ -113,7 +114,7 @@ void endOfGame(uint16_t count) {
 				asm volatile ("  jmp 0");
 			}
 			else if (selectie == 2) {
-				//TODO higscores aanroepen
+				DisplayHighscore();
 			}
 			
 		}

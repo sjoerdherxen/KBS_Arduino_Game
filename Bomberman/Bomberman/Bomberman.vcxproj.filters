@@ -33,7 +33,16 @@
     <ClInclude Include="score.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BasicDisplay.h">
+    <ClInclude Include="ScreenBrightness.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="showLives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="soundEffects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Crates.h">
@@ -54,19 +63,16 @@
     <ClInclude Include="Nunchuck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScreenBrightness.h">
+    <ClInclude Include="BasicDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="showLives.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="soundEffects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Textures.h">
+    <ClInclude Include="__vm\.Bomberman.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameOverMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,6 +95,18 @@
     <ClCompile Include="score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="screenBrightness.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="showLives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="soundEffects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Crates.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -107,19 +125,10 @@
     <ClCompile Include="Nunchuck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="screenBrightness.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="showLives.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="soundEffects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameOverMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

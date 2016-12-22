@@ -1,4 +1,5 @@
 #include "score.h"
+#include "Keyboard.h"
 
 #include "Textures.h"
 #include "BasicDisplay.h"
@@ -22,7 +23,6 @@ int main(void) {
 
 	gameOverMenu();
 
-	while (1);
 
 	return 1;
 }

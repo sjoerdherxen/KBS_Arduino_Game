@@ -96,10 +96,11 @@ void resetScore() {
 	eeprom_write_word((uint16_t*)2, 0);
 	eeprom_write_word((uint16_t*)4, 0);
 	for (uint8_t i = 10; i < 19; i++) {
-		eeprom_write_word((uint16_t*)i, 0);
+		eeprom_write_word((uint16_t*)i, '-');
 	}
 }
 
+//If you want to see the current scores on the serial monitor you can execute this
 void printHighscore() {
 	Serial.println("Highscores:");
 	_delay_ms(10);
@@ -124,3 +125,4 @@ void printHighscore() {
 		_delay_ms(10);
 	}
 }
+
