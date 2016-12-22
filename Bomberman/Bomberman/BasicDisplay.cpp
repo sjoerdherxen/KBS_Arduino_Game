@@ -71,16 +71,27 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 	_displayBoms(boms, newCrates, player1LocationNew);
 }
 
-// highscores tonen verwacht 5 3 letterige namen. 5 scores.
-void DisplayHighscore(char **names, uint8_t *scores){
-	scherm.drawText(80, 20, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+// highscores tonen verwacht 3 3 letterige namen. 3 scores.
+void DisplayHighscore() {
+	//Print "Highscores"
+	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
 
-	for (uint8_t i = 0; i < 5; i++){
-		scherm.drawText(80, 41 + i * 21, names[i], RGB(0, 0, 0), RGB(255, 255, 255), 2);
-		scherm.drawInteger(192, 41 + i * 21, (unsigned long)(scores[i]), 10, RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	//Print iedere naam
+	char neem[10];
+	for (uint8_t i = 0; i < 3; i++) {
+		uint8_t b = 0;
+		for (uint8_t x = 10 + i * 3; x < i * 3 + 13; x++) {
+			neem[b] = getName(x);
+			b++;
+		}
+		scherm.drawText(80, 41 + i * 21, neem, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 	}
 
-	_displayMenuHelpers(1);
+	//Print iedere score
+	for (uint8_t i = 0; i < 3; i++) {
+		uint8_t a = i * 2;
+		scherm.drawInteger(192, 41 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
+	}
 }
 
 // de border van het spel tekenen
