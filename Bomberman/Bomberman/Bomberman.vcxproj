@@ -72,13 +72,40 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BasicDisplay.cpp" />
+    <ClCompile Include="Crates.cpp" />
+    <ClCompile Include="EEPROM.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Highscore.cpp" />
+    <ClCompile Include="IrComm.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="Nunchuck.cpp" />
     <ClCompile Include="score.cpp" />
+    <ClCompile Include="screenBrightness.cpp" />
+    <ClCompile Include="showLives.cpp" />
+    <ClCompile Include="soundEffects.cpp" />
+    <ClCompile Include="stdint.h.cpp" />
+    <ClCompile Include="Textures.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bomberman.ino" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BasicDisplay.h" />
+    <ClInclude Include="Crates.h" />
+    <ClInclude Include="EEPROM.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Highscore.h" />
+    <ClInclude Include="IrComm.h" />
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="Nunchuck.h" />
     <ClInclude Include="score.h" />
+    <ClInclude Include="ScreenBrightness.h" />
+    <ClInclude Include="showLives.h" />
+    <ClInclude Include="soundEffects.h" />
+    <ClInclude Include="stdint.h" />
+    <ClInclude Include="Textures.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

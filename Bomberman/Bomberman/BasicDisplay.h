@@ -1,6 +1,7 @@
 #include <MI0283QT9.h>
 #include <Arduino.h>
 #include "Textures.h"
+#include "score.h"
 
 #ifndef BasicDisplay
 #define BasicDisplay
@@ -14,7 +15,7 @@ void DisplayMainMenu(uint8_t selected);
 
 void DisplayScherpte(uint8_t x);
 
-void DisplayHighscore(char **names, uint8_t *scores);
+void DisplayHighscore();
 
 void _displayBorder();
 void _displayInnerStatic();

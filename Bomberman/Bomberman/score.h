@@ -1,4 +1,3 @@
-#include <MI0283QT9.h>
 #include <Arduino.h>
 
 #ifndef score
