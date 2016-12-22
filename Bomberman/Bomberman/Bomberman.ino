@@ -1,6 +1,4 @@
-#include <Wire.h>
-#include <Arduino.h>
-#include <MI0283QT9.h>
+#include "score.h"
 
 #include "Textures.h"
 #include "BasicDisplay.h"
@@ -14,5 +12,10 @@ int main(void){
 
 	while (1);
 
+	delay(10);
+	printHighscore();
+	delay(10);
+	//DisplayHighscore();
 	return 1;
 }
+
