@@ -19,6 +19,8 @@ void DisplayScherpte(uint8_t x);
 
 void DisplayHighscore();
 
+void DisplayKeyboard();
+
 void _displayBorder();
 void _displayInnerStatic();
 void _displayCrates(uint8_t crates[]);
