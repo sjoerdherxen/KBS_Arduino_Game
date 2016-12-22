@@ -1,11 +1,14 @@
-#include <Arduino.h>
+#ifndef Textures_h
+#define Textures_h
+
+#include "Game.h"
+
+#if UseTextures == 1
 #include <Arduino.h>
 #include <MI0283QT9.h>
 #include <SD.h>
 #include <BMPheader.h>
-
-#ifndef Textures_h
-#define Textures_h
+#endif
 
 /* function used to open a bitmapping file */
 void OpenBMPFile(char *texture, int16_t x, int16_t y, MI0283QT9 *lcd);
