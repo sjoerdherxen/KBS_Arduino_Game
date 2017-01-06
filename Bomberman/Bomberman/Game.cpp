@@ -99,7 +99,7 @@ void GameInit() {
 	// testcode
 	//initIrSend();
 
-	showMainMenu();
+	//showMainMenu();
 
 }
 

@@ -531,23 +531,26 @@ void DisplayKeyboard() {
 	//scherm.fillRect(76, 76, 100, 36, RGB(0, 0, 0));
 	int x1 = 120;
 	int x2 = 40;
-	uint8_t selectColor = 150;
+	//uint8_t selectColor = 150;
 
 	
-	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, selectColor, 0), 4);
+	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, 150, 0), 4);
 	scherm.drawChar(112, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
 	scherm.drawChar(144, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
+	
 
-	scherm.drawChar(80, x1, 'A', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(80, x2, 'A', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(80, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(80, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
 
-	scherm.drawChar(112, x1, 'A', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(112, x2, 'A', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(112, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(112, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
-	scherm.drawChar(144, x1, 'A', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(144, x2, 'A', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(144, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(144, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
 	//Confirm
-	scherm.drawText(184, 98, "Confirm", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	scherm.drawText(184, 90, "Confirm", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+
+	showMiddle(&scherm);
 }

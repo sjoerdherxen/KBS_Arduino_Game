@@ -8,7 +8,7 @@ int main(void) {
 	init();
 	//initIrSend();
 	Serial.begin(9600);
-	//GameInit();
+	GameInit();
 	DisplayOn();
 	DisplayKeyboard();
 	while (1);

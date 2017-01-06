@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include "Textures.h"
 #include "score.h"
+#include "Keyboard.h"
 
 #ifndef BasicDisplay
 #define BasicDisplay
