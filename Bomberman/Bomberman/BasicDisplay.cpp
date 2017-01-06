@@ -577,32 +577,34 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 		_clearSquare(location + j*mul);
 	}
 }
-
+/* Function that shows a screen where you can enter your initials*/
 void DisplayKeyboard() {
+	/* Fill the screen with a white background*/
 	scherm.fillScreen(RGB(255, 255, 255));
 
+	/* Shows the menu helper "z select" */
 	_displayMenuHelpers(2);
-
-	int x1 = 120;
-	int x2 = 40;
 	
+	/* Draws the first 3 letters in the middle row, the first letter has the selected color*/
 	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, 150, 0), 4);
 	scherm.drawChar(112, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
 	scherm.drawChar(144, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
 	
+	/* Draws the first row top and bottom grey letters*/
+	scherm.drawChar(80, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(80, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
-	scherm.drawChar(80, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(80, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	/* Draws the second row top and bottom grey letters*/
+	scherm.drawChar(112, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(112, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
+	/* Draws the third row top and bottom grey letters*/
+	scherm.drawChar(144, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(144, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
-	scherm.drawChar(112, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(112, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-
-	scherm.drawChar(144, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(144, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-
-	//Confirm
+	/* Draws the "confirm" text*/
 	scherm.drawText(184, 90, "Confirm", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
-	showMiddle(&scherm);
+	/*Starts the function showMiddle so the user can select characters*/
+	selectChars(&scherm);
 }
