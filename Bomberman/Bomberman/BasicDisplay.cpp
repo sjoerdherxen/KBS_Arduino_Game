@@ -528,11 +528,8 @@ void DisplayKeyboard() {
 
 	_displayMenuHelpers(2);
 
-	//scherm.fillRect(76, 76, 100, 36, RGB(0, 0, 0));
 	int x1 = 120;
 	int x2 = 40;
-	//uint8_t selectColor = 150;
-
 	
 	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, 150, 0), 4);
 	scherm.drawChar(112, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
