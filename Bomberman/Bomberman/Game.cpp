@@ -73,7 +73,7 @@ void GameTick(uint16_t count, int gameover) {
 			}
 		}
 #else
-		while (1){
+		while (0){
 			uint8_t *data = dataRecieve();
 			if (data){
 				player2Location = data[1];
@@ -133,12 +133,6 @@ void GameInit() {
 	setupSpeaker();
 	setupExpander();
 	setupNunchuck();
-
-	//while (1){
-	//	sendTrippleStart(1, 2, 3);
-	//	sendTrippleDone(1, 2, 3);
-	//	delay(4000);
-	//}
 
 	showMainMenu();
 }

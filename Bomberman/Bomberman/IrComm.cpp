@@ -32,7 +32,7 @@ void setupIR(){
 	//set up Timer 2
 	//TCCR2B = (1 << CS22) | (1 << CS21) | (1 << CS20);
 	cli();
-	TCCR2B = (1 << CS21);// | (1 << CS20); // prescaler 32
+	TCCR2B = (1 << CS21);// | (1 << CS21); // prescaler 32
 	TCCR2A = (1 << WGM21);
 	// time = 500 us
 	OCR2A = 249;
@@ -164,7 +164,13 @@ uint8_t dataAvailable(){
 ISR(INT0_vect){
 	unsigned long time = micros() - prevMicros;
 	prevMicros = micros();
-	uint8_t input = (PIND & (1 << PIND2));
+
+	Serial.println(time);
+	//Serial.print("-");
+	
+
+	uint8_t input = !(PIND & (1 << PIND2));
+	//Serial.println(input);
 	if (input){ // pin 2 is on
 		if (time < 750){ // 0
 			data = data << 1;
@@ -193,24 +199,26 @@ ISR(INT0_vect){
 
 
 ISR(TIMER2_COMPA_vect){
+	
 	if (timer2count < 3){
 		timer2count++;
 		return;
 	}
 	timer2count = 0;
-
+	
 	if (!sendData){
 		return;
 	}
 	if (sendData == 2){
 		PORTD |= (1 << PIND3);
+		sendData = 3;
 		return;
 	}
 	if (sendData == 3){
 		millisSendDone = millis();
+		sendData = 0;
 		return;
 	}
-
 	switch (sendDataStage)
 	{
 	case 0:
@@ -221,24 +229,25 @@ ISR(TIMER2_COMPA_vect){
 					sendDataBit--;
 				}
 			}
+			sendDataStage++;
 		}
 		else{
 			sendDataByte++;
 			if (sendDataByte > 4){
 				sendData = 2;
-				return;
 			}
 			sendDataBit = 8;
 			sendDataStage = 0;
-			return;
 		}
 		break;
 	case 1:
-		if (!dataToSend[sendDataByte] & (1 << (sendDataBit - 1))){
+		if (!(dataToSend[sendDataByte] & (1 << (sendDataBit - 1)))){
 			PORTD &= ~(1 << PIND3);
 			sendDataBit--;
 			sendDataStage = 0;
-			return;
+		}
+		else {
+			sendDataStage++;
 		}
 		break;
 	case 2:
@@ -246,10 +255,10 @@ ISR(TIMER2_COMPA_vect){
 			PORTD &= ~(1 << PIND3);
 			sendDataBit--;
 			sendDataStage = 0;
-			return;
+		}
+		else {
+			sendDataStage++;
 		}
 		break;
 	}
-
-	sendDataStage++;
 }

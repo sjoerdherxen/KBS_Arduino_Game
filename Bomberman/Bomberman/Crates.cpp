@@ -50,6 +50,9 @@ uint8_t* GenerateCrates() {
 	ShowLoader(0);
 	for(uint8_t i = 0; i < 125; i+=3){
 		sendTrippleStart(c[i], c[i+1], c[i+2]);
+		//while (!sendTrippleDone(c[i], c[i + 1], c[i + 2])){
+		//	//sendTrippleStart(c[i], c[i + 1], c[i + 2]);
+		//}
 		ShowLoader(i);
 	}
 
@@ -57,6 +60,7 @@ uint8_t* GenerateCrates() {
 #else 
 
 	for (uint8_t i = 0; i < 125; ){
+
 		uint8_t *data = dataRecieve();
 		if (data) {
 			c[i] = data[1];

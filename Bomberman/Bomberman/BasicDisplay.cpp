@@ -235,7 +235,7 @@ void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2Loc
 	_displayInfo();
 }
 
-/*// highscores tonen verwacht 3 3 letterige namen. 3 scores.
+// highscores tonen verwacht 3 3 letterige namen. 3 scores.
 void DisplayHighscore() {
 	//Print "Highscores"
 	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
@@ -256,7 +256,7 @@ void DisplayHighscore() {
 		uint8_t a = i * 2;
 		scherm.drawInteger(192, 41 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 	}
-}*/
+}
 
 void DisplayStartingGame(){
 	scherm.fillScreen(RGB(255, 255, 255));
