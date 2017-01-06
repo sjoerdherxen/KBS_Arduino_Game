@@ -27,8 +27,14 @@ void playGameOver(uint16_t count);
 /* function to start the music */
 void startMusic(uint16_t count);
 
+/* function to start the music */
+void stopMusic();
+
 /* function that contains the tones of the music */
 void playMusic(uint16_t count);
+
+/* function for set sound level */
+void playSound(uint16_t tone);
 
 #endif
 

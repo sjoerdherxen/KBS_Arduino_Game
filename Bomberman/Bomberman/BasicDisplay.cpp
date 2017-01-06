@@ -69,7 +69,7 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint16_t count) {
 /* function to be used to start the lcd-screen */
 void DisplayOn(){
 	/* this tries to open the SD-card */
-	SDcardLoaded = loadTextures();
+	//SDcardLoaded = loadTextures();
 
 	/* turn on the screen */
 	scherm.begin();
@@ -91,11 +91,13 @@ void DisplayScherpte(uint8_t x){
 /* function to draw the main menu, it needs a selected menu item to function */
 void DisplayMainMenu(uint8_t selected){
 #if IsMasterGame == 1
-	/* when the screen opens for the first 
+	/* when the screen opens for the first
 	, selected equals 0 */
 	if (selected == 0){
 		/* fills the screen with a white color */
 		scherm.fillScreen(RGB(255, 255, 255));
+		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255,255), 2);
+		scherm.drawText(80, 100, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
 		/* displays help text in the main menu */
 		_displayMenuHelpers(2);
@@ -141,7 +143,7 @@ void DisplayGameOverMenu(uint8_t selected) {
 		scherm.fillScreen(RGB(255, 255, 255));
 
 		/* displays Game Over! on the screen */
-		scherm.drawText(40,40,"Game Over!",RGB(0,0,0),RGB(255,255,255),3);
+		scherm.drawText(40, 40, "Game Over!", RGB(0, 0, 0), RGB(255, 255, 255), 3);
 
 		/* displays help text in the main menu */
 		_displayMenuHelpers(2);
@@ -240,6 +242,11 @@ void DisplayHighscore() {
 	}
 }
 
+void DisplayStartingGame(){
+	scherm.fillScreen(RGB(255, 255, 255));
+	scherm.drawText(56, 45, "Starting game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+}
+
 /* function to draw the border of the game */
 void _displayBorder(){
 	/* for every block in the length of 15 blocks */
@@ -267,11 +274,12 @@ void _displayBorder(){
 	}
 }
 
+// Show a loader for the crates being send over IR, should take a few seconds.
 void ShowLoader(uint8_t progress){
-	if (!progress){
+	if (!progress){ // show empty loader if progress == 0. at start
 		scherm.drawRect(93, 100, 125, 20, RGB(0, 0, 0));
 	}
-	else {
+	else { // add rect for progress being made always 3 pixels
 		scherm.fillRect(91 + progress, 100, 3, 20, RGB(0, 0, 0));
 	}
 }
@@ -361,44 +369,50 @@ void _displayCountDown() {
 	scherm.drawText(5, 80, "GO", RGB(255, 255, 255), RGB(255, 255, 255), 4);
 }
 
-/* function to show the score and power-ups of a player */
-void _displayInfo(){
-	// todo getplayercount
-
+void _displayInfoStart(){
 	scherm.drawChar(5, 5, 'X', RGB(255, 0, 0), RGB(255, 255, 255), 2);
 	scherm.drawChar(5, 125, 'X', RGB(0, 0, 255), RGB(255, 255, 255), 2);
 
-	scherm.drawInteger(5, 23, player1Lives, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
-	scherm.drawInteger(5, 143, player2Lives, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
+	scherm.drawText(5, 22, "Levens", RGB(0, 0, 0), RGB(255, 255, 255), 1);
+	scherm.drawText(5, 142, "Levens", RGB(0, 0, 0), RGB(255, 255, 255), 1);
 
-	if (player1Score >= 1000){
-		scherm.fillRect(69, 41, 11, 16, RGB(255, 255, 255));
-	}
-	else if(player1Score >= 100){
-		scherm.fillRect(53, 41, 27, 16, RGB(255, 255, 255));
-	}
-	else if (player1Score >= 10){
-		scherm.fillRect(37, 41, 43, 16, RGB(255, 255, 255));
-	}
-	else {
-		scherm.fillRect(21, 41, 59, 16, RGB(255, 255, 255));
+	scherm.drawText(5, 47, "Score", RGB(0, 0, 0), RGB(255, 255, 255), 1);
+	scherm.drawText(5, 167, "Score", RGB(0, 0, 0), RGB(255, 255, 255), 1);
 }
 
+/* function to show the score and power-ups of a player */
+void _displayInfo(){
+	scherm.drawInteger(5, 31, player1Lives, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
+	scherm.drawInteger(5, 151, player2Lives, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
+
+	if (player1Score >= 1000){
+		scherm.fillRect(69, 55, 11, 16, RGB(255, 255, 255));
+	}
+	else if (player1Score >= 100){
+		scherm.fillRect(53, 55, 27, 16, RGB(255, 255, 255));
+	}
+	else if (player1Score >= 10){
+		scherm.fillRect(37, 55, 43, 16, RGB(255, 255, 255));
+	}
+	else {
+		scherm.fillRect(21, 55, 59, 16, RGB(255, 255, 255));
+	}
+
 	if (player2Score >= 1000){
-		scherm.fillRect(69, 161, 11, 16, RGB(255, 255, 255));
+		scherm.fillRect(69, 175, 11, 16, RGB(255, 255, 255));
 	}
 	else if (player2Score >= 100){
-		scherm.fillRect(53, 161, 27, 16, RGB(255, 255, 255));
+		scherm.fillRect(53, 175, 27, 16, RGB(255, 255, 255));
 	}
 	else if (player2Score >= 10){
-		scherm.fillRect(37, 161, 43, 16, RGB(255, 255, 255));
-		}
-	else {
-		scherm.fillRect(21, 161, 59, 16, RGB(255, 255, 255));
+		scherm.fillRect(37, 175, 43, 16, RGB(255, 255, 255));
 	}
-	
-	scherm.drawInteger(5, 41, player1Score, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
-	scherm.drawInteger(5, 161, player2Score, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
+	else {
+		scherm.fillRect(21, 175, 59, 16, RGB(255, 255, 255));
+	}
+
+	scherm.drawInteger(5, 55, player1Score, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
+	scherm.drawInteger(5, 175, player2Score, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
 
 }
 

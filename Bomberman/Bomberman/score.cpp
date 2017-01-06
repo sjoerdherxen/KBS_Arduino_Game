@@ -101,7 +101,7 @@ void resetScore() {
 }
 
 void printHighscore() {
-	Serial.println("Highscores:");
+	/*Serial.println("Highscores:");
 	_delay_ms(10);
 
 	for (uint8_t i = 0; i < 3; i++) {
@@ -122,5 +122,5 @@ void printHighscore() {
 		}
 		Serial.print("\n");
 		_delay_ms(10);
-	}
+	}*/
 }

@@ -25,6 +25,7 @@ void _displayBorder();
 void _displayInnerStatic();
 void _displayCrates(uint8_t crates[]);
 void _displayPlayers();
+void _displayInfoStart();
 void _displayInfo();
 void _displayCountDown();
 void _clearSquare(uint8_t square);

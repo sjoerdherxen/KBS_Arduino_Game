@@ -49,7 +49,7 @@ uint8_t* GenerateCrates() {
 	
 	ShowLoader(0);
 	for(uint8_t i = 0; i < 125; i+=3){
-		sendTripple(c[i], c[i+1], c[i+2]);
+		sendTrippleStart(c[i], c[i+1], c[i+2]);
 		ShowLoader(i);
 	}
 

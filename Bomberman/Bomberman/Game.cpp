@@ -18,6 +18,7 @@ uint8_t player1Lives = 5;
 uint8_t player2Lives = 5;
 int gameover = 0;
 
+
 void setGameover(int gameoverSet) {
 	gameover = gameoverSet;
 }
@@ -25,71 +26,71 @@ void setGameover(int gameoverSet) {
 // todo zorg ervoor dat timing via een timer/interupt werkt.
 void GameTick(uint16_t count, int gameover) {
 	if (!gameover) {
-	uint8_t nunchuck = Nunchuck_get_data();
+		uint8_t nunchuck = Nunchuck_get_data();
 
-	uint8_t oldpl1Loc = player1Location;
-	
-	// place bomb
-	uint16_t bomb = 0;
-	if (nunchuck & 0x40){
-		bomb = PlaceBomb();
-		Serial.println(bomb);
-	}
-	
-	// cool down on player move
-	if (nextPlayerMove){
-		nextPlayerMove--;
-	}
-	else { // move player
-		PlayerMove(nunchuck & 0x07);
+		uint8_t oldpl1Loc = player1Location;
+
+		// place bomb
+		uint16_t bomb = 0;
+		if (nunchuck & 0x40){
+			bomb = PlaceBomb();
+		}
+
+		// cool down on player move
+		if (nextPlayerMove){
+			nextPlayerMove--;
+		}
+		else { // move player
+			PlayerMove(nunchuck & 0x07);
 			if (oldpl1Loc != player1Location) {
-			nextPlayerMove = 1;
+				nextPlayerMove = 1;
+			}
 		}
-	}
-	// ticks op bommen updaten
-	UpdateBombs();
+		// ticks op bommen updaten
+		UpdateBombs();
 
-	// play sounds
-	endOfGame(count);
-	playLoseLife(count);
-	playGameOver(count);
-	playExplosion(count);
+		// play sounds
+		endOfGame(count);
+		playLoseLife(count);
+		playGameOver(count);
+		playExplosion(count);
 
-	if (screenBrightness != setBrightness()){
-		screenBrightness = setBrightness();
-		DisplayScherpte(screenBrightness);
-	}
-	uint8_t oldpl2Loc = player2Location;
+		if (screenBrightness != setBrightness()){
+			screenBrightness = setBrightness();
+			DisplayScherpte(screenBrightness);
+		}
+		uint8_t oldpl2Loc = player2Location;
 #if IsMasterGame == 1
-	sendTripple(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
-	while (1){
-		uint8_t *data = dataRecieve();
-		if (data){
-			player2Location = data[1];
-			bombs[3] = 0;
-			bombs[3] = data[2];
-			bombs[3] |= data[3] >> 8;
-			break;
+		sendTrippleStart(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
+		while (0){
+			uint8_t *data = dataRecieve();
+			if (data){
+				player2Location = data[1];
+				bombs[3] = 0;
+				bombs[3] = data[2];
+				bombs[3] |= data[3] >> 8;
+				break;
+			}
 		}
-	}
 #else
-	while (1){
-		uint8_t *data = dataRecieve();
-		if (data){
-			player2Location = data[1];
-			bombs[3] = 0;
-			bombs[3] = data[2];
-			bombs[3] |= data[3] >> 8;
-			break;
+		while (1){
+			uint8_t *data = dataRecieve();
+			if (data){
+				player2Location = data[1];
+				bombs[3] = 0;
+				bombs[3] = data[2];
+				bombs[3] |= data[3] >> 8;
+				break;
+			}
 		}
-}
-	sendTripple(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
+		sendTrippleStart(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
 #endif
-	if (count % 10 == 9){
-		player1Score++;
-		player2Score++;
+		if (count % 10 == 9){
+			player1Score++;
+			player2Score++;
+		}
+		UpdateGame(crates, oldpl1Loc, oldpl2Loc, bombs, count);
 	}
-	UpdateGame(crates, oldpl1Loc, oldpl2Loc, bombs, count);
 }
 
 // deze code is voor het initialseren van de game
@@ -114,10 +115,11 @@ void Game(){
 	unsigned long prevGameTick = millis();
 	// led levens opstarten
 	startLives();
+	_displayInfoStart();
 
 	while (1) {
 		prevGameTick = millis();
-		GameTick(i++,gameover);
+		GameTick(i++, gameover);
 		while (millis() < prevGameTick + 100);
 	}
 }
@@ -127,14 +129,18 @@ void GameInit() {
 	// Setup
 	DisplayOn();
 	setupPot();
+	setupIR();
 	setupSpeaker();
 	setupExpander();
 	setupNunchuck();
-	// testcode
-	setupIR();
+
+	//while (1){
+	//	sendTrippleStart(1, 2, 3);
+	//	sendTrippleDone(1, 2, 3);
+	//	delay(4000);
+	//}
 
 	showMainMenu();
-
 }
 
 void showMainMenu() {
