@@ -67,7 +67,7 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint16_t count) {
 }
 
 /* function to be used to start the lcd-screen */
-void DisplayOn(){
+void DisplayOn() {
 	/* this tries to open the SD-card */
 	//SDcardLoaded = loadTextures();
 
@@ -83,17 +83,17 @@ void DisplayOn(){
 
 
 /* function which changes the brightness of the screen by using the poteniometer */
-void DisplayScherpte(uint8_t x){
+void DisplayScherpte(uint8_t x) {
 	/* sets the brightness of the screen */
 	scherm.led(x);
 }
 
 /* function to draw the main menu, it needs a selected menu item to function */
-void DisplayMainMenu(uint8_t selected){
+void DisplayMainMenu(uint8_t selected) {
 #if IsMasterGame == 1
-	/* when the screen opens for the first 
+	/* when the screen opens for the first
 	, selected equals 0 */
-	if (selected == 0){
+	if (selected == 0) {
 		/* fills the screen with a white color */
 		scherm.fillScreen(RGB(255, 255, 255));
 		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255,255), 2);
@@ -104,7 +104,7 @@ void DisplayMainMenu(uint8_t selected){
 	}
 
 	/* if "Start Game" is selected the 'selected' visuals will show */
-	if (selected == 1){
+	if (selected == 1) {
 		scherm.drawRect(79, 44, 162, 18, RGB(0, 0, 0));
 		scherm.drawRect(79, 99, 162, 18, RGB(255, 255, 255));
 		scherm.drawText(80, 45, "Start Game", RGB(255, 255, 255), RGB(0, 0, 0), 2);
@@ -112,7 +112,7 @@ void DisplayMainMenu(uint8_t selected){
 	}
 
 	/* if "Highscores" is selected the 'selected' visuals will show */
-	else if (selected == 2){
+	else if (selected == 2) {
 		scherm.drawRect(79, 99, 162, 18, RGB(0, 0, 0));
 		scherm.drawRect(79, 44, 162, 18, RGB(255, 255, 255));
 		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
@@ -266,21 +266,21 @@ void DisplayStartingGame(){
 /* function to draw the border of the game */
 void _displayBorder(){
 	/* for every block in the length of 15 blocks */
-	for (uint8_t i = 0; i < 15; i++){
+	for (uint8_t i = 0; i < 15; i++) {
 
 		/* for every block in the height of 15 blocks */
-		for (uint8_t j = 0; j < 15; j++){
+		for (uint8_t j = 0; j < 15; j++) {
 
 			/* if the block is equal to the blocks on the side of the playing field */
-			if (i == 0 || i == 14 || j == 0 || j == 14){
+			if (i == 0 || i == 14 || j == 0 || j == 14) {
 
 				/* if the SD-card is inserted, the textures are loaded */
-				if (SDcardLoaded){
+				if (SDcardLoaded) {
 					drawTexture(3, 80 + i * 16, j * 16, &scherm);
 				}
 
 				/* if the SD-card is not inserted, the default textures are used */
-				else{
+				else {
 					/* rectagles are drawn as default texture */
 					scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
 					scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
@@ -301,20 +301,20 @@ void ShowLoader(uint8_t progress){
 }
 
 /* function to display the static blocks inside the playing field */
-void _displayInnerStatic(){
+void _displayInnerStatic() {
 	/* for each posision inside the border */
-	for (uint8_t i = 2; i < 13; i += 2){
+	for (uint8_t i = 2; i < 13; i += 2) {
 
 		/* for each posision inside the border */
-		for (uint8_t j = 2; j < 13; j += 2){
+		for (uint8_t j = 2; j < 13; j += 2) {
 
 			/* if the SD-card is inserted, the textures are loaded */
-			if (SDcardLoaded){
+			if (SDcardLoaded) {
 				drawTexture(3, 80 + i * 16, j * 16, &scherm);
 			}
 
 			/* if the SD-card is not inserted, the default textures are used */
-			else{
+			else {
 				/* rectagles are drawn as default texture */
 				scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
 				scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
@@ -324,19 +324,19 @@ void _displayInnerStatic(){
 }
 
 /* function to display the crates inside the playing field */
-void _displayCrates(uint8_t crates[]){
+void _displayCrates(uint8_t crates[]) {
 	/* for-loop to loop through all the possible crate locations */
-	for (uint8_t i = 0; i < 127; i++){
+	for (uint8_t i = 0; i < 127; i++) {
 
-		if (crates[i] != 0xFF){
+		if (crates[i] != 0xFF) {
 
 			/* if the SD-card is inserted, the textures are loaded */
-			if (SDcardLoaded){
+			if (SDcardLoaded) {
 				drawTexture(2, (((crates[i] & 0xF0) >> 4) * 16) + 96, 16 + (crates[i] & 0x0F) * 16, &scherm);
 			}
 
 			/* if the SD-card is not inserted, the default textures are used */
-			else{
+			else {
 				uint8_t x1 = (((crates[i] & 0xF0) >> 4) * 16);
 				uint8_t x2 = x1 + 14;
 				uint8_t y = 17 + (crates[i] & 0x0F) * 16;
@@ -433,20 +433,20 @@ void _displayInfo(){
 }
 
 /* function to clear a square in the playing field */
-void _clearSquare(uint8_t square){
+void _clearSquare(uint8_t square) {
 	scherm.fillRect(96 + ((square & 0xF0) >> 4) * 16, 16 + (square & 0x0F) * 16, 16, 16, RGB(255, 255, 255));
 }
 
 /* function to display info text on the main menu */
-void _displayMenuHelpers(uint8_t which){
+void _displayMenuHelpers(uint8_t which) {
 
 	/* display text that explains the C-button */
-	if (which & (1 << 0)){
+	if (which & (1 << 0)) {
 		scherm.drawText(5, 219, "C back", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
 
 	/* display text that explains the Z-button */
-	if (which & (1 << 1)){
+	if (which & (1 << 1)) {
 		scherm.drawText(187, 219, "Z select", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
 }
@@ -482,7 +482,7 @@ void _displayExplode(uint8_t location, uint16_t count, uint8_t bombI){
 	}
 
 	// teken bom explosie
-	if (SDcardLoaded){
+	if (SDcardLoaded) {
 		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
 	}
 
@@ -496,7 +496,7 @@ void _displayExplode(uint8_t location, uint16_t count, uint8_t bombI){
 int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates, uint16_t count, uint8_t bombI){
 
 	/* for-loop to loop through the distance of the explosion */
-	for (int8_t j = 1; j < max; j++){
+	for (int8_t j = 1; j < max; j++) {
 
 		/* the location that the explosion goes in, is put into an integer */
 		uint8_t newLocation = location + j*mul;
@@ -504,17 +504,17 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 		/* check if the location that has to be exploded, is a static block */
 		if ((newLocation & 0x0F) > 0x0C ||
 			(newLocation & 0xF0) > 0xC0 ||
-			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)){
+			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)) {
 
 			/* stop the explosion */
 			return j;
 		}
 
 		/* for-loop to loop through all the crates */
-		for (uint8_t u = 0; u < 127; u++){
+		for (uint8_t u = 0; u < 127; u++) {
 
 			/* check if the location that has to be exploded, is a crate */
-			if (crates[u] == newLocation){
+			if (crates[u] == newLocation) {
 
 				/* clear the possion of the crate */
 				_clearSquare(newLocation);
@@ -546,10 +546,10 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 }
 
 /* function to be called when the explosion is done */
-void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates){
+void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates) {
 
 	/* for-loop to loop through the distance of the explosion */
-	for (int8_t j = 1; j < max; j++){
+	for (int8_t j = 1; j < max; j++) {
 
 		/* the location that the explosion goes in, is put into an integer */
 		uint8_t newLocation = location + j*mul;
@@ -557,17 +557,17 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 		/* check if the location that is exploded, was a static block */
 		if ((newLocation & 0x0F) > 0x0C ||
 			(newLocation & 0xF0) > 0xC0 ||
-			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)){
+			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)) {
 
 			/* stop reset */
 			return;
 		}
 
 		/* for-loop to loop through all the crates */
-		for (uint8_t u = 0; u < 127; u++){
+		for (uint8_t u = 0; u < 127; u++) {
 
 			/* check if the location that has to be exploded, is a crate */
-			if (crates[u] == newLocation){
+			if (crates[u] == newLocation) {
 
 				/* stop reset */
 				return;
@@ -576,4 +576,33 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 		/* clear the location of the explosion */
 		_clearSquare(location + j*mul);
 	}
+}
+
+void DisplayKeyboard() {
+	scherm.fillScreen(RGB(255, 255, 255));
+
+	_displayMenuHelpers(2);
+
+	int x1 = 120;
+	int x2 = 40;
+	
+	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, 150, 0), 4);
+	scherm.drawChar(112, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
+	scherm.drawChar(144, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
+	
+
+	scherm.drawChar(80, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(80, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+
+
+	scherm.drawChar(112, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(112, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+
+	scherm.drawChar(144, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(144, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+
+	//Confirm
+	scherm.drawText(184, 90, "Confirm", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+
+	showMiddle(&scherm);
 }
