@@ -577,15 +577,15 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 		_clearSquare(location + j*mul);
 	}
 }
-
+/* Function that shows a screen where you can enter your initials*/
 void DisplayKeyboard() {
+	/* Fill the screen with a white background*/
 	scherm.fillScreen(RGB(255, 255, 255));
 
+	/* Shows the menu helper "z select" */
 	_displayMenuHelpers(2);
 
-	int x1 = 120;
-	int x2 = 40;
-	
+	/* Draws the first 3 letters in the middle row, the first letter has the selected color*/
 	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, 150, 0), 4);
 	scherm.drawChar(112, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
 	scherm.drawChar(144, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
