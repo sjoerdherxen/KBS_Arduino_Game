@@ -30,6 +30,9 @@
     <ClInclude Include="soundEffects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="score.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ScreenBrightness.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -69,7 +72,7 @@
     <ClInclude Include="GameOverMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="score.h">
+    <ClInclude Include="Keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="soundEffects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="screenBrightness.cpp">
@@ -122,7 +128,7 @@
     <ClCompile Include="GameOverMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="score.cpp">
+    <ClCompile Include="Keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

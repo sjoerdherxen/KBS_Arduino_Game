@@ -2,6 +2,7 @@
 
 uint8_t gameOverMenu() {
 	uint8_t currentDisplay = 0;
+	uint8_t value = Nunchuck_get_data();
 	while (1) {
 		_delay_ms(100);
 
@@ -11,7 +12,7 @@ uint8_t gameOverMenu() {
 			currentDisplay = 3;
 		}
 
-		uint8_t value = Nunchuck_get_data();
+		value = Nunchuck_get_data();
 		if (value == 3) {
 			currentDisplay = 2;
 		}
