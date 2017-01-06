@@ -158,8 +158,7 @@ void showMainMenu() {
 		Game();
 	}
 	else if (selected == 2) {
-		// todo highscore
-		return;
+		DisplayHighscore();
 	}
 #else
 	Game();

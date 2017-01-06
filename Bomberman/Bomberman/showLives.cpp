@@ -114,7 +114,7 @@ void endOfGame(uint16_t count) {
 				asm volatile ("  jmp 0");
 			}
 			else if (selectie == 2) {
-				//TODO higscores aanroepen
+				DisplayHighscore();
 			}
 			
 		}

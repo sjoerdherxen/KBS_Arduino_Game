@@ -18,6 +18,8 @@ void DisplayScherpte(uint8_t x);
 
 void DisplayHighscore();
 
+void DisplayKeyboard();
+
 void DisplayStartingGame();
 void ShowLoader(uint8_t progress);
 
