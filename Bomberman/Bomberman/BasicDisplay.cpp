@@ -235,7 +235,7 @@ void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2Loc
 	_displayInfo();
 }
 
-/*// highscores tonen verwacht 3 3 letterige namen. 3 scores.
+// highscores tonen verwacht 3 3 letterige namen. 3 scores.
 void DisplayHighscore() {
 	//Print "Highscores"
 	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
@@ -256,7 +256,7 @@ void DisplayHighscore() {
 		uint8_t a = i * 2;
 		scherm.drawInteger(192, 41 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 	}
-}*/
+}
 
 void DisplayStartingGame(){
 	scherm.fillScreen(RGB(255, 255, 255));
@@ -584,27 +584,25 @@ void DisplayKeyboard() {
 
 	/* Shows the menu helper "z select" */
 	_displayMenuHelpers(2);
-	
+
 	/* Draws the first 3 letters in the middle row, the first letter has the selected color*/
 	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, 150, 0), 4);
 	scherm.drawChar(112, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
 	scherm.drawChar(144, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
 	
-	/* Draws the first row top and bottom grey letters*/
-	scherm.drawChar(80, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(80, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
-	/* Draws the second row top and bottom grey letters*/
-	scherm.drawChar(112, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(112, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(80, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(80, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
-	/* Draws the third row top and bottom grey letters*/
-	scherm.drawChar(144, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(144, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
-	/* Draws the "confirm" text*/
+	scherm.drawChar(112, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(112, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+
+	scherm.drawChar(144, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(144, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+
+	//Confirm
 	scherm.drawText(184, 90, "Confirm", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
-	/*Starts the function showMiddle so the user can select characters*/
-	selectChars(&scherm);
+	showMiddle(&scherm);
 }

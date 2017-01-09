@@ -287,7 +287,7 @@ void playSound(uint16_t tone){
 	}
 	else {
 		playingSound = 1;
-		playingSoundLevel = tone;
+		playingSoundLevel = tone/16;
 		playingSoundCounter = 0;
 	}
 	sei();

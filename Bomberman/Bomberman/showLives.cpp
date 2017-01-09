@@ -111,7 +111,7 @@ void endOfGame(uint16_t count) {
 
 			if (selectie == 1) {
 			/*Rebooting the arduino to go to the main menu and clear the memory*/
-				asm volatile ("  jmp 0");
+				__asm volatile ("  jmp 0");
 			}
 			else if (selectie == 2) {
 				DisplayHighscore();
