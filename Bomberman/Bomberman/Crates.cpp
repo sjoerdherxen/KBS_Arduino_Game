@@ -14,7 +14,7 @@ uint8_t* GenerateCrates() {
 	/* seed gets the randomly generated seed value to be used in Games.cpp to send to the slave*/
 	/* since analogRead differs in value, the value of seed
 		will differ too, but it will be equal for the same seed every time*/
-		/* randomSeed generates a number with seed */
+	/* randomSeed generates a number with seed */
 	randomSeed(analogRead(A1));
 
 
@@ -22,7 +22,7 @@ uint8_t* GenerateCrates() {
 	/* an 8-bit integer x is declared as 2, to be used in
 	the following code */
 	uint8_t x = 2;
-	
+
 	/* for-loop loops through all the 127 possible crates */
 	for (uint8_t i = 0; i < 127; i++) {
 		/* this randomly skips a crate location to make the playing field random */
@@ -46,20 +46,26 @@ uint8_t* GenerateCrates() {
 		c[i] = x;
 		x++;
 	}
-	
+
 	ShowLoader(0);
-	for(uint8_t i = 0; i < 125; i+=3){
+	for (uint8_t i = 0; i < 125; i += 3){
+#if Multiplayer == 1
+#if IrCommUseTimer == 1
 		sendTrippleStart(c[i], c[i+1], c[i+2]);
-		//while (!sendTrippleDone(c[i], c[i + 1], c[i + 2])){
-		//	//sendTrippleStart(c[i], c[i + 1], c[i + 2]);
-		//}
+		while (!sendTrippleDone(c[i], c[i + 1], c[i + 2])){
+			sendTrippleStart(c[i], c[i + 1], c[i + 2]);
+		}
+#else
+		sendTripple(c[i], c[i + 1], c[i + 2]);
+#endif
+#endif
 		ShowLoader(i);
 	}
 
 	return c;
 #else 
 
-	for (uint8_t i = 0; i < 125; ){
+	for (uint8_t i = 0; i < 125;){
 
 		uint8_t *data = dataRecieve();
 		if (data) {

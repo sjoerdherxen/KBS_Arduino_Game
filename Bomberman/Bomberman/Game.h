@@ -1,5 +1,7 @@
-#define IsMasterGame 1
-#define UseTextures 0
+#define IsMasterGame 1 // is the master or slave game 
+#define UseTextures 0 // gebruik maken van textures uit sdkaart
+#define Multiplayer 1 // enable multiplayer
+#define IrCommUseTimer 0 // used for toggling between timer and delay version of sending data
 
 #ifndef Game_h
 #define Game_h

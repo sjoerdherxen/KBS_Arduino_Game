@@ -236,12 +236,14 @@ void stopMusic(){
 	playSound(0);
 }
 
+
+// sound management
 void playSound(uint16_t tone){
 	cli();
-	if (!tone){
+	if (!tone){ // disable sounds
 		playingSound = 0;
 	}
-	else {
+	else { // set sound to tone value
 		playingSound = 1;
 		playingSoundLevel = tone/16;
 		playingSoundCounter = 0;
@@ -250,14 +252,14 @@ void playSound(uint16_t tone){
 }
 
 ISR(TIMER2_COMPB_vect){
-	if (playingSound){
-		if (playingSoundLevel <= playingSoundCounter){
+	if (playingSound){ // sound on
+		if (playingSoundLevel <= playingSoundCounter){ // toggle if counter is equal to tone
 			PORTC ^= (1 << PORTC1);
 			playingSoundCounter = 0;
 		}
 		playingSoundCounter++;
 	}
-	else {
+	else {// sound off
 		PORTC &= ~(1 << PORTC1);
 	}
 }

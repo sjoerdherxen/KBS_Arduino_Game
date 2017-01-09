@@ -90,7 +90,6 @@ void DisplayScherpte(uint8_t x) {
 
 /* function to draw the main menu, it needs a selected menu item to function */
 void DisplayMainMenu(uint8_t selected) {
-#if IsMasterGame == 1
 	/* when the screen opens for the first
 	, selected equals 0 */
 	if (selected == 0) {
@@ -128,14 +127,6 @@ void DisplayMainMenu(uint8_t selected) {
 		scherm.drawText(80, 80, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 		scherm.drawText(80, 120, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
-#endif
-#if IsMasterGame == 0
-	/* fills the screen with a white color */
-	scherm.fillScreen(RGB(255, 255, 255));
-
-	/* display "waiting for primary" */
-	scherm.drawText(24, 45, "Waiting on master", RGB(0, 0, 0), RGB(255, 255, 255), 2);
-#endif
 }
 
 /* function to draw the main menu, it needs a selected menu item to function */
@@ -262,12 +253,12 @@ void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2Loc
 	/* if player 1 has been moved since the last update,
 	the player is drawn at it's new location */
 	if (player1Location != player1LocationOld || player2Location != player2LocationOld){
-		/* draw a player */
-		_displayPlayers();
-
 		/* clear the square of the last posion of the player */
 		_clearSquare(player1LocationOld);
 		_clearSquare(player2LocationOld);
+
+		/* draw a player */
+		_displayPlayers();
 	}
 
 	/* if player 2 has been moved since the last update,
@@ -311,7 +302,11 @@ void DisplayHighscore() {
 
 void DisplayStartingGame(){
 	scherm.fillScreen(RGB(255, 255, 255));
+#if IsMasterGame == 1
 	scherm.drawText(56, 45, "Starting game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+#else
+	scherm.drawText(24, 45, "Waiting on master", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+#endif
 }
 
 /* function to draw the border of the game */
