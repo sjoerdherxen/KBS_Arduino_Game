@@ -5,7 +5,6 @@ it returns values of selected menu items */
 uint8_t Mainmenu(){
 	startMusic(0);
 	uint16_t count = 0;
-#if IsMasterGame == 1
 	/* the currentdisplay variable is used to
 	determine which	menu item is selected */
 	uint8_t currentDisplay = 0;
@@ -45,18 +44,5 @@ uint8_t Mainmenu(){
 		playMusic(count);
 		count++;
 	}
-#endif
-#if IsMasterGame == 0
-
-	// this is displayed on the secondaire arduino, it will say waiting for primary.
-	DisplayMainMenu(0);
-	while (1){
-
-		if (dataAvailable()){
-			return 1;
-		}
-	}
-	return 0;
-#endif
 }
 

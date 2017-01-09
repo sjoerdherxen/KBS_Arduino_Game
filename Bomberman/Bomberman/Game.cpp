@@ -60,30 +60,46 @@ void GameTick(uint16_t count, int gameover) {
 			DisplayScherpte(screenBrightness);
 		}
 		uint8_t oldpl2Loc = player2Location;
+#if Multiplayer == 1
 #if IsMasterGame == 1
-		sendTrippleStart(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
-		while (0){
-			uint8_t *data = dataRecieve();
-			if (data){
-				player2Location = data[1];
-				bombs[3] = 0;
-				bombs[3] = data[2];
-				bombs[3] |= data[3] >> 8;
-				break;
-			}
-		}
+#if IrCommUseTimer
+		sendTrippleStart(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF));
 #else
-		while (0){
+		sendTripple(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF));
+		while (1){
 			uint8_t *data = dataRecieve();
 			if (data){
 				player2Location = data[1];
-				bombs[3] = 0;
-				bombs[3] = data[2];
-				bombs[3] |= data[3] >> 8;
+				Serial.println(data[3], BIN);
+				if (data[3] != 0){
+					bombs[3] = 0;
+					bombs[3] = data[3];
+					bombs[3] |= ((uint16_t)data[2]) << 8;
+				}
 				break;
 			}
 		}
-		sendTrippleStart(player1Location, ((bomb & 0xFF00) << 8), (bomb & 0x00FF));
+#endif
+#else
+#if IrCommUseTimer
+		sendTrippleStart(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF));
+#else
+		while (1){
+			uint8_t *data = dataRecieve();
+			if (data){
+				player2Location = data[1];
+				Serial.println(data[2], BIN);
+				if (data[3] != 0){
+					bombs[3] = 0;
+					bombs[3] = data[3];
+					bombs[3] |= ((uint16_t)data[2]) << 8;
+				}
+				break;
+			}
+		}
+		sendTripple(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF));
+#endif
+#endif
 #endif
 		if (count % 10 == 9){
 			player1Score++;
@@ -95,9 +111,8 @@ void GameTick(uint16_t count, int gameover) {
 
 // deze code is voor het initialseren van de game
 void Game(){
-#if IsMasterGame == 1
 	DisplayStartingGame();
-#endif
+	
 	free(crates);
 
 	crates = GenerateCrates();
@@ -140,24 +155,14 @@ void GameInit() {
 void showMainMenu() {
 	setGameover(0);
 	// hoofdmenu openen
-#if IsMasterGame == 1
 	uint8_t selected = Mainmenu();
-#else
-	uint8_t selected = Mainmenu();
-#endif
 
-	// checks if the specific arduino is the master or the slave
-#if IsMasterGame == 1
 	if (selected == 1) { // start game
 		Game();
 	}
 	else if (selected == 2) {
 		DisplayHighscore();
-		showMainMenu();
 	}
-#else
-	Game();
-#endif
 }
 
 // Move player to direction if valid newlocation
