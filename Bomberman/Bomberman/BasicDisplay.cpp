@@ -96,7 +96,7 @@ void DisplayMainMenu(uint8_t selected) {
 	if (selected == 0) {
 		/* fills the screen with a white color */
 		scherm.fillScreen(RGB(255, 255, 255));
-		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255,255), 2);
+		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 		scherm.drawText(80, 100, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
 		/* displays help text in the main menu */
@@ -143,7 +143,9 @@ void DisplayGameOverMenu(uint8_t selected) {
 		scherm.fillScreen(RGB(255, 255, 255));
 
 		/* displays Game Over! on the screen */
-		scherm.drawText(40, 40, "Game Over!", RGB(0, 0, 0), RGB(255, 255, 255), 3);
+		scherm.drawText(40, 15, "Game Over!", RGB(0, 0, 0), RGB(255, 255, 255), 3);
+		scherm.drawText(70, 90, "Your score: ", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawInteger(252, 90, (unsigned long)player1Score, 10, RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
 		/* displays help text in the main menu */
 		_displayMenuHelpers(2);
@@ -151,26 +153,27 @@ void DisplayGameOverMenu(uint8_t selected) {
 
 	/* if "Start Game" is selected the 'selected' visuals will show */
 	if (selected == 1) {
-		scherm.drawRect(84, 35, 145, 18, RGB(0, 0, 0));
-		scherm.drawRect(79, 54, 162, 18, RGB(255, 255, 255));
-		scherm.drawText(85, 36, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
-		scherm.drawText(80, 55, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawRect(84, 40, 145, 18, RGB(0, 0, 0));
+		scherm.drawRect(79, 59, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 41, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+
+		scherm.drawText(80, 60, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
 
 	/* if "Highscores" is selected the 'selected' visuals will show */
 	else if (selected == 2) {
-		scherm.drawRect(79, 54, 162, 18, RGB(0, 0, 0));
-		scherm.drawRect(84, 35, 145, 18, RGB(255, 255, 255));
-		scherm.drawText(85, 36, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
-		scherm.drawText(80, 55, "Save Score", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+		scherm.drawRect(79, 59, 162, 18, RGB(0, 0, 0));
+		scherm.drawRect(84, 40, 145, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 41, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 60, "Save Score", RGB(255, 255, 255), RGB(0, 0, 0), 2);
 	}
 
 	/* if nothing is selected the main menu will show as normal */
 	else {
-		scherm.drawRect(84, 35, 145, 18, RGB(255, 255, 255));
-		scherm.drawRect(79, 54, 162, 18, RGB(255, 255, 255));
-		scherm.drawText(85, 36, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
-		scherm.drawText(80, 55, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawRect(84, 40, 145, 18, RGB(255, 255, 255));
+		scherm.drawRect(79, 59, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(85, 41, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 60, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
 
 	char neem[10];
@@ -238,23 +241,31 @@ void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2Loc
 // highscores tonen verwacht 3 3 letterige namen. 3 scores.
 void DisplayHighscore() {
 	//Print "Highscores"
+	scherm.fillScreen(RGB(255, 255, 255));
 	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
 
 	//Print iedere naam
-	char neem[10];
+	char name[10];
 	for (uint8_t i = 0; i < 3; i++) {
 		uint8_t b = 0;
 		for (uint8_t x = 10 + i * 3; x < i * 3 + 13; x++) {
-			neem[b] = getName(x);
-			b++;
+			scherm.drawChar(80 + (x-(10+i*3))*16, 41 + i * 21, (char)getName(x), RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 		}
-		scherm.drawText(80, 41 + i * 21, neem, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 	}
 
 	//Print iedere score
 	for (uint8_t i = 0; i < 3; i++) {
 		uint8_t a = i * 2;
 		scherm.drawInteger(192, 41 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
+	}
+
+	_displayMenuHelpers(1);
+	while (1){
+		uint8_t nunchuck = Nunchuck_get_data();
+		if (nunchuck & (1 << 7)){
+			__asm volatile ("  jmp 0");
+		}
+		_delay_ms(100);
 	}
 }
 
@@ -412,7 +423,7 @@ void _displayInfo(){
 	}
 	else {
 		scherm.fillRect(21, 55, 59, 16, RGB(255, 255, 255));
-}
+	}
 
 	if (player2Score >= 1000){
 		scherm.fillRect(69, 175, 11, 16, RGB(255, 255, 255));
@@ -422,11 +433,11 @@ void _displayInfo(){
 	}
 	else if (player2Score >= 10){
 		scherm.fillRect(37, 175, 43, 16, RGB(255, 255, 255));
-		}
+	}
 	else {
 		scherm.fillRect(21, 175, 59, 16, RGB(255, 255, 255));
 	}
-	
+
 	scherm.drawInteger(5, 55, player1Score, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
 	scherm.drawInteger(5, 175, player2Score, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
 
@@ -577,7 +588,8 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 		_clearSquare(location + j*mul);
 	}
 }
-/* Function that shows a screen where you can enter your initials*/
+
+
 void DisplayKeyboard() {
 	/* Fill the screen with a white background*/
 	scherm.fillScreen(RGB(255, 255, 255));
@@ -589,20 +601,22 @@ void DisplayKeyboard() {
 	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, 150, 0), 4);
 	scherm.drawChar(112, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
 	scherm.drawChar(144, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
-	
 
-	scherm.drawChar(80, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(80, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	/* Draws the first row top and bottom grey letters*/
+	scherm.drawChar(80, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(80, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
+	/* Draws the second row top and bottom grey letters*/
+	scherm.drawChar(112, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(112, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
-	scherm.drawChar(112, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(112, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	/* Draws the third row top and bottom grey letters*/
+	scherm.drawChar(144, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(144, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
 
-	scherm.drawChar(144, x1, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-	scherm.drawChar(144, x2, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
-
-	//Confirm
+	/* Draws the "confirm" text*/
 	scherm.drawText(184, 90, "Confirm", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
-	showMiddle(&scherm);
+	/*Starts the function showMiddle so the user can select characters*/
+	selectChars(&scherm);
 }

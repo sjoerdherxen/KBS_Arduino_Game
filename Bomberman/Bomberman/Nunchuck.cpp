@@ -108,9 +108,9 @@ uint8_t Nunchuck_get_data()
 			nunchuckdata |= 4;
 		}
 
-		if ((nunchuck_buf[5] >> 0) & 1)
+		if ((nunchuck_buf[5] >> 0) & 1) // z knop
 			nunchuckdata &= ~(1 << 6);
-		if ((nunchuck_buf[5] >> 1) & 1)
+		if ((nunchuck_buf[5] >> 1) & 1) // c knop
 			nunchuckdata &= ~(1 << 7);
 
 		/* the function will return the nunchuck data */

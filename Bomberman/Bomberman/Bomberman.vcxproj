@@ -82,6 +82,7 @@
     <ClInclude Include="GameOverMenu.h" />
     <ClInclude Include="Highscore.h" />
     <ClInclude Include="IrComm.h" />
+    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Nunchuck.h" />
     <ClInclude Include="score.h" />
@@ -98,6 +99,7 @@
     <ClCompile Include="GameOverMenu.cpp" />
     <ClCompile Include="Highscore.cpp" />
     <ClCompile Include="IrComm.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Nunchuck.cpp" />
     <ClCompile Include="score.cpp" />

@@ -114,7 +114,7 @@ void endOfGame(uint16_t count) {
 				__asm volatile ("  jmp 0");
 			}
 			else if (selectie == 2) {
-				DisplayHighscore();
+				DisplayKeyboard();
 			}
 			
 		}
