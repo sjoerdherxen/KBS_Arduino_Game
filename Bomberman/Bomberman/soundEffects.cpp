@@ -17,7 +17,7 @@ uint16_t playGameOverTick = 0;
 
 /* integers for the music */
 uint8_t ifPlayMusic = 0;
-uint16_t playMusicTick = 0;
+uint16_t playMusicNote = 0;
 
 volatile uint8_t playingSound = 0;
 volatile uint16_t playingSoundLevel = 1;
@@ -186,21 +186,65 @@ void playGameOver(uint16_t count) {
 
 /* notes to be used in playMusic() */
 int music[] = {
-	NOTE_F5,NOTE_D5,NOTE_AS4,NOTE_D5,NOTE_F5,NOTE_AS5,NOTE_D6,NOTE_C6,NOTE_AS5,NOTE_D5,NOTE_E5,NOTE_F5,
-	NOTE_F5,NOTE_F5,NOTE_D6,NOTE_C6,NOTE_AS5,NOTE_A5,NOTE_G5,NOTE_A5,NOTE_AS5,NOTE_AS5,NOTE_F5,NOTE_D5,NOTE_AS4,
-	NOTE_D6,NOTE_D6,NOTE_D6,NOTE_DS6,NOTE_F6,NOTE_F6,NOTE_DS6,NOTE_D6,NOTE_C6,NOTE_D6,NOTE_DS6,NOTE_DS6,
+	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
+	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
 
-	0,
-	
-	NOTE_DS6,NOTE_D6,NOTE_C6,NOTE_AS5,NOTE_A5,NOTE_G5,NOTE_A5,NOTE_AS5,NOTE_D5,NOTE_E5,NOTE_F5,
-	NOTE_F5,NOTE_AS5,NOTE_AS5,NOTE_AS5,NOTE_A5,NOTE_G5,NOTE_G5,NOTE_G5,NOTE_C6,NOTE_DS6,NOTE_D6,NOTE_C6,NOTE_AS5,NOTE_AS5,NOTE_A5,
-	NOTE_F5,NOTE_F5,NOTE_AS5,NOTE_C6,NOTE_D6,NOTE_DS6,NOTE_F6,NOTE_AS5,NOTE_C6,NOTE_D6,NOTE_DS6,NOTE_C6,NOTE_AS5
+	NOTE_F2, NOTE_E2, NOTE_D2, NOTE_C2,
+	NOTE_B2, NOTE_A2, NOTE_G1, NOTE_F1,
+	NOTE_F2, NOTE_E2, NOTE_D2, NOTE_C2,
+	NOTE_B2, NOTE_A2, NOTE_G1, NOTE_F1,
+
+	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
+	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
+
+	NOTE_F2, NOTE_E2, NOTE_D2, NOTE_C2,
+	NOTE_B2, NOTE_A2, NOTE_G1, NOTE_F1,
+	NOTE_F2, NOTE_E2, NOTE_D2, NOTE_C2,
+	NOTE_B2, NOTE_A2, NOTE_G1, NOTE_F1,
+
+	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
+	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
+
+	NOTE_F3, // BREAK
+
+	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
+	NOTE_B4, NOTE_A3, NOTE_G3, NOTE_F3,
+	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
+	NOTE_B4, NOTE_A3, NOTE_G3, NOTE_F3,
+
+	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G3, NOTE_F3,
+	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G3, NOTE_F3,
+
+	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
+	NOTE_B4, NOTE_A3, NOTE_G3, NOTE_F3,
+	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
+	NOTE_B4, NOTE_A3, NOTE_G3, NOTE_F3,
+
+	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G3, NOTE_F3,
+	NOTE_F4, NOTE_E3, NOTE_D4, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G3, NOTE_F3,
+
+	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
+	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
+	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
+
+	0
 };
 
 /* function to start the music */
 void startMusic(uint16_t count) {
 	ifPlayMusic = 1;
-	playMusicTick = count;
+	playMusicNote = 0;
 }
 
 /* function that contains the tones of the music */
@@ -208,27 +252,17 @@ void playMusic(uint16_t count) {
 
 	/* the ifPlayMusic vaiabele is initialized in the function above */
 	if (ifPlayMusic) {
-
 		/* counting the gameticks */
-		uint8_t t = (count - playMusicTick);
-
-		/* if the gametick hits theh 323, stop the music */
-		if (t == 323) {
-
-			/* stop playing sound on the speaker */
-			playSound(0);
-			/* set the ifPlayMusic variable to 0, to stop the music function */
-			ifPlayMusic = 0;
-			return;
+		playMusicNote++;
+		if (playMusicNote >= sizeof(music)){
+			playMusicNote = 0;
 		}
-
-		/* stop playing sound on the speaker */
-		playSound(0);
-
-		/* play sound on the speaker using the notes from the music array */
-		playSound(music[t / 2]);
 	}
+
+	/* play sound on the speaker using the notes from the music array */
+	playSound(music[playMusicNote]);
 }
+
 
 
 /* function to start the music */
@@ -245,7 +279,7 @@ void playSound(uint16_t tone){
 	}
 	else { // set sound to tone value
 		playingSound = 1;
-		playingSoundLevel = tone/16;
+		playingSoundLevel = tone / 16;
 		playingSoundCounter = 0;
 	}
 	sei();

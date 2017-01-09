@@ -65,7 +65,8 @@ void GameTick(uint16_t count, int gameover) {
 #if IrCommUseTimer
 		sendTrippleStart(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF));
 #else
-		sendTripple(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF), 1);
+		sendTripple(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF), 0);
+		unsigned long start = millis();
 		while (1){
 			uint8_t *data = dataRecieve();
 			if (data){
@@ -78,12 +79,16 @@ void GameTick(uint16_t count, int gameover) {
 				}
 				break;
 			}
+			if (millis() - start > 200){
+				break;
+			}
 		}
 #endif
 #else
 #if IrCommUseTimer
 		sendTrippleStart(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF));
 #else
+		unsigned long start = millis();
 		while (1){
 			uint8_t *data = dataRecieve();
 			if (data){
@@ -96,8 +101,11 @@ void GameTick(uint16_t count, int gameover) {
 				}
 				break;
 			}
+			if (millis() - start > 200){
+				break;
+			}
 		}
-		sendTripple(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF), 1);
+		sendTripple(player1Location, ((bomb & 0xFF00) >> 8), (bomb & 0x00FF), 0);
 #endif
 #endif
 #endif
