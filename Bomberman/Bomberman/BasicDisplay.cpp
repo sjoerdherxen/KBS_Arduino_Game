@@ -501,6 +501,7 @@ void _displayMenuHelpers(uint8_t which) {
 void _displayExplode(uint8_t location, uint16_t count, uint8_t bombI){
 	// check of de speler in de explosie staat
 	if (player1Location == location){
+		player1Lives--;
 		loseLife(count);
 		startLoseLife(count);
 		if (bombI < 3){
@@ -516,6 +517,7 @@ void _displayExplode(uint8_t location, uint16_t count, uint8_t bombI){
 
 	if (player2Location == location){
 		player2Lives--;
+		loseLife(count);
 		if (bombI >= 3){
 			if (player2Score < 50)
 				player2Score = 0;

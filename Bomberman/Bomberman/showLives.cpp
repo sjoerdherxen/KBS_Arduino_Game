@@ -3,6 +3,7 @@
 
 //Initializes and declares lives to 0
 extern uint8_t player1Lives;
+extern uint8_t player2Lives;
 //>=1 = true so that means the end of the game, 0 is false so not the end of the game
 uint8_t ifEndGame = 0;
 //Initializes and declares endOfGameTick to 0, endOfGameTcik will store the tick number
@@ -45,11 +46,8 @@ void startLives() {
 
 //Activates the blinking and after that the amount of leds equal to the amount of lives is set.
 void loseLife(uint16_t count) {				
-	//Sets lives to one less, for instance: from 4 to 3
-	player1Lives--;
-
 	//Checks how many lives the player has and which leds have to be displayed
-	if (player1Lives){
+	if (player1Lives && player2Lives){
 		//Begins transmission to adress 56, etc.												
 		Wire.beginTransmission(56);
 		//Writes the pattern that corresponds to lives to the adress, etc.

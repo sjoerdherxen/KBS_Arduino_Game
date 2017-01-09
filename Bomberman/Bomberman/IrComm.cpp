@@ -77,7 +77,7 @@ uint8_t sendTrippleDone(uint8_t b1, uint8_t b2, uint8_t b3){
 
 #else
 // send 3 bytes of information. and receive checksum byte
-void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
+void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t force){
 	received[0] = 0;
 	Pdata = 0;
 	PrevDataItemSend++;
@@ -90,8 +90,8 @@ void sendTripple(uint8_t b1, uint8_t b2, uint8_t b3){
 	IrSendByte(b3);// data
 
 	IrSendByte(PrevDataItemSend + b1 + b2 + b3); // parity
-
-	for (uint8_t i = 0; i < 5; i++){
+	
+	for (uint8_t i = 0; i < 15 || force; i++){
 		Pdata = 0;
 		_delay_ms(20);
 		if (received[0] == (uint8_t)(PrevDataItemSend + b1 + b2 + b3)){
