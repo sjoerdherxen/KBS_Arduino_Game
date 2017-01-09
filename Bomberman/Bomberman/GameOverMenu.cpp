@@ -16,7 +16,6 @@ uint8_t gameOverMenu() {
 	}
 
 	if (isNewHighscore) {
-		Serial.println("Nieuwe highscore");
 		while (1) {
 			_delay_ms(100);
 
@@ -41,7 +40,6 @@ uint8_t gameOverMenu() {
 		}
 	}
 	else {
-		Serial.println("Te lage score");
 		while (1) {
 			_delay_ms(100);
 

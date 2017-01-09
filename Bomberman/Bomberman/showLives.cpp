@@ -41,8 +41,6 @@ void startLives() {
 	Wire.endTransmission();
 	//Sets lives to 5		
 	player1Lives = 5;
-
-	Serial.println("LALALAL");
 }
 
 //Activates the blinking and after that the amount of leds equal to the amount of lives is set.
@@ -111,9 +109,7 @@ void endOfGame(uint16_t count) {
 		
 			//This will start the GameOverMenu
 			setGameover(1);
-			Serial.println("Dit is na setgameover(1)");
 			uint8_t selectie = gameOverMenu();
-			Serial.println("Dit is na selectie = gameOverMenu()");
 			if (selectie == 1) {
 			/*Rebooting the arduino to go to the main menu and clear the memory*/
 				__asm volatile ("  jmp 0");
