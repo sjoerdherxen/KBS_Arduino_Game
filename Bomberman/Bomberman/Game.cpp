@@ -135,6 +135,7 @@ void GameInit() {
 	setupNunchuck();
 
 	showMainMenu();
+
 }
 
 void showMainMenu() {

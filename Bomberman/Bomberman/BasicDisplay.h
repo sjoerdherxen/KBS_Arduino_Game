@@ -13,7 +13,7 @@ void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2Loc
 
 void DisplayMainMenu(uint8_t selected);
 
-void DisplayGameOverMenu(uint8_t selected);
+void DisplayGameOverMenu(uint8_t selected, uint8_t isNewHighscore);
 
 void DisplayScherpte(uint8_t x);
 
