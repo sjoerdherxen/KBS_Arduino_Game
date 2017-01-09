@@ -2,7 +2,7 @@
 
 uint8_t *crates;
 volatile uint8_t gameTickReady;
-#if IsMasterGame == 1
+#if IsMasterGame == 0
 uint8_t player1Location = 0x00;
 uint8_t player2Location = 0xCC;
 #else 
