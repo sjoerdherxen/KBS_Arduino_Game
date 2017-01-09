@@ -1,5 +1,7 @@
 #include "Keyboard.h"
 
+extern uint16_t player1Score;
+
 /* This function is used to select the different characters with the nunchuck*/
 char* selectChars(MI0283QT9 *scherm) {
 	/* The character/button which is selected by the nunchuck, 0 to 2 are the characters and 4 is the confirm button*/
@@ -77,7 +79,10 @@ char* selectChars(MI0283QT9 *scherm) {
 			scherm->drawText(184, 90, "Confirm", RGB(255, 255, 255), RGB(0, 0, 0), 2);
 			/* If the Z button is pressed, go to the mainmenu and return the value of the name*/
 			if (value & 0x40) {
-				showMainMenu();
+				saveScore(player1Score, letter);
+				printHighscore();
+				delay(2000);
+				__asm volatile ("  jmp 0");
 				return letter;
 			}
 		}
