@@ -153,6 +153,7 @@ void showMainMenu() {
 	}
 	else if (selected == 2) {
 		DisplayHighscore();
+		showMainMenu();
 	}
 #else
 	Game();

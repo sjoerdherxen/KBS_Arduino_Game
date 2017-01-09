@@ -7,7 +7,6 @@
 int main(void) {
 	init();
 	Serial.begin(9600);
-	//initIrSend();
 	GameInit();
 
 
