@@ -2,7 +2,8 @@
 #include "showLives.h"									
 
 //Initializes and declares lives to 0
-int lives = 0;
+extern uint8_t player1Lives;
+extern uint8_t player2Lives;
 //>=1 = true so that means the end of the game, 0 is false so not the end of the game
 uint8_t ifEndGame = 0;
 //Initializes and declares endOfGameTick to 0, endOfGameTcik will store the tick number
@@ -40,19 +41,17 @@ void startLives() {
 	//Ends all transmissions
 	Wire.endTransmission();
 	//Sets lives to 5		
-	lives = 5;											
+	player1Lives = 5;
 }
 
 //Activates the blinking and after that the amount of leds equal to the amount of lives is set.
 void loseLife(uint16_t count) {				
-	//Sets lives to one less, for instance: from 4 to 3
-	lives--;		
 	//Checks how many lives the player has and which leds have to be displayed
-	if (lives){
+	if (player1Lives && player2Lives){
 		//Begins transmission to adress 56, etc.												
 		Wire.beginTransmission(56);
 		//Writes the pattern that corresponds to lives to the adress, etc.
-		Wire.write(pgm_read_byte(&patterns[lives])); 
+		Wire.write(pgm_read_byte(&patterns[player1Lives])); 
 		//Ends all transmissions
 		Wire.endTransmission();
 		//When a player has 0 lives this part of the switch statement will be executed
@@ -102,6 +101,21 @@ void endOfGame(uint16_t count) {
 			ifEndGame--;
 			//endOfGameTick gets the current tick value of the game
 			endOfGameTick = count;
+		}
+
+		if(ifEndGame == 0){
+		
+			//This will start the GameOverMenu
+			setGameover(1);
+			uint8_t selectie = gameOverMenu();
+			if (selectie == 1) {
+			/*Rebooting the arduino to go to the main menu and clear the memory*/
+				__asm volatile ("  jmp 0");
+			}
+			else if (selectie == 2) {
+				DisplayKeyboard();
+			}
+			
 		}
 	}
 }

@@ -3,9 +3,15 @@
 
 MI0283QT9 scherm;
 uint8_t SDcardLoaded = 0;
+extern uint8_t player1Location;
+extern uint8_t player2Location;
+extern uint16_t player1Score;
+extern uint16_t player2Score;
+extern uint8_t player1Lives;
+extern uint8_t player2Lives;
 
 /* function to display bombs on the playing field */
-void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, uint16_t count) {
+void _displayBombs(uint16_t *bombs, uint8_t *crates, uint16_t count) {
 
 	/* for-loop to loop through all the bombs */
 	for (uint16_t i = 0; i < 6; i++) {
@@ -38,13 +44,13 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, ui
 				_clearSquare(bombs[i] >> 8);
 
 				/* display the explosion of the bomb */
-				_displayExplode(bombs[i] >> 8, player1Location, count);
+				_displayExplode(bombs[i] >> 8, count, i);
 
 				/* display the explosion of the bomb in all four directions */
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 1, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates, player1Location, count);
-				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates, player1Location, count);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 1, crates, count, i);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates, count, i);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates, count, i);
+				_explodeLoop(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates, count, i);
 			}
 
 			/* remove the explosion */
@@ -54,15 +60,16 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint8_t player1Location, ui
 				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -1, crates);
 				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, 16, crates);
 				_explodeLoopDone(((bombs[i] & 0x00C0) >> 4) - 1, bombs[i] >> 8, -16, crates);
+				_displayPlayers();
 			}
 		}
 	}
 }
 
 /* function to be used to start the lcd-screen */
-void DisplayOn(){
+void DisplayOn() {
 	/* this tries to open the SD-card */
-	SDcardLoaded = loadTextures();
+	//SDcardLoaded = loadTextures();
 
 	/* turn on the screen */
 	scherm.begin();
@@ -76,59 +83,149 @@ void DisplayOn(){
 
 
 /* function which changes the brightness of the screen by using the poteniometer */
-void DisplayScherpte(uint8_t x){
+void DisplayScherpte(uint8_t x) {
 	/* sets the brightness of the screen */
 	scherm.led(x);
 }
 
 /* function to draw the main menu, it needs a selected menu item to function */
-void DisplayMainMenu(uint8_t selected){
-#if IsMasterGame == 1
-	/* when the screen opens for the first 
+void DisplayMainMenu(uint8_t selected) {
+	/* when the screen opens for the first
 	, selected equals 0 */
-	if (selected == 0){
+	if (selected == 0) {
 		/* fills the screen with a white color */
 		scherm.fillScreen(RGB(255, 255, 255));
+		scherm.fillRect(35, 15, 240, 26, RGB(255, 0, 0));
+		scherm.drawText(40, 20, "BOMBERMAN!", RGB(255, 255, 255), RGB(0, 0, 0), 3);
+		scherm.drawText(80, 80, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 120, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
 		/* displays help text in the main menu */
 		_displayMenuHelpers(2);
 	}
 
 	/* if "Start Game" is selected the 'selected' visuals will show */
-	if (selected == 1){
-		scherm.drawRect(79, 44, 162, 18, RGB(0, 0, 0));
-		scherm.drawRect(79, 99, 162, 18, RGB(255, 255, 255));
-		scherm.drawText(80, 45, "Start Game", RGB(255, 255, 255), RGB(0, 0, 0), 2);
-		scherm.drawText(80, 100, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	if (selected == 1) {
+		scherm.drawRect(79, 79, 162, 18, RGB(0, 0, 0));
+		scherm.drawRect(79, 119, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(80, 80, "Start Game", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+		scherm.drawText(80, 120, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
 
 	/* if "Highscores" is selected the 'selected' visuals will show */
-	else if (selected == 2){
-		scherm.drawRect(79, 99, 162, 18, RGB(0, 0, 0));
-		scherm.drawRect(79, 44, 162, 18, RGB(255, 255, 255));
-		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
-		scherm.drawText(80, 100, "Highscores", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+	else if (selected == 2) {
+		scherm.drawRect(79, 119, 162, 18, RGB(0, 0, 0));
+		scherm.drawRect(79, 79, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(80, 80, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 120, "Highscores", RGB(255, 255, 255), RGB(0, 0, 0), 2);
 	}
 
 	/* if nothing is selected the main menu will show as normal */
 	else {
-		scherm.drawRect(79, 44, 162, 18, RGB(255, 255, 255));
-		scherm.drawRect(79, 99, 162, 18, RGB(255, 255, 255));
-		scherm.drawText(80, 45, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
-		scherm.drawText(80, 100, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawRect(79, 79, 162, 18, RGB(255, 255, 255));
+		scherm.drawRect(79, 119, 162, 18, RGB(255, 255, 255));
+		scherm.drawText(80, 80, "Start Game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawText(80, 120, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
-#endif
-#if IsMasterGame == 0
-	/* fills the screen with a white color */
-	scherm.fillScreen(RGB(255, 255, 255));
+}
 
-	/* display "waiting for primary" */
-	scherm.drawText(24, 45, "Waiting on master", RGB(0, 0, 0), RGB(255, 255, 255), 2);
-#endif
+/* function to draw the main menu, it needs a selected menu item to function */
+void DisplayGameOverMenu(uint8_t selected, uint8_t isNewHighscore) {
+	if (isNewHighscore) {
+		if (selected == 0) {
+			/* fills the screen with a white color */
+			scherm.fillScreen(RGB(255, 255, 255));
+
+			/* displays Game Over! on the screen */
+			scherm.drawText(40, 15, "Game Over!", RGB(0, 0, 0), RGB(255, 255, 255), 3);
+			scherm.drawText(70, 90, "Your score: ", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+			scherm.drawInteger(252, 90, (unsigned long)player1Score, 10, RGB(0, 0, 0), RGB(255, 255, 255), 2);
+
+			/* Main menu is the first selected button*/
+			scherm.drawText(85, 41, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+
+			/* displays help text in the main menu */
+			_displayMenuHelpers(2);
+		}
+
+		/* if "Start Game" is selected the 'selected' visuals will show */
+		if (selected == 1) {
+			scherm.drawRect(84, 40, 145, 18, RGB(0, 0, 0));
+			scherm.drawRect(79, 59, 162, 18, RGB(255, 255, 255));
+			scherm.drawText(85, 41, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+
+			scherm.drawText(80, 60, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		}
+
+		/* if "Highscores" is selected the 'selected' visuals will show */
+		else if (selected == 2) {
+			scherm.drawRect(79, 59, 162, 18, RGB(0, 0, 0));
+			scherm.drawRect(84, 40, 145, 18, RGB(255, 255, 255));
+			scherm.drawText(85, 41, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+			scherm.drawText(80, 60, "Save Score", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+		}
+
+		/* if nothing is selected the main menu will show as normal */
+		else {
+			scherm.drawRect(84, 40, 145, 18, RGB(255, 255, 255));
+			scherm.drawRect(79, 59, 162, 18, RGB(255, 255, 255));
+			scherm.drawText(85, 41, "Main Menu", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+			scherm.drawText(80, 60, "Save Score", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+		}
+
+		for (uint8_t i = 0; i < 3; i++) {
+			for (uint8_t x = 10 + i * 3; x < i * 3 + 13; x++) {
+				scherm.drawChar(80 + (x - (10 + i * 3)) * 16, 140 + i * 21, (char)getName(x), RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
+			}
+		}
+
+		//Print iedere score
+		for (uint8_t i = 0; i < 3; i++) {
+			uint8_t a = i * 2;
+			scherm.drawInteger(192, 141 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
+		}
+	}
+	else {
+		if (selected == 0) {
+			/* fills the screen with a white color */
+			scherm.fillScreen(RGB(255, 255, 255));
+
+			/* displays Game Over! on the screen */
+			scherm.drawText(40, 15, "Game Over!", RGB(0, 0, 0), RGB(255, 255, 255), 3);
+			scherm.drawText(70, 90, "Your score: ", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+			scherm.drawInteger(252, 90, (unsigned long)player1Score, 10, RGB(0, 0, 0), RGB(255, 255, 255), 2);
+
+			scherm.drawText(80, 108, "Not a new highscore :(", RGB(255, 0, 0), RGB(255, 255, 255), 1);
+
+			/* Main menu is the first selected button*/
+			scherm.drawText(85, 51, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+
+			/* displays help text in the main menu */
+			_displayMenuHelpers(2);
+		}
+
+		/* if "Start Game" is selected the 'selected' visuals will show */
+		if (selected == 1) {
+			scherm.drawText(85, 51, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
+		}
+
+		//Print iedere naam
+		for (uint8_t i = 0; i < 3; i++) {
+			for (uint8_t x = 10 + i * 3; x < i * 3 + 13; x++) {
+				scherm.drawChar(100 + (x - (10 + i * 3)) * 16, 141 + i * 21, (char)getName(x), RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
+			}
+		}
+
+		//Print iedere score
+		for (uint8_t i = 0; i < 3; i++) {
+			uint8_t a = i * 2;
+			scherm.drawInteger(172, 141 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
+		}
+	}
 }
 
 /* display the game for the first time */
-void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Location){
+void DisplayGame(uint8_t crates[]){
 	/* reset the screen to a white color */
 	scherm.fillScreen(RGB(255, 255, 255));
 
@@ -145,75 +242,90 @@ void DisplayGame(uint8_t crates[], uint8_t player1Location, uint8_t player2Locat
 	/* displays info about players */
 	_displayInfo();
 
-	/* displays player 1 */
-	_displayPlayer(player1Location, RGB(255, 0, 0));
-
-	/* displays player 2 */
-	_displayPlayer(player2Location, RGB(0, 0, 255));
+	/* displays players */
+	_displayPlayers();
 }
 
 /* function to display updates in the game */
-void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1LocationOld, uint8_t player1LocationNew, uint8_t player2LocationOld, uint8_t player2LocationNew, uint16_t *bombs, uint16_t count){
+void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2LocationOld, uint16_t *bombs, uint16_t count){
 	/* display an updated crate */
-	_displayCrates(oldCrates, newCrates);
-
-	/* display the updated info */
-	_displayInfo();
 
 	/* if player 1 has been moved since the last update,
 	the player is drawn at it's new location */
-	if (player1LocationNew != player1LocationOld){
-		/* draw a player */
-		_displayPlayer(player1LocationNew, RGB(255, 0, 0));
-
+	if (player1Location != player1LocationOld || player2Location != player2LocationOld){
 		/* clear the square of the last posion of the player */
 		_clearSquare(player1LocationOld);
+		_clearSquare(player2LocationOld);
+
+		/* draw a player */
+		_displayPlayers();
 	}
 
 	/* if player 2 has been moved since the last update,
 	the player is drawn at it's new location */
-	if (player2LocationNew != player2LocationOld){
-		/* draw a player */
-		_displayPlayer(player2LocationNew, RGB(0, 0, 255));
-
-		/* clear the square of the last posion of the player */
-		_clearSquare(player2LocationOld);
-	}
-
 	/*  */
-	_displayBombs(bombs, newCrates, player1LocationNew, count);
+	_displayBombs(bombs, crates, count);
+	_displayInfo();
 }
 
-/* highscores tonen verwacht 5 3 letterige namen. 5 scores. */
-void DisplayHighscore(char **names, uint8_t *scores){
-	scherm.drawText(80, 20, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+// highscores tonen verwacht 3 3 letterige namen. 3 scores.
+void DisplayHighscore() {
+	//Print "Highscores"
+	scherm.fillScreen(RGB(255, 255, 255));
+	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
 
-	for (uint8_t i = 0; i < 5; i++){
-		scherm.drawText(80, 41 + i * 21, names[i], RGB(0, 0, 0), RGB(255, 255, 255), 2);
-		scherm.drawInteger(192, 41 + i * 21, (unsigned long)(scores[i]), 10, RGB(0, 0, 0), RGB(255, 255, 255), 2);
+	//Print iedere naam
+	char name[10];
+	for (uint8_t i = 0; i < 3; i++) {
+		uint8_t b = 0;
+		for (uint8_t x = 10 + i * 3; x < i * 3 + 13; x++) {
+			scherm.drawChar(80 + (x-(10+i*3))*16, 41 + i * 21, (char)getName(x), RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
+		}
+	}
+
+	//Print iedere score
+	for (uint8_t i = 0; i < 3; i++) {
+		uint8_t a = i * 2;
+		scherm.drawInteger(192, 41 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 	}
 
 	_displayMenuHelpers(1);
+	while (1){
+		uint8_t nunchuck = Nunchuck_get_data();
+		if (nunchuck & (1 << 7)){
+			__asm volatile ("  jmp 0");
+		}
+		_delay_ms(100);
+	}
+}
+
+void DisplayStartingGame(){
+	scherm.fillScreen(RGB(255, 255, 255));
+#if IsMasterGame == 1
+	scherm.drawText(56, 45, "Starting game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+#else
+	scherm.drawText(24, 45, "Waiting on master", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+#endif
 }
 
 /* function to draw the border of the game */
 void _displayBorder(){
 	/* for every block in the length of 15 blocks */
-	for (uint8_t i = 0; i < 15; i++){
+	for (uint8_t i = 0; i < 15; i++) {
 
 		/* for every block in the height of 15 blocks */
-		for (uint8_t j = 0; j < 15; j++){
+		for (uint8_t j = 0; j < 15; j++) {
 
 			/* if the block is equal to the blocks on the side of the playing field */
-			if (i == 0 || i == 14 || j == 0 || j == 14){
+			if (i == 0 || i == 14 || j == 0 || j == 14) {
 
 				/* if the SD-card is inserted, the textures are loaded */
-				if (SDcardLoaded){
+				if (SDcardLoaded) {
 					drawTexture(3, 80 + i * 16, j * 16, &scherm);
 				}
 
 				/* if the SD-card is not inserted, the default textures are used */
-				else{
+				else {
 					/* rectagles are drawn as default texture */
 					scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
 					scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
@@ -223,21 +335,31 @@ void _displayBorder(){
 	}
 }
 
+// Show a loader for the crates being send over IR, should take a few seconds.
+void ShowLoader(uint8_t progress){
+	if (!progress){ // show empty loader if progress == 0. at start
+		scherm.drawRect(93, 100, 125, 20, RGB(0, 0, 0));
+	}
+	else { // add rect for progress being made always 3 pixels
+		scherm.fillRect(91 + progress, 100, 3, 20, RGB(0, 0, 0));
+	}
+}
+
 /* function to display the static blocks inside the playing field */
-void _displayInnerStatic(){
+void _displayInnerStatic() {
 	/* for each posision inside the border */
-	for (uint8_t i = 2; i < 13; i += 2){
+	for (uint8_t i = 2; i < 13; i += 2) {
 
 		/* for each posision inside the border */
-		for (uint8_t j = 2; j < 13; j += 2){
+		for (uint8_t j = 2; j < 13; j += 2) {
 
 			/* if the SD-card is inserted, the textures are loaded */
-			if (SDcardLoaded){
+			if (SDcardLoaded) {
 				drawTexture(3, 80 + i * 16, j * 16, &scherm);
 			}
 
 			/* if the SD-card is not inserted, the default textures are used */
-			else{
+			else {
 				/* rectagles are drawn as default texture */
 				scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
 				scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
@@ -247,19 +369,19 @@ void _displayInnerStatic(){
 }
 
 /* function to display the crates inside the playing field */
-void _displayCrates(uint8_t crates[]){
+void _displayCrates(uint8_t crates[]) {
 	/* for-loop to loop through all the possible crate locations */
-	for (uint8_t i = 0; i < 127; i++){
+	for (uint8_t i = 0; i < 127; i++) {
 
-		if (crates[i] != 0xFF){
+		if (crates[i] != 0xFF) {
 
 			/* if the SD-card is inserted, the textures are loaded */
-			if (SDcardLoaded){
+			if (SDcardLoaded) {
 				drawTexture(2, (((crates[i] & 0xF0) >> 4) * 16) + 96, 16 + (crates[i] & 0x0F) * 16, &scherm);
 			}
 
 			/* if the SD-card is not inserted, the default textures are used */
-			else{
+			else {
 				uint8_t x1 = (((crates[i] & 0xF0) >> 4) * 16);
 				uint8_t x2 = x1 + 14;
 				uint8_t y = 17 + (crates[i] & 0x0F) * 16;
@@ -276,19 +398,21 @@ void _displayCrates(uint8_t crates[]){
 }
 
 /* function to draw the players at the beginning of the game */
-void _displayPlayer(int_least16_t position, uint16_t playerColor){
+void _displayPlayers(){
 
 	/* if the SD-card is inserted, the player texture will be loaded */
 	if (SDcardLoaded){
-		drawTexture(5, 96 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, &scherm);
+		drawTexture(5, 96 + ((player1Location & 0xF0) >> 4) * 16, 16 + (player1Location & 0x0F) * 16, &scherm);
+		drawTexture(6, 96 + ((player2Location & 0xF0) >> 4) * 16, 16 + (player2Location & 0x0F) * 16, &scherm);
 	}
 	/* if the SD-card is not inserted, the default texture will be used (an X with the player color) */
 	else {
-		scherm.drawChar(97 + ((position & 0xF0) >> 4) * 16, 16 + (position & 0x0F) * 16, 'X', playerColor, RGB(255, 255, 255), 2);
+		scherm.drawChar(97 + ((player1Location & 0xF0) >> 4) * 16, 16 + (player1Location & 0x0F) * 16, 'X', RGB(255, 0, 0), RGB(255, 255, 255), 2);
+		scherm.drawChar(97 + ((player2Location & 0xF0) >> 4) * 16, 16 + (player2Location & 0x0F) * 16, 'X', RGB(0, 0, 255), RGB(255, 255, 255), 2);
 	}
 }
 
-/* this function will be executed when the game starts */
+// this function will be executed when the game starts
 void _displayCountDown() {
 	// For-loop to repeat the following code 5 times
 	for (int i = 5; i > 0; i--) {
@@ -306,82 +430,106 @@ void _displayCountDown() {
 	scherm.drawText(5, 80, "GO", RGB(255, 255, 255), RGB(255, 255, 255), 4);
 }
 
-/* function to show the score and power-ups of a player */
-void _displayInfo(){
-	// todo getplayercount
-
+void _displayInfoStart(){
 	scherm.drawChar(5, 5, 'X', RGB(255, 0, 0), RGB(255, 255, 255), 2);
 	scherm.drawChar(5, 125, 'X', RGB(0, 0, 255), RGB(255, 255, 255), 2);
 
-	// score:
-	uint8_t pl1Score = 0;
-	uint8_t pl2Score = 0;
-	int i = 2;
-	while (pl1Score > 0){
-		scherm.drawInteger(27 + i * 16, 5, (long unsigned int)(pl1Score % 10), 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
-		i--;
-		pl1Score = pl1Score / 10;
-	}
-	i = 2;
-	while (pl2Score > 0){
-		scherm.drawInteger(27 + i * 16, 125, (long unsigned int)(pl2Score % 10), 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
-		i--;
-		pl2Score = pl2Score / 10;
-	}
+	scherm.drawText(5, 22, "Levens", RGB(0, 0, 0), RGB(255, 255, 255), 1);
+	scherm.drawText(5, 142, "Levens", RGB(0, 0, 0), RGB(255, 255, 255), 1);
+
+	scherm.drawText(5, 47, "Score", RGB(0, 0, 0), RGB(255, 255, 255), 1);
+	scherm.drawText(5, 167, "Score", RGB(0, 0, 0), RGB(255, 255, 255), 1);
 }
 
-/* function to display crates once their updated */
-void _displayCrates(uint8_t oldCrates[], uint8_t newCrates[]){
+/* function to show the score and power-ups of a player */
+void _displayInfo(){
+	scherm.drawInteger(5, 31, player1Lives, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
+	scherm.drawInteger(5, 151, player2Lives, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
 
-	/* for-loop to loop through each crate in the game */
-	for (uint8_t i = 0; i < 127; i++){
-
-		if (oldCrates[i] != 0xFF && oldCrates[i] != newCrates[i]){
-			//uint8_t x1 = (((newCrates[i] & 0xF0) >> 4) * 16);
-			//uint8_t x2 = x1 + 14;
-			//uint8_t y = 17 + (newCrates[i] & 0x0F) * 16;
-
-			///* to give the crate a little bit of default texture, lines are drawn */
-			//scherm.drawLine((uint16_t)(x1)+97, y, (uint16_t)(x2)+97, y, RGB(0, 0, 0));
-			//scherm.drawLine((uint16_t)(x1)+97, y + 3, (uint16_t)(x2)+97, y + 3, RGB(0, 0, 0));
-			//scherm.drawLine((uint16_t)(x1)+97, y + 6, (uint16_t)(x2)+97, y + 6, RGB(0, 0, 0));
-			//scherm.drawLine((uint16_t)(x1)+97, y + 9, (uint16_t)(x2)+97, y + 9, RGB(0, 0, 0));
-			//scherm.drawLine((uint16_t)(x1)+97, y + 12, (uint16_t)(x2)+97, y + 12, RGB(0, 0, 0));
-
-			_clearSquare(oldCrates[i]);
-		}
+	if (player1Score >= 1000){
+		scherm.fillRect(69, 55, 11, 16, RGB(255, 255, 255));
 	}
+	else if (player1Score >= 100){
+		scherm.fillRect(53, 55, 27, 16, RGB(255, 255, 255));
+	}
+	else if (player1Score >= 10){
+		scherm.fillRect(37, 55, 43, 16, RGB(255, 255, 255));
+	}
+	else {
+		scherm.fillRect(21, 55, 59, 16, RGB(255, 255, 255));
+	}
+
+	if (player2Score >= 1000){
+		scherm.fillRect(69, 175, 11, 16, RGB(255, 255, 255));
+	}
+	else if (player2Score >= 100){
+		scherm.fillRect(53, 175, 27, 16, RGB(255, 255, 255));
+	}
+	else if (player2Score >= 10){
+		scherm.fillRect(37, 175, 43, 16, RGB(255, 255, 255));
+	}
+	else {
+		scherm.fillRect(21, 175, 59, 16, RGB(255, 255, 255));
+	}
+
+	scherm.drawInteger(5, 55, player1Score, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
+	scherm.drawInteger(5, 175, player2Score, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
+
 }
 
 /* function to clear a square in the playing field */
-void _clearSquare(uint8_t square){
+void _clearSquare(uint8_t square) {
 	scherm.fillRect(96 + ((square & 0xF0) >> 4) * 16, 16 + (square & 0x0F) * 16, 16, 16, RGB(255, 255, 255));
 }
 
 /* function to display info text on the main menu */
-void _displayMenuHelpers(uint8_t which){
+void _displayMenuHelpers(uint8_t which) {
 
 	/* display text that explains the C-button */
-	if (which & (1 << 0)){
+	if (which & (1 << 0)) {
 		scherm.drawText(5, 219, "C back", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
 
 	/* display text that explains the Z-button */
-	if (which & (1 << 1)){
+	if (which & (1 << 1)) {
 		scherm.drawText(187, 219, "Z select", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 	}
 }
 
-/* function to display the explosion of a bomb */
-void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
-	/* check if the player is in an explosion */
-	if (playerlocation == location){
+
+void _displayExplode(uint8_t location, uint16_t count, uint8_t bombI){
+	// check of de speler in de explosie staat
+	if (player1Location == location){
+		player1Lives--;
 		loseLife(count);
 		startLoseLife(count);
+		if (bombI < 3){
+			if (player1Score < 50)
+				player1Score = 0;
+			else
+				player1Score -= 50;
+		}
+		else{
+			player2Score += 100;
+		}
 	}
 
-	/*  */
-	if (SDcardLoaded){
+	if (player2Location == location){
+		player2Lives--;
+		loseLife(count);
+		if (bombI >= 3){
+			if (player2Score < 50)
+				player2Score = 0;
+			else
+				player2Score -= 50;
+		}
+		else{
+			player1Score += 100;
+		}
+	}
+
+	// teken bom explosie
+	if (SDcardLoaded) {
 		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
 	}
 
@@ -392,10 +540,10 @@ void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
 }
 
 /* function to display the explosion in different directions (up, down, right, left) */
-int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates, uint8_t playerLoc, uint16_t count){
+int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates, uint16_t count, uint8_t bombI){
 
 	/* for-loop to loop through the distance of the explosion */
-	for (int8_t j = 1; j < max; j++){
+	for (int8_t j = 1; j < max; j++) {
 
 		/* the location that the explosion goes in, is put into an integer */
 		uint8_t newLocation = location + j*mul;
@@ -403,26 +551,33 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 		/* check if the location that has to be exploded, is a static block */
 		if ((newLocation & 0x0F) > 0x0C ||
 			(newLocation & 0xF0) > 0xC0 ||
-			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)){
+			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)) {
 
 			/* stop the explosion */
 			return j;
 		}
 
 		/* for-loop to loop through all the crates */
-		for (uint8_t u = 0; u < 127; u++){
+		for (uint8_t u = 0; u < 127; u++) {
 
 			/* check if the location that has to be exploded, is a crate */
-			if (crates[u] == newLocation){
+			if (crates[u] == newLocation) {
 
 				/* clear the possion of the crate */
 				_clearSquare(newLocation);
 
 				/* display the explosion on the location of the crate */
-				_displayExplode(newLocation, playerLoc, count);
+				_displayExplode(newLocation, count, bombI);
 
 				/* remove the crate after the explosion */
 				crates[u] = 0xFF;
+
+				if (bombI < 3){
+					player1Score += 5;
+				}
+				else {
+					player2Score += 5;
+				}
 
 				/* stop the explosion */
 				return j;
@@ -433,15 +588,15 @@ int8_t _explodeLoop(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates
 		_clearSquare(location + j*mul);
 
 		/* display the explosion */
-		_displayExplode(location + j*mul, playerLoc, count);
+		_displayExplode(location + j*mul, count, bombI);
 	}
 }
 
 /* function to be called when the explosion is done */
-void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates){
+void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crates) {
 
 	/* for-loop to loop through the distance of the explosion */
-	for (int8_t j = 1; j < max; j++){
+	for (int8_t j = 1; j < max; j++) {
 
 		/* the location that the explosion goes in, is put into an integer */
 		uint8_t newLocation = location + j*mul;
@@ -449,17 +604,17 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 		/* check if the location that is exploded, was a static block */
 		if ((newLocation & 0x0F) > 0x0C ||
 			(newLocation & 0xF0) > 0xC0 ||
-			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)){
+			((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1)) {
 
 			/* stop reset */
 			return;
 		}
 
 		/* for-loop to loop through all the crates */
-		for (uint8_t u = 0; u < 127; u++){
+		for (uint8_t u = 0; u < 127; u++) {
 
 			/* check if the location that has to be exploded, is a crate */
-			if (crates[u] == newLocation){
+			if (crates[u] == newLocation) {
 
 				/* stop reset */
 				return;
@@ -468,4 +623,36 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 		/* clear the location of the explosion */
 		_clearSquare(location + j*mul);
 	}
+}
+
+
+void DisplayKeyboard() {
+	/* Fill the screen with a white background*/
+	scherm.fillScreen(RGB(255, 255, 255));
+
+	/* Shows the menu helper "z select" */
+	_displayMenuHelpers(2);
+
+	/* Draws the first 3 letters in the middle row, the first letter has the selected color*/
+	scherm.drawChar(80, 80, 'A', RGB(255, 255, 255), RGB(0, 150, 0), 4);
+	scherm.drawChar(112, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
+	scherm.drawChar(144, 80, 'A', RGB(255, 255, 255), RGB(0, 0, 0), 4);
+
+	/* Draws the first row top and bottom grey letters*/
+	scherm.drawChar(80, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(80, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+
+	/* Draws the second row top and bottom grey letters*/
+	scherm.drawChar(112, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(112, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+
+	/* Draws the third row top and bottom grey letters*/
+	scherm.drawChar(144, 120, 'B', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+	scherm.drawChar(144, 40, 'Z', RGB(170, 170, 170), RGB(255, 255, 255), 4);
+
+	/* Draws the "confirm" text*/
+	scherm.drawText(184, 90, "Confirm", RGB(0, 0, 0), RGB(255, 255, 255), 2);
+
+	/*Starts the function showMiddle so the user can select characters*/
+	selectChars(&scherm);
 }

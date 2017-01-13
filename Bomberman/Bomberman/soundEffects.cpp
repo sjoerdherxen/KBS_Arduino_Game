@@ -17,11 +17,19 @@ uint16_t playGameOverTick = 0;
 
 /* integers for the music */
 uint8_t ifPlayMusic = 0;
-uint16_t playMusicTick = 0;
+uint16_t playMusicNote = 0;
+
+volatile uint8_t playingSound = 0;
+volatile uint16_t playingSoundLevel = 1;
+volatile uint16_t playingSoundCounter = 0;
 
 void setupSpeaker() {
 	/* setting pin 4 as output for the speaker */
 	DDRC |= (1 << PORTC1);
+	cli();
+	OCR2B = 1;
+	TIMSK2 |= (1 << OCIE2B);
+	sei();
 }
 
 // ** Explosion **
@@ -37,7 +45,6 @@ void playExplosion(uint16_t count) {
 
 	/* the ifPlayExplosion variable is initialized in the function above */
 	if (ifPlayExplosion) {
-
 		/* counting the gameticks */
 		uint8_t t = (count - playExplosionTick);
 
@@ -45,17 +52,18 @@ void playExplosion(uint16_t count) {
 		if (t = 10) {
 
 			/* stop playing sound on the speaker */
-			noTone(15);
+			playSound(0);
 			/* set the ifPlayExplosion variable to 0, to stop the explosion function */
 			ifPlayExplosion = 0;
 			return;
 		}
 
 		/* stop playing sound on the speaker */
-		noTone(15);
+		playSound(0);
 
 		/* play sound on the speaker with random frequencies between 100 and 1000 */
-		tone(15, random(100, 1000));
+		playSound(random(50, 200));
+
 	}
 
 	///* a loop of 2000 ms (the time that the explosion is heard) this can be
@@ -98,33 +106,30 @@ void playLoseLife(uint16_t count) {
 
 	/* the ifPlayLoseLife variable is initialized in the function above */
 	if (ifPlayLoseLife) {
-
 		/* at the first game tick, play the first note of the lose life sound */
 		if (count == playLoseLifeTick) {
-			tone(15, loseLife[0], 83);
+			playSound(loseLife[0]);
+
 		}
 
 		/* at the second game tick, play the second note of the lose life sound */
 		else if (count == playLoseLifeTick + 1) {
-			noTone(15);
-			tone(15, loseLife[1], 83);
+			playSound(loseLife[1]);
 		}
 
 		/* at the third game tick, play the third note of the lose life sound */
 		else if (count == playLoseLifeTick + 2) {
-			noTone(15);
-			tone(15, loseLife[2], 83);
+			playSound(loseLife[2]);
 		}
 
 		/* at the fourth game tick, play the fourth note of the lose life sound */
 		else if (count == playLoseLifeTick + 3) {
-			noTone(15);
-			tone(15, loseLife[3], 83);
+			playSound(loseLife[3]);
 		}
 
 		/* at the fifth game tick, play the fifth note of the lose life sound */
 		else if (count == playLoseLifeTick + 4) {
-			noTone(15);
+			playSound(0);
 			ifPlayLoseLife = 0;
 		}
 	}
@@ -165,17 +170,15 @@ void playGameOver(uint16_t count) {
 		if (t == 23) {
 
 			/* stop playing sound on the speaker */
-			noTone(15);
+			playSound(0);
+
 			/* set the ifPlayGameOver variable to 0, to stop the game over function */
 			ifPlayGameOver = 0;
 			return;
 		}
 
-		/* stop playing sound on the speaker */
-		noTone(15);
-
 		/* play sound on the speaker using the notes from the gameOver array */
-		tone(15, gameOver[t / 2], 83);
+		playSound(gameOver[t / 2]);
 	}
 }
 
@@ -235,70 +238,13 @@ int music[] = {
 	NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3,
 	NOTE_B3, NOTE_A3, NOTE_G2, NOTE_F2,
 
-	0,
+	0
 };
-
-///* tempo of the notes */
-//int musicTempo[] = {
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	4, // BREAK
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//	12, 12, 12, 12,
-//
-//	8, // END
-//};
 
 /* function to start the music */
 void startMusic(uint16_t count) {
 	ifPlayMusic = 1;
-	playMusicTick = count;
+	playMusicNote = 0;
 }
 
 /* function that contains the tones of the music */
@@ -306,46 +252,48 @@ void playMusic(uint16_t count) {
 
 	/* the ifPlayMusic vaiabele is initialized in the function above */
 	if (ifPlayMusic) {
-
 		/* counting the gameticks */
-		uint8_t t = (count - playMusicTick);
-
-		/* if the gametick hits theh 323, stop the music */
-		if (t == 323) {
-
-			/* stop playing sound on the speaker */
-			noTone(15);
-			/* set the ifPlayMusic variable to 0, to stop the music function */
-			ifPlayMusic = 0;
-			return;
+		playMusicNote++;
+		if (playMusicNote >= sizeof(music)){
+			playMusicNote = 0;
 		}
-
-		/* stop playing sound on the speaker */
-		noTone(15);
-
-		/* play sound on the speaker using the notes from the music array */
-		tone(15, music[t / 2], 83);
 	}
 
-	///* size is used in the for loop to show the length of the song */
-	//int size = sizeof(music) / sizeof(int);
+	/* play sound on the speaker using the notes from the music array */
+	playSound(music[playMusicNote]);
+}
 
-	///* a for loop that plays the notes in the right order */
-	//for (int note = 0; note < size; note++) {
 
-	//	/* for the duration of the note, the tempo from musicTempo[] has to be devided
-	//	by 1000 ms, a full note would be 1000 / 1, a half a note would be 1000 / 2 and
-	//	a quarter of a note would be 1000 / 4 etc... */
-	//	int noteDuration = 1000 / musicTempo[note];
 
-	//	/* here the note is actually being played using the tone() function */
-	//	tone(4, music[note], noteDuration);
+/* function to start the music */
+void stopMusic(){
+	playSound(0);
+}
 
-	//	/* if you don't want the sound to become absolute rubbish, a delay should be
-	//	put in, a delay of 100 seems to work well */
-	//	_delay_ms(100);
 
-	//	/* the noTone() function stops the tones being outputted */
-	//	noTone(4);
-	//}
+// sound management
+void playSound(uint16_t tone){
+	cli();
+	if (!tone){ // disable sounds
+		playingSound = 0;
+	}
+	else { // set sound to tone value
+		playingSound = 1;
+		playingSoundLevel = tone / 16;
+		playingSoundCounter = 0;
+	}
+	sei();
+}
+
+ISR(TIMER2_COMPB_vect){
+	if (playingSound){ // sound on
+		if (playingSoundLevel <= playingSoundCounter){ // toggle if counter is equal to tone
+			PORTC ^= (1 << PORTC1);
+			playingSoundCounter = 0;
+		}
+		playingSoundCounter++;
+	}
+	else {// sound off
+		PORTC &= ~(1 << PORTC1);
+	}
 }

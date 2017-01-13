@@ -4,7 +4,7 @@
 uint8_t nunchuck_buf[6];
 
 /* function used to setup the nunchuck */
-void Nunchuck_setpowerpins() {
+void setupNunchuck() {
 /* PORTC3 (Analog 3) is used as the power-pin (pwrpin) */
 #define pwrpin PORTC3
 
@@ -22,17 +22,16 @@ void Nunchuck_setpowerpins() {
 
 	/* this delay waits for the program to stabilize */
 	delay(100);
-}
 
-/* function used to initialize the I2C protocol, join the I2C bus and
-tell the nunchuck that we are talking to it */
-void Nunchuck_init() {
+	/* from here the code is used to initialize the I2C protocol, join the I2C bus and
+	tell the nunchuck that we are talking to it */
+
 	/* this sets begins the transmision by I2C, using the Wire library,
 	the I2C bus is joined as a master */
 	Wire.begin();
 
 	/* the address of the nunchuck is 52 (this is the same for every white
-	nunchuck), this address is send to all the divices connected by I2C, 
+	nunchuck), this address is send to all the divices connected by I2C,
 	the nunchuck now knows that we are talking to it */
 	Wire.beginTransmission(0x52);
 
@@ -87,7 +86,7 @@ uint8_t Nunchuck_get_data()
 	/* a new data request is send to the nunchuck for a new data payload */
 	Nunchuck_send_request();
 
-	/* when the counter hits 5, we recieved 6 bytes,
+	/* when the counter hits 5, we received 6 bytes,
 	then we can print the full data payload */
 	if (cnt >= 5) {
 		/* default data is set to binary 1100 0000 (0xC0) */
@@ -109,9 +108,9 @@ uint8_t Nunchuck_get_data()
 			nunchuckdata |= 4;
 		}
 
-		if ((nunchuck_buf[5] >> 0) & 1)
+		if ((nunchuck_buf[5] >> 0) & 1) // z knop
 			nunchuckdata &= ~(1 << 6);
-		if ((nunchuck_buf[5] >> 1) & 1)
+		if ((nunchuck_buf[5] >> 1) & 1) // c knop
 			nunchuckdata &= ~(1 << 7);
 
 		/* the function will return the nunchuck data */
@@ -120,17 +119,6 @@ uint8_t Nunchuck_get_data()
 
 	/* if the data request fails, the function returns a 0 */
 	return 0;
-}
-
-/* this function prints the data recieved by the nunchuck,
-it needs an 8-bit data integer to function */
-void Nunchuck_print_data(uint8_t data)
-{
-	/* print data in binary */
-	Serial.print(data, BIN);
-
-	/* sets a newline */
-	Serial.print("\r\n");
 }
 
 /* the nunchuck uses a specific data format, this has to
