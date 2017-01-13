@@ -263,37 +263,46 @@ void playMusic(uint16_t count) {
 	playSound(music[playMusicNote]);
 }
 
-
-
 /* function to start the music */
 void stopMusic(){
 	playSound(0);
 }
 
 
-// sound management
+/* function for set sound level */
 void playSound(uint16_t tone){
+
+	/* stop all the timers */
 	cli();
-	if (!tone){ // disable sounds
+
+	/* disable sounds */
+	if (!tone){
 		playingSound = 0;
 	}
-	else { // set sound to tone value
+	else {
+		/* set sound to tone value */
 		playingSound = 1;
 		playingSoundLevel = tone / 16;
 		playingSoundCounter = 0;
 	}
+
+	/* start all the timers */
 	sei();
 }
 
 ISR(TIMER2_COMPB_vect){
-	if (playingSound){ // sound on
-		if (playingSoundLevel <= playingSoundCounter){ // toggle if counter is equal to tone
+
+	/* sound on */
+	if (playingSound)
+		/* toggle if the counter is equal to the tone */
+		if (playingSoundLevel <= playingSoundCounter){
 			PORTC ^= (1 << PORTC1);
 			playingSoundCounter = 0;
 		}
 		playingSoundCounter++;
 	}
-	else {// sound off
+	/* sound off */
+	else {
 		PORTC &= ~(1 << PORTC1);
 	}
 }

@@ -68,8 +68,6 @@ void _displayBombs(uint16_t *bombs, uint8_t *crates, uint16_t count) {
 
 /* function to be used to start the lcd-screen */
 void DisplayOn() {
-	/* this tries to open the SD-card */
-	//SDcardLoaded = loadTextures();
 
 	/* turn on the screen */
 	scherm.begin();
@@ -90,8 +88,7 @@ void DisplayScherpte(uint8_t x) {
 
 /* function to draw the main menu, it needs a selected menu item to function */
 void DisplayMainMenu(uint8_t selected) {
-	/* when the screen opens for the first
-	, selected equals 0 */
+	/* when the screen opens for the first time, selected equals 0 */
 	if (selected == 0) {
 		/* fills the screen with a white color */
 		scherm.fillScreen(RGB(255, 255, 255));
@@ -179,7 +176,7 @@ void DisplayGameOverMenu(uint8_t selected, uint8_t isNewHighscore) {
 			}
 		}
 
-		//Print iedere score
+		/* print every score */
 		for (uint8_t i = 0; i < 3; i++) {
 			uint8_t a = i * 2;
 			scherm.drawInteger(192, 141 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
@@ -209,14 +206,14 @@ void DisplayGameOverMenu(uint8_t selected, uint8_t isNewHighscore) {
 			scherm.drawText(85, 51, "Main Menu", RGB(255, 255, 255), RGB(0, 0, 0), 2);
 		}
 
-		//Print iedere naam
+		/* print every name */
 		for (uint8_t i = 0; i < 3; i++) {
 			for (uint8_t x = 10 + i * 3; x < i * 3 + 13; x++) {
 				scherm.drawChar(100 + (x - (10 + i * 3)) * 16, 141 + i * 21, (char)getName(x), RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 			}
 		}
 
-		//Print iedere score
+		/* print every score */
 		for (uint8_t i = 0; i < 3; i++) {
 			uint8_t a = i * 2;
 			scherm.drawInteger(172, 141 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
@@ -250,8 +247,7 @@ void DisplayGame(uint8_t crates[]){
 void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2LocationOld, uint16_t *bombs, uint16_t count){
 	/* display an updated crate */
 
-	/* if player 1 has been moved since the last update,
-	the player is drawn at it's new location */
+	/* if player 1 has been moved since the last update, the player is drawn at it's new location */
 	if (player1Location != player1LocationOld || player2Location != player2LocationOld){
 		/* clear the square of the last posion of the player */
 		_clearSquare(player1LocationOld);
@@ -261,20 +257,19 @@ void UpdateGame(uint8_t crates[], uint8_t player1LocationOld, uint8_t player2Loc
 		_displayPlayers();
 	}
 
-	/* if player 2 has been moved since the last update,
-	the player is drawn at it's new location */
-	/*  */
+	/* if player 2 has been moved since the last update, the player is drawn at it's new location */
 	_displayBombs(bombs, crates, count);
 	_displayInfo();
 }
 
-// highscores tonen verwacht 3 3 letterige namen. 3 scores.
+/* function to display highscores */
 void DisplayHighscore() {
-	//Print "Highscores"
+
+	/* print the text "Highscores" */
 	scherm.fillScreen(RGB(255, 255, 255));
 	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
 
-	//Print iedere naam
+	/* print every name */
 	char name[10];
 	for (uint8_t i = 0; i < 3; i++) {
 		uint8_t b = 0;
@@ -283,12 +278,13 @@ void DisplayHighscore() {
 		}
 	}
 
-	//Print iedere score
+	/* print every score */
 	for (uint8_t i = 0; i < 3; i++) {
 		uint8_t a = i * 2;
 		scherm.drawInteger(192, 41 + i * 21, getScore(a), 10, RGB(0 + (i * 70), 0 + (i * 70), 0 + (i * 70)), RGB(255, 255, 255), 2);
 	}
 
+	/* display the info text for the menu */
 	_displayMenuHelpers(1);
 	while (1){
 		uint8_t nunchuck = Nunchuck_get_data();
@@ -299,11 +295,14 @@ void DisplayHighscore() {
 	}
 }
 
+/* function to display the screen that is shown when the game is starting */
 void DisplayStartingGame(){
 	scherm.fillScreen(RGB(255, 255, 255));
 #if IsMasterGame == 1
+	/* print the text "Starting game" */
 	scherm.drawText(56, 45, "Starting game", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 #else
+	/* print the text "Waiting on master" */
 	scherm.drawText(24, 45, "Waiting on master", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 #endif
 }
@@ -326,6 +325,7 @@ void _displayBorder(){
 
 				/* if the SD-card is not inserted, the default textures are used */
 				else {
+
 					/* rectagles are drawn as default texture */
 					scherm.fillRect(81 + i * 16, 1 + j * 16, 14, 14, RGB(0, 0, 0));
 					scherm.drawRect(80 + i * 16, j * 16, 16, 16, RGB(100, 100, 100));
@@ -335,12 +335,14 @@ void _displayBorder(){
 	}
 }
 
-// Show a loader for the crates being send over IR, should take a few seconds.
+/* Show a loading-bar for the crates being send by IR */
 void ShowLoader(uint8_t progress){
-	if (!progress){ // show empty loader if progress == 0. at start
+	/* show an empty loader if the progress starts */
+	if (!progress){
 		scherm.drawRect(93, 100, 125, 20, RGB(0, 0, 0));
 	}
-	else { // add rect for progress being made always 3 pixels
+	/* add an expanding rectangle for the progress made */
+	else {
 		scherm.fillRect(91 + progress, 100, 3, 20, RGB(0, 0, 0));
 	}
 }
@@ -412,40 +414,49 @@ void _displayPlayers(){
 	}
 }
 
-// this function will be executed when the game starts
+/* function to display the countdown at the start of the game */
 void _displayCountDown() {
-	// For-loop to repeat the following code 5 times
+	/* for-loop to cycle through the numbers of the countdown */
 	for (int i = 5; i > 0; i--) {
 		//Draw the countdown in the info menu (from 5 to 1)
 		scherm.drawInteger(5, 80, (unsigned long)i, 10, RGB(255, 0, 0), RGB(255, 255, 255), 9);
 		_delay_ms(1000);
 	}
 
-	//Delete the 1 in the info menu
+	/* remove the '1' (last countdown digit) in the info menu */
 	scherm.drawChar(5, 80, '1', RGB(255, 255, 255), RGB(255, 255, 255), 9);
-	//Draw GO in the info menu
+
+	/* display the text "GO" in the info menu */
 	scherm.drawText(5, 80, "GO", RGB(0, 255, 0), RGB(255, 255, 255), 4);
 	_delay_ms(1000);
-	//Delete Go in the info menu
+
+	/* remove the "GO" in the info menu */
 	scherm.drawText(5, 80, "GO", RGB(255, 255, 255), RGB(255, 255, 255), 4);
 }
 
+/* function to display player info at the left side of the game screen */
 void _displayInfoStart(){
+
+	/* display the player */
 	scherm.drawChar(5, 5, 'X', RGB(255, 0, 0), RGB(255, 255, 255), 2);
 	scherm.drawChar(5, 125, 'X', RGB(0, 0, 255), RGB(255, 255, 255), 2);
 
+	/* display the lives */
 	scherm.drawText(5, 22, "Levens", RGB(0, 0, 0), RGB(255, 255, 255), 1);
 	scherm.drawText(5, 142, "Levens", RGB(0, 0, 0), RGB(255, 255, 255), 1);
 
+	/* display the score */
 	scherm.drawText(5, 47, "Score", RGB(0, 0, 0), RGB(255, 255, 255), 1);
 	scherm.drawText(5, 167, "Score", RGB(0, 0, 0), RGB(255, 255, 255), 1);
 }
 
 /* function to show the score and power-ups of a player */
 void _displayInfo(){
+	/* display the lives of each player */
 	scherm.drawInteger(5, 31, player1Lives, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
 	scherm.drawInteger(5, 151, player2Lives, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
 
+	/* display score info for player 1 */
 	if (player1Score >= 1000){
 		scherm.fillRect(69, 55, 11, 16, RGB(255, 255, 255));
 	}
@@ -459,6 +470,7 @@ void _displayInfo(){
 		scherm.fillRect(21, 55, 59, 16, RGB(255, 255, 255));
 	}
 
+	/* display score info for player 2 */
 	if (player2Score >= 1000){
 		scherm.fillRect(69, 175, 11, 16, RGB(255, 255, 255));
 	}
@@ -472,6 +484,7 @@ void _displayInfo(){
 		scherm.fillRect(21, 175, 59, 16, RGB(255, 255, 255));
 	}
 
+	/* display the scores */
 	scherm.drawInteger(5, 55, player1Score, 10, RGB(255, 0, 0), RGB(255, 255, 255), 2);
 	scherm.drawInteger(5, 175, player2Score, 10, RGB(0, 0, 255), RGB(255, 255, 255), 2);
 
@@ -496,10 +509,12 @@ void _displayMenuHelpers(uint8_t which) {
 	}
 }
 
-
+/* function to display the explosion */
 void _displayExplode(uint8_t location, uint16_t count, uint8_t bombI){
-	// check of de speler in de explosie staat
+	/* check if the player is inside the explosion */
 	if (player1Location == location){
+
+		/* make the player lose a life, and play the lose-life sound from the speaker */
 		player1Lives--;
 		loseLife(count);
 		startLoseLife(count);
@@ -514,6 +529,7 @@ void _displayExplode(uint8_t location, uint16_t count, uint8_t bombI){
 		}
 	}
 
+	/* make the player lose a life (for player 2) */
 	if (player2Location == location){
 		player2Lives--;
 		loseLife(count);
@@ -528,7 +544,7 @@ void _displayExplode(uint8_t location, uint16_t count, uint8_t bombI){
 		}
 	}
 
-	// teken bom explosie
+	/* draw the explosion */
 	if (SDcardLoaded) {
 		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
 	}
@@ -625,7 +641,7 @@ void _explodeLoopDone(uint16_t max, uint16_t location, int8_t mul, uint8_t *crat
 	}
 }
 
-
+/* function to display the keyboard to insert highscores */
 void DisplayKeyboard() {
 	/* Fill the screen with a white background*/
 	scherm.fillScreen(RGB(255, 255, 255));

@@ -18,47 +18,56 @@ uint8_t player1Lives = 5;
 uint8_t player2Lives = 5;
 int gameover = 0;
 
-
+/* function to set the gameover value */
 void setGameover(int gameoverSet) {
 	gameover = gameoverSet;
 }
-// dit is de code van een gametick. dit wordt 10x per seconde uitgevoerd.
-// todo zorg ervoor dat timing via een timer/interupt werkt.
+
+/* function to generate the gametick, the gametick is called every 10th of a second */
 void GameTick(uint16_t count, int gameover) {
+
+	/* if the game is still running */
 	if (!gameover) {
+
+		/* insert the nunchuck data */
 		uint8_t nunchuck = Nunchuck_get_data();
 
+		/* insert the old player location */
 		uint8_t oldpl1Loc = player1Location;
 
-		// place bomb
+		/* place a bomb */
 		uint16_t bomb = 0;
 		if (nunchuck & 0x40){
 			bomb = PlaceBomb();
 		}
 
-		// cool down on player move
+		/* cool down on player move */
 		if (nextPlayerMove){
 			nextPlayerMove--;
 		}
-		else { // move player
+		/* move the player */
+		else {
 			PlayerMove(nunchuck & 0x07);
 			if (oldpl1Loc != player1Location) {
 				nextPlayerMove = 1;
 			}
 		}
-		// ticks op bommen updaten
+
+		/* place gameticks on the bombs */
 		UpdateBombs();
 
-		// play sounds
+		/* give the gametick to all the sounds */
 		endOfGame(count);
 		playLoseLife(count);
 		playGameOver(count);
 		playExplosion(count);
 
+		/* set the screen brightness */
 		if (screenBrightness != setBrightness()){
 			screenBrightness = setBrightness();
 			DisplayScherpte(screenBrightness);
 		}
+
 		uint8_t oldpl2Loc = player2Location;
 #if Multiplayer == 1
 #if IsMasterGame == 1
@@ -115,29 +124,36 @@ void GameTick(uint16_t count, int gameover) {
 	}
 }
 
-// deze code is voor het initialseren van de game
+/* function to initialize the game */
 void Game(){
+
+	/* display the starting game */
 	DisplayStartingGame();
 	
+	/* free all the crates */
 	free(crates);
 
+	/* generate the crates */
 	crates = GenerateCrates();
-	// initiele weergave van 
+
+	/* initial display of the crates */
 	DisplayGame(crates);
 
-	// standaard spelwaarden zetten
+	/* set default game values */
 	nextPlayerMove = 0;
 	for (uint8_t i = 0; i < 6; i++) {
 		bombs[i] = 0;
 	}
 
-	// set timer voor gametick
+	/* set the timer for the gametick */
 	uint16_t i = 0;
 	unsigned long prevGameTick = millis();
-	// led levens opstarten
+
+	/* startup the led lives */
 	startLives();
 	_displayInfoStart();
 
+	/* infinite loop for the gametick */
 	while (1) {
 		prevGameTick = millis();
 		GameTick(i++, gameover);
@@ -145,26 +161,43 @@ void Game(){
 	}
 }
 
-// Executed on startup 
+/* function to initialize the game on startup */
 void GameInit() {
-	// Setup
+	
+	/* turn on the display */
 	DisplayOn();
+
+	/* setup the potentiometer */
 	setupPot();
+
+	/* setup the infrared */
 	setupIR();
+
+	/* setup the speaker */
 	setupSpeaker();
+
+	/* setup the port expander */
 	setupExpander();
+
+	/* setup the nunchuck */
 	setupNunchuck();
 
+	/* show the main menu */
 	showMainMenu();
 
 }
 
+/* function to show the main menu */
 void showMainMenu() {
+	
+	/* set the gameover value to 0 to initialize the game as not done */
 	setGameover(0);
-	// hoofdmenu openen
+	
+	/* open the main menu */
 	uint8_t selected = Mainmenu();
 
-	if (selected == 1) { // start game
+	/* start the game */
+	if (selected == 1) {
 		Game();
 	}
 	else if (selected == 2) {
@@ -172,50 +205,59 @@ void showMainMenu() {
 	}
 }
 
-// Move player to direction if valid newlocation
+/* function to move the player */
 void PlayerMove(uint8_t direction) {
 	uint8_t newLocation = player1Location;
 
 	switch (direction)
 	{
-	case 1: //up
+	/* move the player up */
+	case 1:
 		if ((player1Location & 0x0F) > 0) {
 			newLocation--;
 		}
 		break;
-	case 2: // right
+
+	/* move the player right */
+	case 2:
 		if ((player1Location >> 4) < 12) {
 			newLocation += 0x10;
 		}
 		break;
-	case 3: // down
+
+	/* move the player down */
+	case 3:
 		if ((player1Location & 0x0F) < 12) {
 			newLocation++;
 		}
 		break;
-	case 4: //left
+
+	/* move the player left */
+	case 4:
 		if ((player1Location >> 4) > 0) {
 			newLocation -= 0x10;
 		}
 		break;
 	}
-	// is static block
+
+	/*check if it is a static block */
 	if ((newLocation & 0x0F) % 2 == 1 && ((newLocation & 0xF0) >> 4) % 2 == 1) {
 		return;
 	}
 
-	// is crate
+	/* check if it is a crate */
 	for (uint8_t i = 0; i < 127; i++) {
 		if (crates[i] == newLocation) {
 			return;
 		}
 	}
-	// is other player here
+
+	/* check if it is the other player */
 	if (newLocation == player2Location) {
 		return;
 	}
 
-	// is bomb
+	/* check if it is a bomb */
 	for (uint8_t i = 0; i < 6; i++) {
 		if (bombs[i]) {
 			if ((bombs[i] & 0xFF00) >> 8 == newLocation) {
@@ -224,29 +266,32 @@ void PlayerMove(uint8_t direction) {
 		}
 	}
 
-
+	/* set a new player location */
 	player1Location = newLocation;
 }
 
+/* function to return the player location */
 uint8_t returnPlayerLocation() {
 	return player1Location;
 }
 
-// bom statussen updaten
+/* function to update the bombs */
 void UpdateBombs() {
 	for (uint8_t i = 0; i < 6; i++) {
 		if (bombs[i]) {
-			if ((bombs[i] & 0x001F) < 0x19) { // status ophogen
+			/* increase the state of the bombs */
+			if ((bombs[i] & 0x001F) < 0x19) {
 				bombs[i]++;
 			}
-			else { // bom resetten
+			/* reste the bombs */
+			else {
 				bombs[i] = 0;
 			}
 		}
 	}
 }
 
-// een bom plaatsen door speler
+/* function to place a bomb by a player */
 uint16_t PlaceBomb(){
 	if (!bombs[0]){
 		bombs[0] = 0;

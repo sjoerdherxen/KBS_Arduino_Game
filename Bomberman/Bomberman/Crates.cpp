@@ -2,18 +2,22 @@
 
 /* function used to generate crates into the game */
 uint8_t* GenerateCrates() {
+
 	uint8_t *c;
+
 	/* make variables with a malloc of 127 */
 	c = (uint8_t*)malloc(127);
 	for (uint8_t i = 0; i < 127; i++) {
+
 		/* the default location of crate is set to outside the playing field */
 		c[i] = 0xFF;
 	}
 
 #if IsMasterGame == 1
-	/* seed gets the randomly generated seed value to be used in Games.cpp to send to the slave*/
-	/* since analogRead differs in value, the value of seed
-		will differ too, but it will be equal for the same seed every time*/
+	/* seed gets the randomly generated seed value to be used in Games.cpp to send to
+	the slave. Since analogRead differs in value, the value of seed will differ too,
+	but it will be equal for the same seed every time */
+
 	/* randomSeed generates a number with seed */
 	randomSeed(analogRead(A1));
 
@@ -25,6 +29,7 @@ uint8_t* GenerateCrates() {
 
 	/* for-loop loops through all the 127 possible crates */
 	for (uint8_t i = 0; i < 127; i++) {
+
 		/* this randomly skips a crate location to make the playing field random */
 		if (random(2) == 1) {
 			x++;

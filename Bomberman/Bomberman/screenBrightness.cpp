@@ -8,6 +8,7 @@ void setupPot() {
 }
 
 uint16_t analogReadPot(uint8_t pin) {
+
 	/* make the two vars low and high for the output value */
 	uint8_t low, high;
 

@@ -1,171 +1,156 @@
-//All functions are declared in the showLives.h headerfile
 #include "showLives.h"									
 
-//Initializes and declares lives to 0
+/* initializes and declares lives to 0 */
 extern uint8_t player1Lives;
 extern uint8_t player2Lives;
-//>=1 = true so that means the end of the game, 0 is false so not the end of the game
+
+/* declares the end of the game */
 uint8_t ifEndGame = 0;
-//Initializes and declares endOfGameTick to 0, endOfGameTcik will store the tick number
+
+/* value to store the gametick */
 uint16_t endOfGameTick = 0;
 
-//These are all the patterns for the leds, the first 3 bits are not used because the leds aren't connected to those digital ports
-//A 1 stands for no output, a 0 stands for output.
+/* patterns for the which leds have to be on at certain times, the first 3 bits are not used */
 const uint8_t patterns[] PROGMEM = {
-	//These 6 patterns are for showing the lives
-	0b11111111, 
+
+	/* 6 patterns for showing lives */
+	0b11111111,
 	0b11111110,
 	0b11111100,
 	0b11111000,
 	0b11110000,
 	0b11100000,
 
-	//These patterns are used to show to the endGame animation
+	/* 4 patters for the end-game animation */
 	0b11111011,
 	0b11110001,
 	0b11100100,
 	0b11101110,
 };
 
-//Setting up the expander for use
+/* function used to setup the port expander */
 void setupExpander() {
 	Wire.begin();
 }
 
-//Turns all leds on which is equal to having 5 lives
-void startLives() {	
-	//Begins transmission to adress 56
+/* function to turn on all leds, equal to a player having 5 full lives */
+void startLives() {
+
+	/* begin transmission on address 56 */
 	Wire.beginTransmission(56);
-	//Writes the pattern that corresponds to 0 to the adres
+
+	/* writes the pattern that corresponds to the 0 to the address */
 	Wire.write(pgm_read_byte(&patterns[5]));
-	//Ends all transmissions
+
+	/* ends all transmission */
 	Wire.endTransmission();
-	//Sets lives to 5		
+
+	/* sets the value of lives to 5 */
 	player1Lives = 5;
 }
 
-//Activates the blinking and after that the amount of leds equal to the amount of lives is set.
-void loseLife(uint16_t count) {				
-	//Checks how many lives the player has and which leds have to be displayed
-	if (player1Lives && player2Lives){
-		//Begins transmission to adress 56, etc.												
+/* activates the blinking and after that the amount of leds equal to the amount of lives is set */
+void loseLife(uint16_t count) {
+
+	/* checks how many lives the player has and which leds have to be displayed */
+	if (player1Lives && player2Lives) {
+
+		/* begins transmission on address 56 */
 		Wire.beginTransmission(56);
-		//Writes the pattern that corresponds to lives to the adress, etc.
-		Wire.write(pgm_read_byte(&patterns[player1Lives])); 
-		//Ends all transmissions
+
+		/* writes the pattern that corresponds to lives to the adress */
+		Wire.write(pgm_read_byte(&patterns[player1Lives]));
+
+		/* ends all transmissions */
 		Wire.endTransmission();
-		//When a player has 0 lives this part of the switch statement will be executed
-	}else {
-		//The endOfGameTick integer gets the current gametick value
+	}
+	else {
+
+		/* the endOfGameTick integer gets the current gametick value */
 		endOfGameTick = count;
-		//Starts the gameOver animation and gives the current gametick value with it
+
+		/* starts the gameOver animation and gives the current gametick value with it */
 		startGameOver(count);
-		//ifEndGame gets the value 3, it is set to 3 so the animation will be executed 3 times
-		ifEndGame = 3;									
+
+		/* ifEndGame gets the value 3, it is set to 3 so the animation will be executed 3 times */
+		ifEndGame = 3;
 	}
 }
 
-//This is the animation the game will execute when a player is dead
+/* this is the animation the game will execute when a player is dead */
 void endOfGame(uint16_t count) {
-	//If ifEnGame is >=1 this part of the code will be executed, every time this code is executed 
-	//ifEndGame gets - 1 so at some point it will reach 0 and this part of the code won't be executed anymore
+	/* if ifEnGame is >=1 this part of the code will be executed, every time this code is executed */ 
+	/* ifEndGame gets - 1 so at some point it will reach 0 and this part of the code won't be executed anymore */
 	if (ifEndGame) {
 		if (count == endOfGameTick) {
-			//Begins transmission to adress 56, etc.		
+			/* begins transmission to adress 56 */
 			Wire.beginTransmission(56);
-			//Writes the pattern that corresponds to 6 to the adres, etc
-			Wire.write(pgm_read_byte(&patterns[6])); //xxoxx
-			//Ends all transmissions
+
+			/* writes the pattern that corresponds to xxoxx */
+			Wire.write(pgm_read_byte(&patterns[6]));
+
+			/* ends all transmissions */
 			Wire.endTransmission();
 		}
 		else if (count == endOfGameTick + 2) {
+			/* begins transmission to adress 56 */
 			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[7])); //xooox
+
+			/* writes the pattern that corresponds to xooox */
+			Wire.write(pgm_read_byte(&patterns[7]));
+
+			/* ends all transmissions */
 			Wire.endTransmission();
 		}
 		else if (count == endOfGameTick + 4) {
+			/* begins transmission to adress 56 */
 			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[8])); //ooxoo
+
+			/* writes the pattern that corresponds to ooxoo */
+			Wire.write(pgm_read_byte(&patterns[8]));
+
+			/* ends all transmissions */
 			Wire.endTransmission();
 		}
 		else if (count == endOfGameTick + 6) {
+			/* begins transmission to adress 56 */
 			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[9])); //oxxxo
+
+			/* writes the pattern that corresponds to oxxxo */
+			Wire.write(pgm_read_byte(&patterns[9]));
+
+			/* ends all transmissions */
 			Wire.endTransmission();
 		}
 		else if (count == endOfGameTick + 8) {
+
+			/* begins transmission to adress 56 */
 			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[0])); //xxxxx
+
+			/* writes the pattern that corresponds to xxxxx */
+			Wire.write(pgm_read_byte(&patterns[0]));
+
+			/* ends all transmissions */
 			Wire.endTransmission();
-			//ifEndGame - 1
+
 			ifEndGame--;
-			//endOfGameTick gets the current tick value of the game
 			endOfGameTick = count;
 		}
 
-		if(ifEndGame == 0){
-		
-			//This will start the GameOverMenu
+		if (ifEndGame == 0) {
+
+			/* this will start the GameOverMenu */
 			setGameover(1);
 			uint8_t selectie = gameOverMenu();
+
 			if (selectie == 1) {
-			/*Rebooting the arduino to go to the main menu and clear the memory*/
+				/* rebooting the arduino to go to the main menu and clear the memory */
 				__asm volatile ("  jmp 0");
 			}
 			else if (selectie == 2) {
 				DisplayKeyboard();
 			}
-			
-		}
-	}
-}
 
-//This part is a comment because it is not neccesary for the end product, when we have extra time we will probably implement it
-/*
-void blink(int check2) {								//Makes the leds blink when a live is lost
-	for (int i = 0; i < 3; i++) {
-		switch (check2) {								//Checks how many lives the player has and which leds have to be animated
-		case 4:											//What the leds should look like: (o = on and x = off)
-			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[0]));
-			Wire.endTransmission();						//ooooo
-			_delay_ms(200);
-			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[5]));
-			Wire.endTransmission();						//xxxxx
-			_delay_ms(200);
-			break;
-		case 3:
-			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[1]));
-			Wire.endTransmission();						//oooox
-			_delay_ms(200);
-			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[5]));
-			Wire.endTransmission();						//xxxxx
-			_delay_ms(200);
-			break;
-		case 2:
-			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[2]));
-			Wire.endTransmission();						//oooxx
-			_delay_ms(200);
-			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[5]));
-			Wire.endTransmission();						//xxxxx
-			_delay_ms(200);
-			break;
-		case 1:
-			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[3]));
-			Wire.endTransmission();						//ooxxx
-			_delay_ms(200);
-			Wire.beginTransmission(56);
-			Wire.write(pgm_read_byte(&patterns[5]));
-			Wire.endTransmission();						//xxxxx
-			_delay_ms(200);
-			break;
 		}
 	}
 }
-*/

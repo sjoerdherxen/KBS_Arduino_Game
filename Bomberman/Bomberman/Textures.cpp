@@ -1,7 +1,5 @@
 #include "Textures.h"
 
-//char files[14][12] = {"static1.bmp", "Bomb.bmp", "Crate1.bmp", "static1.bmp", "static1.bmp", "Player1.bmp", "Player2.bmp"};
-
 /* the SD-card contains .bmp files (bitmapping files), in this function the files are opened
 and used to draw on the lcd-screen */
 void OpenBMPFile(char *name, int16_t x, int16_t y, MI0283QT9 *lcd)

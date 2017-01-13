@@ -13,10 +13,17 @@
 #ifndef showLives
 
 #define showLives
+
+/* function used to setup the port expander */
 void setupExpander();
-void blink(int check2);
-void loseLife(uint16_t count);
-void endOfGame(uint16_t count);
+
+/* function to turn on all leds, equal to a player having 5 full lives */
 void startLives();
 
-#endif // !showLives
+/* activates the blinking and after that the amount of leds equal to the amount of lives is set */
+void loseLife(uint16_t count);
+
+/* this is the animation the game will execute when a player is dead */
+void endOfGame(uint16_t count);
+
+#endif

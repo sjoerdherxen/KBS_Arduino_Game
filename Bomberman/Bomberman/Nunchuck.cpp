@@ -5,6 +5,7 @@ uint8_t nunchuck_buf[6];
 
 /* function used to setup the nunchuck */
 void setupNunchuck() {
+
 /* PORTC3 (Analog 3) is used as the power-pin (pwrpin) */
 #define pwrpin PORTC3
 
@@ -108,9 +109,12 @@ uint8_t Nunchuck_get_data()
 			nunchuckdata |= 4;
 		}
 
-		if ((nunchuck_buf[5] >> 0) & 1) // z knop
+		/* Z-button */
+		if ((nunchuck_buf[5] >> 0) & 1)
 			nunchuckdata &= ~(1 << 6);
-		if ((nunchuck_buf[5] >> 1) & 1) // c knop
+
+		/* C-button */
+		if ((nunchuck_buf[5] >> 1) & 1)
 			nunchuckdata &= ~(1 << 7);
 
 		/* the function will return the nunchuck data */
