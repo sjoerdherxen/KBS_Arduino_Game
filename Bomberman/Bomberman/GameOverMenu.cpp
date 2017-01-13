@@ -9,7 +9,6 @@ uint8_t gameOverMenu() {
 	isNewHighscore = 0;
 
 	for (int i = 0; i < 5; i = i + 2) {
-		Serial.println(player1Score);
 		if (getScore(i) < player1Score) {
 			isNewHighscore = 1;
 		}

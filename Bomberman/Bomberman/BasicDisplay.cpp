@@ -273,7 +273,6 @@ void DisplayHighscore() {
 	//Print "Highscores"
 	scherm.fillScreen(RGB(255, 255, 255));
 	scherm.drawText(80, 20, "Highscores", RGB(0, 150, 0), RGB(255, 255, 255), 2);
-	scherm.drawText(240, 230, "Send Nudes", RGB(245, 245, 245), RGB(255, 255, 255), 0.2);
 
 	//Print iedere naam
 	char name[10];

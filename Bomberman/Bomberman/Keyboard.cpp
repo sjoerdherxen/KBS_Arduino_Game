@@ -80,7 +80,6 @@ char* selectChars(MI0283QT9 *scherm) {
 			/* If the Z button is pressed, go to the mainmenu and return the value of the name*/
 			if (value & 0x40) {
 				saveScore(player1Score, letter);
-				printHighscore();
 				delay(2000);
 				__asm volatile ("  jmp 0");
 				return letter;

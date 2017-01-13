@@ -71,7 +71,6 @@ void GameTick(uint16_t count, int gameover) {
 			uint8_t *data = dataRecieve();
 			if (data){
 				player2Location = data[1];
-				Serial.println(data[3], BIN);
 				if (data[3] != 0){
 					bombs[3] = 0;
 					bombs[3] = data[3];
@@ -93,7 +92,6 @@ void GameTick(uint16_t count, int gameover) {
 			uint8_t *data = dataRecieve();
 			if (data){
 				player2Location = data[1];
-				Serial.println(data[2], BIN);
 				if (data[3] != 0){
 					bombs[3] = 0;
 					bombs[3] = data[3];

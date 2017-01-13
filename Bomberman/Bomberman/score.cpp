@@ -99,30 +99,3 @@ void resetScore() {
 		eeprom_write_word((uint16_t*)i, '-');
 	}
 }
-
-//If you want to see the current scores on the serial monitor you can execute this
-void printHighscore() {
-	/*Serial.println("Highscores:");
-	_delay_ms(10);
-
-	for (uint8_t i = 0; i < 3; i++) {
-		uint8_t a = i * 2;
-		uint8_t b = i + 1;
-		uint8_t c = i * 3 + 10;
-		Serial.print(b);
-		_delay_ms(10);
-		Serial.print(": ");
-		_delay_ms(10);
-		Serial.print(getScore(a));
-		_delay_ms(10);
-		Serial.print(" - ");
-		_delay_ms(10);
-		for (uint8_t x = c; x < c + 3; x++) {
-			Serial.write(getName(x));
-			_delay_ms(10);
-		}
-		Serial.print("\n");
-		_delay_ms(10);
-	}*/
-}
-

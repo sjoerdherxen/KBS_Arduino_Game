@@ -121,17 +121,6 @@ uint8_t Nunchuck_get_data()
 	return 0;
 }
 
-/* this function prints the data recieved by the nunchuck,
-it needs an 8-bit data integer to function */
-void Nunchuck_print_data(uint8_t data)
-{
-	/* print data in binary */
-	Serial.print(data, BIN);
-
-	/* sets a newline */
-	Serial.print("\r\n");
-}
-
 /* the nunchuck uses a specific data format, this has to
 be decoded to use in our functions, this function does that
 (only needed if the regular wiimote driver is used) */
