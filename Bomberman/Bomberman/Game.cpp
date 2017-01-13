@@ -8,19 +8,21 @@ uint16_t bombs[6];
 uint8_t nextPlayerMove;
 uint8_t screenBrightness = 0;
 
-
-// dit is de code van een gametick. dit wordt 10x per seconde uitgevoerd.
-// todo zorg ervoor dat timing via een timer/interupt werkt.
+/* function to generate the gametick, the gametick is called every 10th of a second */
 void GameTick(uint16_t count){
 
+	/* insert the nunchuck data into an 8-bit integer */
 	uint8_t nunchuck = Nunchuck_get_data();
 
+	/* insert the location of the player into an 8-bit integer */
 	uint8_t oldpl1Loc = player1Location;
 	
+	/* place a bomb */
 	if (nunchuck & 0x40){
 		PlaceBomb();
 	}
 	
+	/* move the player */
 	if (nextPlayerMove){
 		nextPlayerMove--;
 	}
@@ -31,11 +33,13 @@ void GameTick(uint16_t count){
 		}
 	}
 	
-
+	/* update the bombs on the playing field */
 	UpdateBombs();
 
+	/* update the game objects and players */
 	UpdateGame(crates, crates, oldpl1Loc, player1Location, player2Location, player2Location, bombs, count);
 
+	/* give the sounds a gametick so they can start playing when they are called */
 	endOfGame(count);
 	playLoseLife(count);
 	playGameOver(count);
@@ -44,6 +48,7 @@ void GameTick(uint16_t count){
 	mainMenuTick(count);
 	playMusic(count);
 
+	/* setting the brightness of the lcd-screen */
 	if (screenBrightness != setBrightness()){
 		screenBrightness = setBrightness();
 		DisplayScherpte(screenBrightness);
@@ -51,24 +56,28 @@ void GameTick(uint16_t count){
 
 }
 
-// deze code is voor het initialseren van de game
+/* function to initialize the game */
 void Game(){
+	/* generate crates */
 	crates = GenerateCrates();
-	// initiele weergave van 
+
+	/* initial display of the game */
 	DisplayGame(crates, player1Location, player2Location);
 
-	// standaard spelwaarden zetten
+	/* set default game values */
 	nextPlayerMove = 0;
 	for (uint8_t i = 0; i < 6; i++){
 		bombs[i] = 0;
 	}
 
-	// set timer voor gametick
+	/* set timer for the gametick */
 	uint16_t i = 0;
 	unsigned long prevGameTick = millis();
-	// led levens opstarten
+
+	/* start-up the leds so the lives can be shown */
 	startLives();
 
+	/* infinite loop for gametick */
 	while (1){
 		prevGameTick = millis();
 		GameTick(i++);
@@ -76,24 +85,30 @@ void Game(){
 	}
 }
 
-// Executed on startup 
+/* function to initialize the whole game at startup */
 void GameInit(){
-	// Setup
+
+	/* setup functions for different aspects of the game */
+	/* turn on the display */
 	DisplayOn();
+
+	/* setup for the potentiometer*/
 	setupPot();
+
+	/* setup for the speaker */
 	setupSpeaker();
+
+	/* setup for the brightness of the screen */
 	screenBrightness = setBrightness();
 
+	/* setup for the nunchuck */
 	Nunchuck_setpowerpins();
 	Nunchuck_init();
 
-	// ports leds levens instellen
+	/* setup for the port expander */
 	setupExpander();
 
-	// testcode
-	//initIrSend();
-
-	// hoofdmenu openen
+	/* open the main menu */
 	_delay_ms(100);
 	uint8_t selected = Mainmenu();
 

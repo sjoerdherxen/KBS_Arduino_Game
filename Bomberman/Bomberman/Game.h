@@ -14,8 +14,13 @@
 #include "showLives.h"
 #include "soundEffects.h"
 
+/* function to generate the gametick, the gametick is called every 10th of a second */
 void GameTick(uint16_t count);
+
+/* function to initialize the game */
 void Game();
+
+/* function to initialize the whole game at startup */
 void GameInit();
 void PlayerMove(uint8_t direction);
 uint8_t returnPlayerLocation();

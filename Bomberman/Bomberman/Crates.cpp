@@ -2,11 +2,11 @@
 
 /* function used to generate crates into the game */
 uint8_t* GenerateCrates() {
-	//Serial.println(millis());
 	uint8_t *c;
 	/* make variables with a malloc of 127 */
 	c = (uint8_t*)malloc(127);
 	
+	/* this for-loop loops through all the 127 possible crates */
 	for (uint8_t i = 0; i < 127; i++) {
 		/* the default location of crate is set to outside the playing field */
 		c[i] = 0xFF;
@@ -14,21 +14,20 @@ uint8_t* GenerateCrates() {
 
 #if IsMasterGame == 1
 	/* seed gets the randomly generated seed value to be used in Games.cpp to send to the slave*/
-	/* since analogRead differs in value, the value of seed
-		will differ too, but it will be equal for the same seed every time*/
-		/* randomSeed generates a number with seed */
+
+	/* since analogRead differs in value, the value of seed will differ too,
+	but it will be equal for the same seed every time*/
+
+	/* randomSeed generates a number with seed */
 	randomSeed(analogRead(A1));
-
-
 
 	/* an 8-bit integer x is declared as 2, to be used in
 	the following code */
 	uint8_t x = 2;
-
-	/* for-loop loops through all the 127 possible crates */
 	
-	/* for-loop loops through all the 127 possible crates */
+	/* this for-loop loops through all the 127 possible crates */
 	for (uint8_t i = 0; i < 127; i++) {
+
 		/* this randomly skips a crate location to make the playing field random */
 		if (random(2) == 1) {
 			x++;
@@ -50,12 +49,6 @@ uint8_t* GenerateCrates() {
 		c[i] = x;
 		x++;
 	}
-	/*
-	for(uint8_t i = 0; i < 127; i+=3){
-		sendTripple(c[i], c[i+1], c[i+2]);
-	}
-	Serial.println(millis());
-	*/
 	return c;
 #else 
 	for (uint8_t i = 0; i < 127;){

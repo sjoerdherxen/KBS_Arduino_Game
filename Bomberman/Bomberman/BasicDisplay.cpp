@@ -184,7 +184,7 @@ void UpdateGame(uint8_t oldCrates[], uint8_t newCrates[], uint8_t player1Locatio
 	_displayBombs(bombs, newCrates, player1LocationNew, count);
 }
 
-// highscores tonen verwacht 5 3 letterige namen. 5 scores.
+/* highscores tonen verwacht 5 3 letterige namen. 5 scores. */
 void DisplayHighscore(char **names, uint8_t *scores){
 	scherm.drawText(80, 20, "Highscores", RGB(0, 0, 0), RGB(255, 255, 255), 2);
 
@@ -196,7 +196,7 @@ void DisplayHighscore(char **names, uint8_t *scores){
 	_displayMenuHelpers(1);
 }
 
-/* function to drawt the border of the game */
+/* function to draw the border of the game */
 void _displayBorder(){
 	/* for every block in the length of 15 blocks */
 	for (uint8_t i = 0; i < 15; i++){
@@ -288,7 +288,7 @@ void _displayPlayer(int_least16_t position, uint16_t playerColor){
 	}
 }
 
-// this function will be executed when the game starts
+/* this function will be executed when the game starts */
 void _displayCountDown() {
 	// For-loop to repeat the following code 5 times
 	for (int i = 5; i > 0; i--) {
@@ -372,19 +372,17 @@ void _displayMenuHelpers(uint8_t which){
 	}
 }
 
-
+/* function to display the explosion of a bomb */
 void _displayExplode(uint8_t location, uint8_t playerlocation, uint16_t count){
-	// check of de speler in de explosie staat
+	/* check if the player is in an explosion */
 	if (playerlocation == location){
 		loseLife(count);
 		startLoseLife(count);
 	}
 
-	// teken bom explosie
+	/*  */
 	if (SDcardLoaded){
 		drawTexture(10, ((location & 0xF0) >> 4) * 16 + 96, (location & 0x0F) * 16 + 16, &scherm);
-
-		// TODO: explosion animation
 	}
 
 	/* if the SD-card is not inserted, draw the default texture of the explosion (a black tirangle) */
